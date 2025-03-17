@@ -17,6 +17,7 @@ return new class extends Migration
             $table->uuid('id_kelompok');
             $table->foreign('id_kelompok')->references('id_kelompok')->on('kelompok')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

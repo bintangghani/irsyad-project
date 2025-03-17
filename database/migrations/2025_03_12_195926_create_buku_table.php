@@ -26,6 +26,7 @@ return new class extends Migration
             $table->uuid('jenis');
             $table->foreign('jenis')->references('id_jenis')->on('jenis')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

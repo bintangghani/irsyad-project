@@ -18,6 +18,7 @@ return new class extends Migration
             $table->uuid('id_permission');
             $table->foreign('id_permission')->references('id_permission')->on('permission')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
