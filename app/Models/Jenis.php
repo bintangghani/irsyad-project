@@ -15,7 +15,8 @@ class Jenis extends Model
     protected $primaryKey = 'id_jenis';
     protected $keyType = 'uuid';
     public $incrementing = false;
-    protected $guarder = [];
+    protected $dates = ['deleted_at'];
+    protected $guarded = [];
 
     public function buku()
     {

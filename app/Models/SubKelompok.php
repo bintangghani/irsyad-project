@@ -15,7 +15,7 @@ class SubKelompok extends Model
     protected $primaryKey = 'id_sub_kelompok';
     protected $keyType = 'uuid';
     public $incrementing = false;
-    protected $guarder = [];
+    protected $guarded = [];
 
     public function kelompok()
     {

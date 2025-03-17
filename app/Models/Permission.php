@@ -15,7 +15,7 @@ class Permission extends Model
     protected $primaryKey = 'id_permission';
     protected $keyType = 'uuid';
     public $incrementing = false;
-    protected $guarder = [];
+    protected $guarded = [];
 
     public function role()
     {
