@@ -10,3 +10,9 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer utilities {
+    .transition-dropdown {
+        @apply transition-all duration-200 ease-in-out;
+    }
+}
