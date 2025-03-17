@@ -3,7 +3,7 @@
 <head>
     @extends('includes.head')
 </head>
-<body>
+<body class="bg-gray-100">
     @yield('content')
 
     @extends('includes.script')
