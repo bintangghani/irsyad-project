@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\KelompokController;
+use App\Http\Controllers\SubKelompokController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -36,5 +37,13 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::post('/', 'store')->name('store');
         Route::put('/', 'update')->name('update');
         Route::delete('/', 'destroy')->name('destroy');
+    });
+
+    Route::controller(SubKelompokController::class)->prefix('subkelompok')->name('subkelompok.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::put('/update/{id}', 'update')->name('update');
+        Route::delete('/destroy/{id}', 'destroy')->name('destroy');
     });
 });
