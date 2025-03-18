@@ -1,38 +1,28 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const booksDropdownBtn = document.getElementById("booksDropdownBtn");
-    const booksDropdownMenu = document.getElementById("booksDropdownMenu");
-    const booksDropdownIcon = document.getElementById("booksDropdownIcon");
+    function toggleDropdown(buttonId, menuId) {
+        const button = document.getElementById(buttonId);
+        const menu = document.getElementById(menuId);
 
-    booksDropdownBtn.addEventListener("click", function () {
-        if (booksDropdownMenu.classList.contains("hidden")) {
-            booksDropdownMenu.classList.remove("hidden");
-            booksDropdownMenu.style.maxHeight = "0px";
-            booksDropdownMenu.style.opacity = "0";
-            requestAnimationFrame(() => {
-                booksDropdownMenu.style.transition = "max-height 0.3s ease-out, opacity 0.3s ease-out";
-                booksDropdownMenu.style.maxHeight = "200px";
-                booksDropdownMenu.style.opacity = "1";
+        button.addEventListener("click", function (event) {
+            event.stopPropagation();
+            const isHidden = menu.classList.contains("hidden");
+            document.querySelectorAll(".dropdown-menu").forEach(m => {
+                m.classList.add("hidden", "opacity-0", "scale-95");
             });
-        } else {
-            booksDropdownMenu.style.transition = "max-height 0.2s ease-in, opacity 0.2s ease-in";
-            booksDropdownMenu.style.maxHeight = "0px";
-            booksDropdownMenu.style.opacity = "0";
-            setTimeout(() => {
-                booksDropdownMenu.classList.add("hidden");
-            }, 200);
-        }
-        booksDropdownIcon.classList.toggle("rotate-180");
-    });
+            if (isHidden) {
+                menu.classList.remove("hidden", "opacity-0", "scale-95");
+            } else {
+                menu.classList.add("hidden", "opacity-0", "scale-95");
+            }
+        });
+    }
 
-    document.addEventListener("click", function (event) {
-        if (!booksDropdownBtn.contains(event.target) && !booksDropdownMenu.contains(event.target)) {
-            booksDropdownMenu.style.transition = "max-height 0.2s ease-in, opacity 0.2s ease-in";
-            booksDropdownMenu.style.maxHeight = "0px";
-            booksDropdownMenu.style.opacity = "0";
-            setTimeout(() => {
-                booksDropdownMenu.classList.add("hidden");
-            }, 200);
-            booksDropdownIcon.classList.remove("rotate-180");
-        }
+    toggleDropdown("dropdown-user-btn", "dropdown-user-menu");
+    toggleDropdown("dropdown-book-btn", "dropdown-book-menu");
+
+    document.addEventListener("click", function () {
+        document.querySelectorAll(".dropdown-menu").forEach(m => {
+            m.classList.add("hidden", "opacity-0", "scale-95");
+        });
     });
 });

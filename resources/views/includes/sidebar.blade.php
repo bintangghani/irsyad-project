@@ -32,7 +32,7 @@
                     </a>
                 </li>
 
-                <li>
+                {{-- <li>
                     <a href="#"
                         class="flex items-center gap-x-2 p-2 rounded-lg cursor-pointer 
                         {{ $currentRoute == 'users' ? 'bg-gray-300' : 'hover:bg-gray-200' }}">
@@ -44,12 +44,39 @@
                         </svg>
                         <span class="text-sm font-semibold text-black">User</span>
                     </a>
-                </li>
-
+                </li> --}}
 
                 <li class="relative">
-                    <button id="booksDropdownBtn"
-                        class="flex items-center gap-x-2 p-2 rounded-lg cursor-pointer w-full
+                    <button id="dropdown-user-btn"
+                        class="dropdown-btn flex items-center gap-x-2 p-2 rounded-lg cursor-pointer w-full 
+                        {{ in_array($currentRoute, ['books', 'categories']) ? 'bg-gray-300' : 'hover:bg-gray-200' }}">
+                        <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="black"
+                            viewBox="0 0 24 24">
+                            <path fill-rule="evenodd"
+                                d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-sm font-semibold text-black">User</span>
+                        <svg class="dropdown-icon w-4 h-4 transition-transform duration-200 ml-auto"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+
+                    <ul id="dropdown-user-menu"
+                        class="dropdown-menu hidden transition-all duration-200 scale-95 opacity-0 origin-top">
+                        <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Semua User</a></li>
+                        <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Permission</a></li>
+                        <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Instansi</a></li>
+                        <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Role</a></li>
+                    </ul>
+                </li>
+
+                <li class="relative">
+                    <button id="dropdown-book-btn"
+                        class="dropdown-btn flex items-center gap-x-2 p-2 rounded-lg cursor-pointer w-full 
                         {{ in_array($currentRoute, ['books', 'categories']) ? 'bg-gray-300' : 'hover:bg-gray-200' }}">
                         <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="black"
                             viewBox="0 0 24 24">
@@ -58,7 +85,7 @@
                                 clip-rule="evenodd" />
                         </svg>
                         <span class="text-sm font-semibold text-black">Buku</span>
-                        <svg class="w-4 h-4 transition-transform duration-200 ml-auto" id="booksDropdownIcon"
+                        <svg class="dropdown-icon w-4 h-4 transition-transform duration-200 ml-auto"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -66,12 +93,17 @@
                         </svg>
                     </button>
 
-                    <ul id="booksDropdownMenu" class="hidden transition-all duration-200 scale-95 opacity-0 origin-top">
+                    <ul id="dropdown-book-menu"
+                        class="dropdown-menu hidden transition-all duration-200 scale-95 opacity-0 origin-top">
                         <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Semua Buku</a></li>
                         <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Jenis Buku</a></li>
                         <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Kelompok Buku</a></li>
+                        <li><a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Sub Kelompok Buku</a>
+                        </li>
                     </ul>
                 </li>
+
+
                 <li>
                     <a href="#"
                         class="flex items-center gap-x-2 p-2 rounded-lg cursor-pointer 
