@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\JenisController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\KelompokController;
 
 use Illuminate\Support\Facades\Route;
@@ -44,4 +45,13 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::put('/', 'update')->name('update');
         Route::delete('/', 'destroy')->name('destroy');
     });
-});
+  
+    Route::controller(RoleController::class)->prefix('role')->name('role.')->group(function () {
+          Route::get('/', 'index')->name('index');
+          Route::get('/create', 'create')->name('create');
+          Route::get('/edit', 'edit')->name('edit');
+          Route::post('/', 'store')->name('store');
+          Route::put('/', 'update')->name('update');
+          Route::delete('/', 'destroy')->name('destroy');
+      });
+  });
