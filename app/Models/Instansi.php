@@ -15,7 +15,7 @@ class Instansi extends Model
     protected $primaryKey = 'id_instansi';
     protected $keyType = 'uuid';
     public $incrementing = false;
-    protected $guarder = [];
+    protected $guarded = [];
 
     public function user()
     {

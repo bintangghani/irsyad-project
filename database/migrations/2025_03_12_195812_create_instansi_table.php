@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('profile');
             $table->text('background');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

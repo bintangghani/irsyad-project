@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id_role')->primary()->unique();
             $table->string('nama');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

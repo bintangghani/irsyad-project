@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Http\Controllers\PermissionController;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +26,6 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');
         Route::put('/', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy'); 
+        Route::delete('/', 'destroy')->name('destroy');
     });
 });
