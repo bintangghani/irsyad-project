@@ -83,3 +83,63 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const tambahBtn = document.getElementById('tambahInstansiBtn');
+    const closeTambahModalBtn = document.getElementById('closeTambahModalBtn');
+    const modalTambah = document.getElementById('modalTambahPermission');
+    const editButtons = document.querySelectorAll('.editInstansiBtn');
+    const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+    const modalEdit = document.getElementById('modalEditPermission');
+    const editIdPermission = document.getElementById('editIdPermission');
+    const editNama = document.getElementById('editNama');
+    const editAlamat = document.getElementById('editAlamat');
+    const editDeskripsi = document.getElementById('editDeskripsi');
+    const editProfile = document.getElementById('editProfile');
+    const editBackground = document.getElementById('editBackground');
+
+    // Open Tambah Modal
+    tambahBtn.addEventListener('click', () => {
+        modalTambah.classList.remove('hidden');
+    });
+
+    // Close Tambah Modal
+    closeTambahModalBtn.addEventListener('click', () => {
+        modalTambah.classList.add('hidden');
+    });
+
+    // Open Edit Modal and Populate Data
+    editButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const id = button.getAttribute('data-id');
+            const nama = button.getAttribute('data-nama');
+            const alamat = button.getAttribute('data-alamat');
+            const deskripsi = button.getAttribute('data-deskripsi');
+            const profile = button.getAttribute('data-profile');
+            const background = button.getAttribute('data-background');
+
+            editIdPermission.value = id;
+            editNama.value = nama;
+            editAlamat.value = alamat;
+            editDeskripsi.value = deskripsi;
+            editProfile.value = profile;
+            editBackground.value = background;
+
+            modalEdit.classList.remove('hidden');
+        });
+    });
+
+    // Close Edit Modal
+    closeEditModalBtn.addEventListener('click', () => {
+        modalEdit.classList.add('hidden');
+    });
+
+    // Close modals when clicking outside the form
+    [modalTambah, modalEdit].forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    });
+});
