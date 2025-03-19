@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\PermissionController;
-use App\Models\Permission;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

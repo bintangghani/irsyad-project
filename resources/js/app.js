@@ -28,33 +28,58 @@ $('#loginBtn').click(function () {
     }, 250, 'linear');
 });
 
-document.getElementById('tambahPermissionBtn').addEventListener('click', function () {
-    const modal = document.getElementById('modalTambahPermission');
-    modal.classList.remove('hidden', 'opacity-0');
-    modal.classList.add('flex');
-});
-
-document.addEventListener('click', function (event) {
-    const modal = document.getElementById('modalTambahPermission');
-    if (event.target === modal) {
-        modal.classList.add('hidden', 'opacity-0');
-        modal.classList.remove('flex');
+$(document).ready(function() {
+    // Tambah Jenis
+    function showModalWithAnimation(modal) {
+        modal.css({
+            display: 'flex',
+            opacity: 0
+        }).animate({
+            opacity: 0.8
+        }, 300);
     }
-});
 
-const editButtons = document.querySelectorAll('.editPermissionBtn');
-editButtons.forEach(button => {
-    button.addEventListener('click', function () {
-        const id = this.getAttribute('data-id');
-        const nama = this.getAttribute('data-nama');
+    function hideModalWithAnimation(modal) {
+        modal.animate({
+            opacity: 0
+        }, 300, function() {
+            modal.css('display', 'none');
+        });
+    }
 
-        document.getElementById('editIdPermission').value = id;
-        document.getElementById('editNama').value = nama;
+    $('#tambahJenisBtn').click(function() {
+        showModalWithAnimation($('#modalTambahJenis'));
+    });
 
-        document.getElementById('modalEditPermission').classList.remove('hidden');
+    $('.close-modal').click(function() {
+        hideModalWithAnimation($('#modalTambahJenis'));
+    });
+
+    $(window).click(function(event) {
+        if ($(event.target).is('#modalTambahJenis')) {
+            hideModalWithAnimation($('#modalTambahJenis'));
+        }
     });
 });
 
-document.getElementById('closeEditModalBtn').addEventListener('click', function () {
-    document.getElementById('modalEditPermission').classList.add('hidden');
+document.addEventListener('DOMContentLoaded', function () {
+    // Jenis
+    const editJenisSection = document.querySelectorAll('.editJenisSection');
+    const editJenisBtn = document.querySelectorAll('.editJenisBtn');
+    const editJenisInput = document.querySelectorAll('.editJenisInput');
+    const editJenisSubmitBtn = document.querySelectorAll('.editJenisSubmitBtn');
+
+    editJenisBtn.forEach((btn, index) => {
+        btn.addEventListener('click', function () {
+            editJenisSection[index].classList.add('hidden');
+            editJenisInput[index].classList.remove('hidden');
+        });
+    });
+
+    editJenisSubmitBtn.forEach((btn, index) => {
+        btn.addEventListener('click', function () {
+            editJenisSection[index].classList.remove('hidden');
+            editJenisInput[index].classList.add('hidden');
+        });
+    });
 });
