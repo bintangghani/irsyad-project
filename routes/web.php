@@ -4,7 +4,7 @@ use App\Http\Controllers\JenisController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.admin.dashboard');
 });
 
 Route::prefix('auth')->name('auth')->group(function () {
