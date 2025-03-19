@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\KelompokController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,14 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
     });
 
     Route::controller(KelompokController::class)->prefix('kelompok')->name('kelompok.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::put('/', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('destroy');
+    });
+
+    Route::controller(InstansiController::class)->prefix('instansi')->name('instansi.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');
