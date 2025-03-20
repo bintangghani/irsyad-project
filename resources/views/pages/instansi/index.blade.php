@@ -46,7 +46,7 @@
             </div>
         </div>
     </div>
-    <div id="modalTambahPermission" class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-50 flex justify-center items-center">
+    <div id="modalTambahPermission" class="fixed inset-0 z-50 hidden bg-gray-300 bg-opacity-50 flex justify-center items-center">
         <form action="{{ route('dashboard.instansi.store') }}" method="POST" class="bg-white max-w-lg w-full rounded-xl shadow-md py-6 px-8 flex flex-col gap-6">
             @csrf
             <h2 class="text-2xl font-bold text-center capitalize">Tambah Instansi</h2>
@@ -64,11 +64,11 @@
             </div>
             <div>
                 <label for="profile" class="block font-medium capitalize text-gray-700 mb-1">Profile</label>
-                <input type="text" name="profile" id="profile" required class="w-full outline-none border-2 border-gray-300 rounded-lg py-2 px-3 focus:ring focus:ring-violet-500">
+                <input type="file" accept="png,jpeg,jpg" name="profile" id="profile" required class="w-full outline-none border-2 border-gray-300 rounded-lg py-2 px-3 focus:ring focus:ring-violet-500">
             </div>
             <div>
                 <label for="background" class="block font-medium capitalize text-gray-700 mb-1">Background</label>
-                <input type="text" name="background" id="background" required class="w-full outline-none border-2 border-gray-300 rounded-lg py-2 px-3 focus:ring focus:ring-violet-500">
+                <input type="file" accept="png,jpeg,jpg" name="background" id="background" required class="w-full outline-none border-2 border-gray-300 rounded-lg py-2 px-3 focus:ring focus:ring-violet-500">
             </div>
             <div class="flex justify-end gap-4">
                 <button type="button" id="closeTambahModalBtn" class="px-4 py-2 rounded-lg bg-gray-400 text-white capitalize font-medium hover:bg-gray-500 cursor-pointer">Batal</button>
@@ -97,11 +97,11 @@
             </div>
             <div>
                 <label for="editProfile" class="block font-medium capitalize text-gray-700 mb-1">Profile</label>
-                <input type="text" name="profile" id="editProfile" required class="w-full outline-none border-2 border-gray-300 rounded-lg py-2 px-3 focus:ring focus:ring-yellow-500">
+                <input type="file" accept="png,jpeg,jpg" name="profile" id="editProfile" required class="w-full outline-none border-2 border-gray-300 rounded-lg py-2 px-3 focus:ring focus:ring-yellow-500">
             </div>
             <div>
                 <label for="editBackground" class="block font-medium capitalize text-gray-700 mb-1">Background</label>
-                <input type="text" name="background" id="editBackground" required class="w-full outline-none border-2 border-gray-300 rounded-lg py-2 px-3 focus:ring focus:ring-yellow-500">
+                <input type="file" accept="png,jpeg,jpg" name="background" id="editBackground" required class="w-full outline-none border-2 border-gray-300 rounded-lg py-2 px-3 focus:ring focus:ring-yellow-500">
             </div>
             <div class="flex justify-end gap-4">
                 <button type="button" id="closeEditModalBtn" class="px-4 py-2 rounded-lg bg-gray-400 text-white capitalize font-medium hover:bg-gray-500 cursor-pointer">Batal</button>
