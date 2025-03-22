@@ -1,37 +1,75 @@
-@extends('layouts.master')
+@extends('layouts/blankLayout')
+
+@section('title', 'Register Basic - Pages')
+
+@section('page-style')
+@vite([
+  'resources/assets/vendor/scss/pages/page-auth.scss'
+])
+@endsection
+
+
 @section('content')
-<main class="max-w-screen w-full h-full flex relative">
-    <div class="w-full flex flex-col justify-center items-center gap-10 min-h-screen h-full px-10">
-        <h3 class="w-fit text-3xl font-bold text-[#6636F1] self-start">Irsyad Cloud Drive</h3>
-        <div class="w-full h-full flex flex-col gap-8">
-            <div class="flex flex-col gap-2 items-center lg:items-start">
-                <h1 class="w-fit text-5xl font-black">Daftarkan akun anda</h1>
-                <h6>Sudah memiliki akun? <a href="/auth/login" class="text-[#6636F1] font-medium cursor-pointer">Login</a></h6>
+<div class="container-xxl">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner">
+      <!-- Register Card -->
+      <div class="card px-sm-6 px-0">
+        <div class="card-body">
+          <!-- Logo -->
+          <div class="app-brand justify-content-center mb-6">
+            <a href="" class="app-brand-link gap-2">
+              <span class="app-brand-logo demo">@include('_partials.macros',["width"=>25,"withbg"=>'var(--bs-primary)'])</span>
+              <span class="app-brand-text demo text-heading fw-bold">{{config('variables.templateName')}}</span>
+            </a>
+          </div>
+          <!-- /Logo -->
+          <h4 class="mb-1">Adventure starts here 🚀</h4>
+          <p class="mb-6">Make your app management easy and fun!</p>
+
+          <form id="formAuthentication" class="mb-6" action="{{ route('auth.register')  }}" method="POST">
+            @csrf
+            <div class="mb-6">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="nama" value="{{ old('username') }}" placeholder="Enter your username" autofocus>
+                @error('nama')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
-            <div class="flex flex-col gap-8">
-                <div class="flex flex-col gap-4">
-                    <div class="flex flex-col gap-0.5">
-                        <label for="email" class="text-base font-medium px-1">Email</label>
-                        <input type="email" name="email" id="email" placeholder="example@example.xyz" class="outline-none border-2 border-gray-400 p-1.5 rounded w-full hover:border-[#6636F1] focus:border-[#6636F1] focus-visible:border-[#6636F1] active:border-[#6636F1]">
-                    </div>
-                    <div class="flex flex-col gap-0.5">
-                        <label for="nama" class="text-base font-medium px-1">Nama</label>
-                        <input type="text" name="nama" id="nama" placeholder="John Doe" class="outline-none border-2 border-gray-400 p-1.5 rounded w-full hover:border-[#6636F1] focus:border-[#6636F1] focus-visible:border-[#6636F1] active:border-[#6636F1]">
-                    </div>
-                    <div class="flex flex-col gap-0.5">
-                        <label for="password" class="text-base font-medium px-1">Password</label>
-                        <input type="password" name="password" id="password" placeholder="********" class="outline-none border-2 border-gray-400 p-1.5 rounded w-full hover:border-[#6636F1] focus:border-[#6636F1] focus-visible:border-[#6636F1] active:border-[#6636F1]">
-                    </div>
-                    <div class="flex flex-col gap-0.5">
-                        <label for="password_confirm" class="text-base font-medium px-1">Konfirmasi Password</label>
-                        <input type="password" name="password_confirm" id="password" placeholder="********" class="outline-none border-2 border-gray-400 p-1.5 rounded w-full hover:border-[#6636F1] focus:border-[#6636F1] focus-visible:border-[#6636F1] active:border-[#6636F1]">
-                    </div>
-                </div>
-                <div>
-                    <button class="w-full py-3 border-2outline-none border-2 border-[#6636F1] bg-[#6636F1] text-white p-1.5 rounded-lg hover:bg-white hover:text-[#6636F1]">Login</button>
-                </div>
+            
+            <div class="mb-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="Enter your email">
+                @error('email')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
+
+            <div class="mb-6 form-password-toggle">
+                <label class="form-label" for="password">Password</label>
+                <div class="input-group input-group-merge">
+                <input type="password" id="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="••••••••" aria-describedby="password">
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                </div>
+                @error('password')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn btn-primary d-grid w-100">
+                Sign up
+            </button>
+        </form>
+
+          <p class="text-center">
+            <span>Already have an account?</span>
+            <a href="{{url('auth/login-basic')}}">
+              <span>Sign in instead</span>
+            </a>
+          </p>
         </div>
+      </div>
     </div>
-</main>
+  </div>
+</div>
 @endsection
