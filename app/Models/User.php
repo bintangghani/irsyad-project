@@ -14,17 +14,24 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasUuids, SoftDeletes;
 
+    protected $primaryKey = 'id_user';
+    protected $keyType = 'uuid';
+    public $incrementing = false;
+    protected $guarded = [];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'nama',
         'email',
         'password',
         'profile',
         'moto',
+        'id_role',
+        'id_instansi'
     ];
 
     /**

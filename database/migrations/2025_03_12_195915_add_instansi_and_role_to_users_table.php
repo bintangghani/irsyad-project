@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->uuid('id_role');
             $table->foreign('id_role')->references('id_role')->on('role')->onUpdate('cascade')->onDelete('restrict');
-            $table->uuid('id_instansi');
+            $table->uuid('id_instansi')->nullable();
             $table->foreign('id_instansi')->references('id_instansi')->on('instansi')->onUpdate('cascade')->onDelete('restrict');
         });
     }
