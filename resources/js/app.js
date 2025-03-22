@@ -122,8 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
             editNama.value = nama;
             editAlamat.value = alamat;
             editDeskripsi.value = deskripsi;
-            editProfile.value = profile;
-            editBackground.value = background;
+            editProfile.value = '';
+            editBackground.value = '';
 
             modalEdit.classList.remove('hidden');
         });
