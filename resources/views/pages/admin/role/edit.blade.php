@@ -6,14 +6,15 @@
             <div class="w-full bg-white px-6 py-4 rounded-xl flex flex-col gap-10">
                 <div class="flex justify-between items-center">
                     <h1 class="text-4xl font-bold">Edit Role</h1>
-                    <a href="{{ route('dashboard.role.index') }}"
+                    <a href="{{ route('dashboard.user.role.index') }}"
                         class="px-4 py-1 rounded-lg bg-violet-500 text-white capitalize font-medium hover:bg-violet-600 cursor-pointer">
                         Kembali
                     </a>
                 </div>
 
                 <div>
-                    <form action="{{ route('dashboard.role.update', $role->id) }}" method="POST" class="flex flex-col gap-6">
+                    <form action="{{ route('dashboard.user.role.update', $role->id) }}" method="POST"
+                        class="flex flex-col gap-6">
                         @csrf
                         @method('PUT')
 

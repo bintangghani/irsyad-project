@@ -6,11 +6,23 @@
         "dev": "vite"
     },
     "devDependencies": {
+        "@rollup/plugin-html": "^2.0.0",
         "@tailwindcss/vite": "^4.0.13",
         "axios": "^1.7.4",
         "concurrently": "^9.0.1",
+        "glob": "^11.0.1",
+        "laravel-datatables-vite": "^0.6.1",
         "laravel-vite-plugin": "^1.2.0",
+        "sass": "^1.86.0",
+        "sass-loader": "^16.0.5",
         "tailwindcss": "^4.0.13",
         "vite": "^6.0.11"
+    },
+    "dependencies": {
+        "apexcharts-clevision": "^3.28.5",
+        "bootstrap": "^5.3.3",
+        "boxicons": "^2.1.4",
+        "jquery": "^3.7.1",
+        "perfect-scrollbar": "^1.5.6"
     }
 }

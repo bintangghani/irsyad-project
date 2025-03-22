@@ -1,0 +1,27 @@
+{
+  "menu": [
+    {
+      "url": "/dashboard",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bx-home-smile",
+      "slug": "dashboard."
+    },
+    {
+      "name": "User Management",
+      "icon": "menu-icon tf-icons bx bx-user",
+      "slug": "dashboard.user.",
+      "submenu": [
+        {
+          "url": "/dashboard/user",
+          "name": "User",
+          "slug": "dashboard.user."
+        },
+        {
+          "url": "/dashboard/user/role",
+          "name": "Role",
+          "slug": "dashboard.user.role.index"
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,4 @@
-@extends('layouts.master')
-
-<div class="max-w-xs p-3 shadow-md min-h-screen bg-white">
+<div class="max-w-xs w-full p-3 shadow-md min-h-screen bg-white">
     <nav class="flex flex-col justify-between h-full">
         <!-- Logo & Toggle Menu -->
         <div>
