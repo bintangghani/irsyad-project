@@ -17,9 +17,16 @@ class Role extends Model
     public $incrementing = false;
     protected $guarded = [];
 
-    public function permission()
+    public function permissions()
     {
-        return $this->hasMany(RolePermission::class, 'id_role', 'id_role');
+        return $this->hasManyThrough(
+            Permission::class,
+            RolePermission::class,
+            'id_role',
+            'id_permission',
+            'id_role',
+            'id_permission'
+        );
     }
 
     public function user()
