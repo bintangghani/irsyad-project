@@ -65,12 +65,14 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::delete('/', 'destroy')->name('destroy');
     });
   
-    Route::controller(RoleController::class)->prefix('role')->name('role.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::get('/edit', 'edit')->name('edit');
-        Route::post('/', 'store')->name('store');
-        Route::put('/', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy');
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::controller(RoleController::class)->prefix('role')->name('role.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::get('/edit', 'edit')->name('edit');
+            Route::post('/', 'store')->name('store');
+            Route::put('/', 'update')->name('update');
+            Route::delete('/', 'destroy')->name('destroy');
+        });
     });
   });
