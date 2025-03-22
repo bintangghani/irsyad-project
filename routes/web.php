@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\JenisController;
@@ -10,10 +11,6 @@ use App\Http\Controllers\SubKelompokController;
 use App\Http\Middleware\Authentication;
 use App\Http\Middleware\CheckLogin;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/', function () {
-    return view('pages.admin.dashboard');
-});
 
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::controller(AuthenticationController::class)->group(function () {
@@ -27,9 +24,9 @@ Route::prefix('auth')->name('auth.')->group(function () {
 });
 
 Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.')->group(function () {
-    Route::get('/', function () {
-        return view('pages.admin.dashboard');
-    })->name('index');
+    Route::controller(DashboardController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
     Route::controller(PermissionController::class)->prefix('permission')->name('permission.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
