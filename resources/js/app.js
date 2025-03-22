@@ -1,4 +1,5 @@
 import './bootstrap';
+import 'laravel-datatables-vite';
 
 if (window.location.pathname === '/auth') {
     var positionLeft = $('#imgAuth').position().left;
