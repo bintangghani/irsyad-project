@@ -24,7 +24,9 @@ class AuthenticationController extends Controller
                 'password' => 'required|min:6',
             ]);
 
-            if (Auth::attempt($validated)) {
+            $remember_me = $request->has('remember-me');
+
+            if (Auth::attempt($validated, $remember_me)) {
                 return redirect()->to('dashboard');
             } else {
                 return redirect()->back();
@@ -62,5 +64,14 @@ class AuthenticationController extends Controller
             //throw $th;
             return response()->json($th->getMessage());
         }
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+    
+        return redirect('/auth/login');
     }
 }

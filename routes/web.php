@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\client\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\PermissionController;
@@ -11,6 +12,14 @@ use App\Http\Controllers\SubKelompokController;
 use App\Http\Middleware\Authentication;
 use App\Http\Middleware\CheckLogin;
 use Illuminate\Support\Facades\Route;
+
+Route::fallback(function () {
+    return redirect()->route('home');
+});
+
+Route::controller(ClientController::class)->group(function () {
+    Route::get('/', 'index')->name('home');
+});
 
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::controller(AuthenticationController::class)->group(function () {
@@ -64,7 +73,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::put('/', 'update')->name('update');
         Route::delete('/', 'destroy')->name('destroy');
     });
-  
+
     Route::prefix('user')->name('user.')->group(function () {
         Route::controller(RoleController::class)->prefix('role')->name('role.')->group(function () {
             Route::get('/', 'index')->name('index');
@@ -75,4 +84,4 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::delete('/', 'destroy')->name('destroy');
         });
     });
-  });
+});
