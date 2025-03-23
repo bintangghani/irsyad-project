@@ -9,6 +9,7 @@ use App\Http\Controllers\JenisController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\SubKelompokController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\Authentication;
 use App\Http\Middleware\CheckLogin;
 use Illuminate\Support\Facades\Route;
@@ -83,5 +84,14 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::put('/', 'update')->name('update');
             Route::delete('/', 'destroy')->name('destroy');
         });
+    });
+
+    Route::controller(UserController::class)->prefix('user')->name('user.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/', 'store')->name('store');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('destroy');
     });
 });
