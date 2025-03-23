@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\client\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\PermissionController;
@@ -12,6 +13,14 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\Authentication;
 use App\Http\Middleware\CheckLogin;
 use Illuminate\Support\Facades\Route;
+
+Route::fallback(function () {
+    return redirect()->route('home');
+});
+
+Route::controller(ClientController::class)->group(function () {
+    Route::get('/', 'index')->name('home');
+});
 
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::controller(AuthenticationController::class)->group(function () {

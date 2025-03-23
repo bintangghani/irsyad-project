@@ -11,7 +11,7 @@ class RoleController extends Controller
 {
     public function index(Request $request)
     {
-        $role = Role::with('permission');
+        $role = Role::with('permissions');
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
