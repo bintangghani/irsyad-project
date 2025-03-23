@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\JenisController;
@@ -7,28 +9,25 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\SubKelompokController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\Authentication;
+use App\Http\Middleware\CheckLogin;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('pages.admin.dashboard');
-});
-
-Route::prefix('auth')->name('auth')->group(function () {
-    Route::get('/', function () {
-        return view('pages.auth.auth');
-    });
-    Route::get('/login', function () {
-        return view('pages.auth.login');
-    });
-    Route::get('/register', function () {
-        return view('pages.auth.register');
+Route::prefix('auth')->name('auth.')->group(function () {
+    Route::controller(AuthenticationController::class)->group(function () {
+        Route::middleware(CheckLogin::class)->group(function () {
+            Route::get('/login', 'login')->name('login');
+            Route::post('/login', 'loginAction')->name('loginAction');
+            Route::get('/register', 'register')->name('register');
+            Route::post('/register', 'registerAction')->name('registerAction');
+        });
     });
 });
 
-Route::prefix('dashboard')->name('dashboard.')->group(function () {
-    Route::get('/', function () {
-        return view('pages.admin.dashboard');
-    })->name('index');
+Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.')->group(function () {
+    Route::controller(DashboardController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
     Route::controller(PermissionController::class)->prefix('permission')->name('permission.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
@@ -75,7 +74,6 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
             Route::post('/', 'store')->name('store');
             Route::put('/', 'update')->name('update');
             Route::delete('/', 'destroy')->name('destroy');
-            Route::post('/search', 'search')->name('search');
         });
     });
 
