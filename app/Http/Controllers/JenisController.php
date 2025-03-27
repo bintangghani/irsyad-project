@@ -7,9 +7,25 @@ use Illuminate\Http\Request;
 
 class JenisController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $jenis = Jenis::all();
+        $jenis = Jenis::with('buku');
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $jenis->where(function ($q) use ($search) {
+                $q->where('nama', 'LIKE', "%$search%");
+            });
+        }
+
+        $perPage = $request->input('per_page', 10);
+
+        if ($jenis->count() < 10) {
+            $jenis = $jenis->orderBy('created_at', 'ASC')->paginate($jenis->count());
+        } else {
+            $jenis = $jenis->orderBy('created_at', 'ASC')->paginate($perPage);
+        }
+
         return view('pages.admin.jenis.index', compact('jenis'));
     }
 
@@ -39,7 +55,7 @@ class JenisController extends Controller
     {
         try {
             $jenis = Jenis::find($request->id_jenis);
-            
+
             if (!$jenis) {
                 return response()->json('Jenis tidak ditemukan');
             }
@@ -58,7 +74,7 @@ class JenisController extends Controller
     {
         try {
             $jenis = Jenis::find($request->id_jenis);
-            
+
             if (!$jenis) {
                 return response()->json('Jenis tidak ditemukan');
             }
@@ -69,5 +85,13 @@ class JenisController extends Controller
         } catch (\Throwable $th) {
             return response()->json($th->getMessage());
         }
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->search;
+        $jenis = Jenis::where('nama', 'like', "%$keyword%")->get();
+
+        return view('pages.admin.jenis.index', compact('jenis'));
     }
 }

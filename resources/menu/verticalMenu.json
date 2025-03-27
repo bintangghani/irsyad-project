@@ -59,6 +59,33 @@
           "slug": "dashboard.subkelompok."
         }
       ]
+    },
+    {
+      "name": "Books Management",
+      "icon": "menu-icon tf-icons bx bx-user",
+      "slug": "dashboard.buku.",
+      "submenu": [
+        {
+          "url": "/dashboard/buku",
+          "name": "Buku",
+          "slug": "dashboard.buku."
+        },
+        {
+          "url": "/dashboard/jenis",
+          "name": "Jenis",
+          "slug": "dashboard.jenis."
+        },
+        {
+          "url": "/dashboard/kelompok",
+          "name": "Kelompok",
+          "slug": "dashboard.kelompok."
+        },
+        {
+          "url": "/dashboard/subkelompok",
+          "name": "Sub Kelompok",
+          "slug": "dashboard.subkelompok."
+        }
+      ]
     }
   ]
 }

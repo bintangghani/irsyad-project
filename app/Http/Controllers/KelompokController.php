@@ -10,9 +10,24 @@ class KelompokController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $kelompok = Kelompok::all();
+        $kelompok = Kelompok::with('sub_kelompok');
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $kelompok->where(function ($q) use ($search) {
+                $q->where('nama', 'LIKE', "%$search%");
+            });
+        }
+
+        $perPage = $request->input('per_page', 10);
+        
+        if ($kelompok->count() < 10) {
+            $kelompok = $kelompok->orderBy('created_at', 'ASC')->paginate($kelompok->count());
+        } else {
+            $kelompok = $kelompok->orderBy('created_at', 'ASC')->paginate($perPage);
+        }
         return view('pages.admin.kelompok.index', compact('kelompok'));
     }
 
@@ -100,5 +115,13 @@ class KelompokController extends Controller
         } catch (\Throwable $th) {
             return response()->json($th->getMessage());
         }
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->search;
+        $kelompok = Kelompok::where('nama', 'like', "%$keyword%")->get();
+
+        return view('pages.admin.kelompok.index', compact('kelompok'));
     }
 }

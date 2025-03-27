@@ -24,7 +24,7 @@
 
                 <div class="card-body">
                     <div class="row mb-3 d-flex justify-content-between">
-                        <div class="col-md-2">
+                        <div class="col-md-2">  
                             <label class="form-label">Show</label>
                             <form action="{{ route('dashboard.user.role.index') }}" method="GET" id="paginationForm">
                                 <select class="form-select" name="per_page" onchange="document.getElementById('paginationForm').submit();">
