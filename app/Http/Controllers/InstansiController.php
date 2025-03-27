@@ -4,18 +4,38 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Instansi;
+use Illuminate\Container\Attributes\Log;
+use Illuminate\Support\Facades\Storage;
 
 class InstansiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $instansi = Instansi::all();
-        return view('pages.instansi.index', compact('instansi'));
+        $instansi = Instansi::with('user');
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $instansi->where(function ($q) use ($search) {
+                $q->where('nama', 'LIKE', "%$search%");
+                $q->where('role', 'LIKE', "%$search%");
+                $q->where('instansi', 'LIKE', "%$search%");
+            });
+        }
+
+        $perPage = $request->input('per_page', 10);
+
+        if ($instansi->count() < 10) {
+            $instansi = $instansi->orderBy('created_at', 'ASC')->paginate($instansi->count());
+        } else {
+            $instansi = $instansi->orderBy('created_at', 'ASC')->paginate($perPage);
+        }
+
+        return view('pages.admin.instansi.index', compact('instansi'));
     }
 
     public function create()
     {
-        return view('pages.instansi.create');
+        return view('pages.admin.instansi.create');
     }
 
     public function store(Request $request)
@@ -25,15 +45,17 @@ class InstansiController extends Controller
                 'nama' => 'required|string|max:255|unique:instansi,nama',
                 'alamat' => 'required|string|max:255',
                 'deskripsi' => 'required|string|max:255',
-                'profile' => 'required|string|max:255',
+                'profile' => 'required|image|mimes:jpg,jpeg,png|max:2048',
                 'background' => 'required|string|max:255'
             ]);
+
+            $profilePath = $request->file('profile')->store('profiles', 'public');
 
             Instansi::create([
                 'nama' => $request->nama,
                 'alamat' => $request->alamat,
                 'deskripsi' => $request->deskripsi,
-                'profile' => $request->profile,
+                'profile' => $profilePath,
                 'background' => $request->background
             ]);
 
@@ -43,26 +65,51 @@ class InstansiController extends Controller
         }
     }
 
-    public function update(Request $request)
+    public function edit($id)
+    {
+        $instansi = Instansi::findOrFail($id);
+        return view('pages.admin.instansi.edit', compact('instansi'));
+    }
+
+
+    public function update(Request $request, $id)
     {
         try {
-            $instansi = Instansi::find($request->id_instansi);
+            $instansi = Instansi::findOrFail($id);
 
-            if (!$instansi) {
-                return response()->json('Instansi tidak ditemukan');
+            $request->validate([
+                'nama' => 'required|string|max:255|unique:instansi,nama',
+                'alamat' => 'required|string|max:255',
+                'deskripsi' => 'required|string|max:255',
+                'profile' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+                'background' => 'required|string|max:255'
+            ]);
+
+            if ($request->hasFile('profile')) {
+                if ($instansi->profile) {
+                    Storage::disk('public')->delete($instansi->profile);
+                }
+                $profilePath = $request->file('profile')->store('profiles', 'public');
+            } else {
+                $profilePath = $instansi->profile;
             }
 
-            $instansi->update([
+            $updated = $instansi->update([
                 'nama' => $request->nama,
                 'alamat' => $request->alamat,
                 'deskripsi' => $request->deskripsi,
-                'profile' => $request->profile,
+                'profile' => $profilePath,
                 'background' => $request->background
             ]);
 
-            return redirect()->route('dashboard.instansi.index');
-        } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            if (!$updated) {
+                return back()->with('error', 'Gagal memperbarui Instansi.');
+            }
+
+            return redirect()->route('dashboard.instansi.index')->with('success', 'Instansi berhasil diperbarui');
+        } catch (\Exception $e) {
+            // Log::error('Update User Error: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -77,9 +124,17 @@ class InstansiController extends Controller
 
             $instansi->delete();
 
-            return redirect()->route('dashboard.instansi.index');
+            return redirect()->route('dashboard.instansi.index')->with('success', 'User berhasil dihapus');
         } catch (\Throwable $th) {
             return response()->json($th->getMessage());
         }
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->search;
+        $instansi = Instansi::where('nama', 'like', "%$keyword%")->get();
+
+        return view('pages.admin.instansi.index', compact('instansi'));
     }
 }
