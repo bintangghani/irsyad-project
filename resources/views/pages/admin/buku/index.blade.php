@@ -89,7 +89,7 @@
                                                 @endif
                                             </td>
                                             <td class="text-capitalize">
-                                                <div>{{ $item->uploaded }}</div>
+                                                <div>{{ $item->uploaded->nama }}</div>
                                             </td>
                                             <td class="text-capitalize">
                                                 <div>{{ $item->sub_kelompok }}</div>

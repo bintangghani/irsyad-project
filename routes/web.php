@@ -99,7 +99,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::get('/create', 'create')->name('create');
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::post('/', 'store')->name('store');
-            Route::put('/', 'update')->name('update');
+            Route::put('/{id}', 'update')->name('update');
             Route::delete('/', 'destroy')->name('destroy');
         });
     });
