@@ -30,6 +30,10 @@ Route::prefix('auth')->name('auth.')->group(function () {
             Route::post('/login', 'loginAction')->name('loginAction');
             Route::get('/register', 'register')->name('register');
             Route::post('/register', 'registerAction')->name('registerAction');
+            Route::get('/forgot-password', 'forgotPassword')->name('forgotPassword');
+            Route::post('/forgot-password', 'forgotPasswordAction')->name('forgotPasswordAction');
+            Route::get('/reset-password/{token}', 'showResetPasswordForm')->name('resetPassword.form');
+            Route::post('/reset-password', 'resetPassword')->name('resetPassword.action');
         });
     });
 });
