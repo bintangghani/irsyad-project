@@ -1,5 +1,8 @@
 import './bootstrap';
 import 'laravel-datatables-vite';
+import Swal from 'sweetalert2';
+
+window.Swal = Swal;
 
 if (window.location.pathname === '/auth') {
     var positionLeft = $('#imgAuth').position().left;
