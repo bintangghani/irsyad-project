@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SubKelompok extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes; 
-    
+    use HasFactory, HasUuids, SoftDeletes;
+
     protected $table = 'sub_kelompok';
     protected $primaryKey = 'id_sub_kelompok';
     protected $keyType = 'uuid';

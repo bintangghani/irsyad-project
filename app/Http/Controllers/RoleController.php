@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\RolePermission;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -21,7 +22,7 @@ class RoleController extends Controller
         }
 
         $perPage = $request->input('per_page', 10);
-        
+
         if ($role->count() < 10) {
             $role = $role->orderBy('created_at', 'ASC')->paginate($role->count());
         } else {
@@ -64,24 +65,48 @@ class RoleController extends Controller
         }
     }
 
-    public function update(Request $request)
+    public function edit($id)
+    {
+        $role = Role::findOrFail($id);
+        $permissions = Permission::orderBy('created_at', 'ASC')->get();
+        $rolePermissions = RolePermission::where('id_role', $id)->pluck('id_permission')->toArray();
+
+        return view('pages.admin.role.edit', compact('role', 'permissions', 'rolePermissions'));
+    }
+
+
+    public function update(Request $request, $id)
     {
         try {
-            $role = Role::find($request->id_role);
+            $request->validate([
+                'nama' => 'required|string|max:255',
+                'permission' => 'nullable|array'
+            ]);
 
-            if (!$role) {
-                return response()->json('Role tidak ditemukan');
-            }
-
+            $role = Role::findOrFail($id);
             $role->update([
                 'nama' => $request->nama
             ]);
 
-            return redirect()->route('dashboard.role.index');
+            // Sync permissions
+            RolePermission::where('id_role', $id)->delete();
+
+            if ($request->permission) {
+                foreach ($request->permission as $item) {
+                    RolePermission::create([
+                        'id_role' => $id,
+                        'id_permission' => $item
+                    ]);
+                }
+            }
+
+            return redirect()->route('dashboard.user.role.index')->with('success', 'Role updated successfully!');
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            return redirect()->back()->with('error', $th->getMessage());
         }
     }
+
+
 
     public function destroy(Request $request)
     {

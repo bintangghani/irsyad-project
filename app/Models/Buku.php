@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Buku extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes; 
-    
+    use HasFactory, HasUuids, SoftDeletes;
+
     protected $table = 'buku';
     protected $primaryKey = 'id_buku';
     protected $keyType = 'uuid';
@@ -24,7 +24,7 @@ class Buku extends Model
 
     public function sub_kelompok()
     {
-        return $this->belongsTo(SubKelompok::class, 'sub_kelompok', 'id_user');
+        return $this->belongsTo(SubKelompok::class, 'sub_kelompok', 'id_sub_kelompok');
     }
 
     public function jenis()

@@ -19,6 +19,10 @@ return new class extends Migration
             $table->year('tahun_terbit');
             $table->integer('jumlah_halaman');
             $table->text('sampul');
+            $table->text('deskripsi');
+            $table->text('file_buku');
+            $table->integer('total_download')->default(0);
+            $table->integer('total_read')->default(0);
             $table->uuid('uploaded_by');
             $table->foreign('uploaded_by')->references('id_user')->on('users')->onUpdate('cascade')->onDelete('restrict');
             $table->uuid('sub_kelompok');

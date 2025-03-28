@@ -4,12 +4,12 @@
 
 @section('content')
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item">
-          <a href="{{ route('dashboard.index')  }}">Home</a>
-        </li>
-        <li class="breadcrumb-item active">Role</li>
-      </ol>
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+                <a href="{{ route('dashboard.index') }}">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Role</li>
+        </ol>
     </nav>
     <main class="container-wrapper">
         <div class="container-xxl py-4 px-0">
@@ -27,8 +27,11 @@
                         <div class="col-md-2">
                             <label class="form-label">Show</label>
                             <form action="{{ route('dashboard.user.role.index') }}" method="GET" id="paginationForm">
-                                <select class="form-select" name="per_page" onchange="document.getElementById('paginationForm').submit();">
-                                    <option value="{{ $role->count() }}" {{ request('per_page') == $role->count() ? 'selected' : '' }}>{{ $role->count() < 10 ? $role->count() : 'Semua' }}</option>
+                                <select class="form-select" name="per_page"
+                                    onchange="document.getElementById('paginationForm').submit();">
+                                    <option value="{{ $role->count() }}"
+                                        {{ request('per_page') == $role->count() ? 'selected' : '' }}>
+                                        {{ $role->count() < 10 ? $role->count() : 'Semua' }}</option>
                                     <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
                                     <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
                                     <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
@@ -38,10 +41,12 @@
                             </form>
                         </div>
 
-                        <form action="{{ route('dashboard.user.role.index') }}" method="GET" class="col-md-6 text-md-end mt-3 mt-md-0">
+                        <form action="{{ route('dashboard.user.role.index') }}" method="GET"
+                            class="col-md-6 text-md-end mt-3 mt-md-0">
                             <label class="form-label">Search</label>
                             <div class="input-group">
-                                <input type="search" name="search" class="form-control" placeholder="Cari Role..." value="{{ request('search') }}">
+                                <input type="search" name="search" class="form-control" placeholder="Cari Role..."
+                                    value="{{ request('search') }}">
                                 <button type="submit" class="btn btn-primary">Cari</button>
                             </div>
                         </form>
@@ -54,7 +59,8 @@
                                     <tr class="bg-primary">
                                         <th scope="col" class="text-center bg-primary text-white w-10">#</th>
                                         <th scope="col" class="bg-primary text-white w-60">Nama</th>
-                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Aksi</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Aksi
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -63,23 +69,18 @@
                                             <th scope="row" class="text-center">{{ $key + 1 }}</th>
                                             <td class="text-capitalize">
                                                 <div class="editJenisSection">{{ $item->nama }}</div>
-                                                <form action="{{ route('dashboard.user.role.update', ['id' => $item->id]) }}" method="POST" class="d-none editJenisInput">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <input type="hidden" name="id_role" value="{{ $item->id_role }}">
-                                                    <div class="input-group">
-                                                        <input type="text" name="nama" class="form-control" value="{{ $item->nama }}">
-                                                        <button type="submit" class="btn btn-warning">Update</button>
-                                                    </div>
-                                                </form>
                                             </td>
                                             <td class="text-center">
-                                                <button class="btn btn-warning editJenisBtn">Edit</button>
-                                                <form action="{{ route('dashboard.user.role.destroy') }}" method="POST" class="d-inline">
+                                                {{-- <a href="{{ route('dashboard.user.role.edit', ['id' => $item->id_role]) }}" class="btn btn-warning editJenisBtn">Edit</a> --}}
+                                                <a href="{{ route('dashboard.user.role.edit', $item->id_role) }}"
+                                                    class="btn btn-warning">Edit</a>
+                                                <form action="{{ route('dashboard.user.role.destroy') }}" method="POST"
+                                                    class="d-inline delete-form">
                                                     @csrf
                                                     @method('DELETE')
                                                     <input type="hidden" name="id_role" value="{{ $item->id_role }}">
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                    <button type="button"
+                                                        class="btn btn-danger delete-button">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -100,4 +101,31 @@
             </div>
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const deleteButtons = document.querySelectorAll('.delete-button');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const form = button.closest('.delete-form');
+
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: 'Data ini akan dihapus secara permanen!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Hapus!',
+                        cancelButtonText: 'Batal',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 @endsection
