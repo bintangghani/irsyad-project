@@ -93,7 +93,9 @@ class BukuController extends Controller
 
             return redirect()->route('dashboard.buku.index')->with('success', 'Buku berhasil ditambah!');
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error' => 'Terjadi kesalahan: ' . $th->getMessage()]);
         }
     }
 
