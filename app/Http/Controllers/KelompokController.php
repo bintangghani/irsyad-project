@@ -53,7 +53,7 @@ class KelompokController extends Controller
             Kelompok::create($validated);
 
             Alert::success('Success', 'Kelompok berhasil ditambahkan');
-            return redirect()->route('dashboard.kelompok.index');
+            return redirect()->route('dashboard.buku.kelompok.index');
         } catch (\Throwable $th) {
             Log::error('Error storing kelompok: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.']);
@@ -97,7 +97,7 @@ class KelompokController extends Controller
             $kelompok->update($validated);
 
             Alert::success('Success', 'Kelompok berhasil diperbarui');
-            return redirect()->route('dashboard.kelompok.index');
+            return redirect()->route('dashboard.buku.kelompok.index');
         } catch (\Throwable $th) {
             Log::error('Error updating kelompok: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui data.']);
@@ -117,7 +117,7 @@ class KelompokController extends Controller
             }
 
             Alert::success('Success', 'Kelompok berhasil dihapus');
-            return redirect()->route('dashboard.kelompok.index');
+            return redirect()->route('dashboard.buku.kelompok.index');
         } catch (\Throwable $th) {
             Log::error('Error deleting kelompok: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan saat menghapus data.']);

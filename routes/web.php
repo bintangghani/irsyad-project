@@ -48,33 +48,6 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::delete('/', 'destroy')->name('destroy');
     });
 
-    Route::controller(JenisController::class)->prefix('jenis')->name('jenis.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::post('/', 'store')->name('store');
-        Route::put('/{id}', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy');
-    });
-
-    Route::controller(KelompokController::class)->prefix('kelompok')->name('kelompok.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::post('/', 'store')->name('store');
-        Route::put('/{id}', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy');
-    });
-
-    Route::controller(SubKelompokController::class)->prefix('subkelompok')->name('subkelompok.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::post('/', 'store')->name('store');
-        Route::put('/{id}', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy');
-    });
-
     Route::controller(InstansiController::class)->prefix('instansi')->name('instansi.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
@@ -84,14 +57,6 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::delete('/', 'destroy')->name('destroy');
     });
 
-    Route::controller(BukuController::class)->prefix('buku')->name('buku.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::post('/', 'store')->name('store');
-        Route::put('/{id}', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy');
-    });
 
     Route::prefix('user')->name('user.')->group(function () {
         Route::controller(RoleController::class)->prefix('role')->name('role.')->group(function () {
@@ -105,6 +70,44 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
     });
 
     Route::controller(UserController::class)->prefix('user')->name('user.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/', 'store')->name('store');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('destroy');
+    });
+
+    Route::prefix('buku')->name('buku.')->group(function () {
+        Route::controller(JenisController::class)->prefix('jenis')->name('jenis.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/', 'destroy')->name('destroy');
+        });
+
+        Route::controller(KelompokController::class)->prefix('kelompok')->name('kelompok.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/', 'destroy')->name('destroy');
+        });
+
+        Route::controller(SubKelompokController::class)->prefix('subkelompok')->name('subkelompok.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/', 'destroy')->name('destroy');
+        });
+    });
+
+    Route::controller(BukuController::class)->prefix('buku')->name('buku.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');

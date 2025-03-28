@@ -44,7 +44,7 @@ class JenisController extends Controller
             Jenis::create($validated);
 
             Alert::success('Success', 'Jenis berhasil ditambahkan');
-            return redirect()->route('dashboard.jenis.index');
+            return redirect()->route('dashboard.buku.jenis.index');
         } catch (\Throwable $th) {
             Log::error('Error storing Jenis: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.']);
@@ -74,7 +74,7 @@ class JenisController extends Controller
             $jenis->update($validated);
 
             Alert::success('Success', 'Jenis berhasil diperbarui');
-            return redirect()->route('dashboard.jenis.index');
+            return redirect()->route('dashboard.buku.jenis.index');
         } catch (\Throwable $th) {
             Log::error('Error updating Jenis: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui data.']);
@@ -92,7 +92,7 @@ class JenisController extends Controller
             }
 
             Alert::success('Success', 'Jenis berhasil dihapus');
-            return redirect()->route('dashboard.jenis.index');
+            return redirect()->route('dashboard.buku.jenis.index');
         } catch (\Throwable $th) {
             Log::error('Error deleting Jenis: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan saat menghapus data.']);

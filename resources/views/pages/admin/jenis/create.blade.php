@@ -9,7 +9,7 @@
                 <a href="{{ route('dashboard.index') }}">Home</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('dashboard.jenis.index') }}">Jenis</a>
+                <a href="{{ route('dashboard.buku.jenis.index') }}">Jenis</a>
             </li>
             <li class="breadcrumb-item active">Create</li>
         </ol>
@@ -19,12 +19,12 @@
             <div class="card">
                 <div class="card-header d-flex flex-column flex-md-row align-items-center justify-content-between">
                     <h5 class="card-title mb-0">Tambah jenis baru</h5>
-                    <a href="{{ route('dashboard.jenis.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('dashboard.buku.jenis.index') }}" class="btn btn-secondary">
                         <span class="d-none d-sm-inline-block">Kembali</span>
                     </a>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('dashboard.jenis.store') }}" method="POST" class="needs-validation" novalidate>
+                    <form action="{{ route('dashboard.buku.jenis.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
                         <div class="mb-3">
                             <label for="nama" class="form-label">Nama jenis</label>

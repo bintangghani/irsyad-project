@@ -8,17 +8,17 @@
             <li class="breadcrumb-item">
                 <a href="{{ route('dashboard.index') }}">Home</a>
             </li>
-            <li class="breadcrumb-item active">jenis</li>
+            <li class="breadcrumb-item active">Jenis</li>
         </ol>
     </nav>
     <main class="container-wrapper">
         <div class="container-xxl py-4 px-0">
             <div class="card">
                 <div class="card-header d-flex flex-column flex-md-row align-items-center justify-content-between">
-                    <h5 class="card-title mb-0 fs-3">List jenis</h5>
-                    <a href="{{ route('dashboard.jenis.create') }}" class="btn btn-primary">
+                    <h5 class="card-title mb-0 fs-3">List Jenis</h5>
+                    <a href="{{ route('dashboard.buku.jenis.create') }}" class="btn btn-primary">
                         <i class="bx bx-plus me-2"></i>
-                        <span class="d-none d-sm-inline-block">Tambah jenis Baru</span>
+                        <span class="d-none d-sm-inline-block">Tambah Jenis</span>
                     </a>
                 </div>
 
@@ -26,7 +26,7 @@
                     <div class="row mb-3 d-flex justify-content-between">
                         <div class="col-md-2">
                             <label class="form-label">Show</label>
-                            <form action="{{ route('dashboard.jenis.index') }}" method="GET" id="paginationForm">
+                            <form action="{{ route('dashboard.buku.jenis.index') }}" method="GET" id="paginationForm">
                                 <select class="form-select" name="per_page"
                                     onchange="document.getElementById('paginationForm').submit();">
                                     <option value="{{ $jenis->count() }}"
@@ -41,7 +41,7 @@
                             </form>
                         </div>
 
-                        <form action="{{ route('dashboard.jenis.index') }}" method="GET"
+                        <form action="{{ route('dashboard.buku.jenis.index') }}" method="GET"
                             class="col-md-6 text-md-end mt-3 mt-md-0">
                             <label class="form-label">Search</label>
                             <div class="input-group">
@@ -69,9 +69,9 @@
                                             <th scope="row" class="text-center">{{ $jenis->firstItem() + $key }}</th>
                                             <td class="text-capitalize">{{ $item->nama }}</td>
                                             <td class="text-center">
-                                                <a href="{{ route('dashboard.jenis.edit', $item->id_jenis) }}"
+                                                <a href="{{ route('dashboard.buku.jenis.edit', $item->id_jenis) }}"
                                                     class="btn btn-warning">Edit</a>
-                                                <form action="{{ route('dashboard.jenis.destroy') }}" method="POST"
+                                                <form action="{{ route('dashboard.buku.jenis.destroy') }}" method="POST"
                                                     class="d-inline">
                                                     @csrf
                                                     @method('DELETE')

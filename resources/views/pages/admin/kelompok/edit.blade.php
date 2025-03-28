@@ -9,7 +9,7 @@
                 <a href="{{ route('dashboard.index') }}">Home</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('dashboard.kelompok.index') }}">Kelompok</a>
+                <a href="{{ route('dashboard.buku.kelompok.index') }}">Kelompok</a>
             </li>
             <li class="breadcrumb-item active">Edit</li>
         </ol>
@@ -19,12 +19,12 @@
             <div class="card">
                 <div class="card-header d-flex flex-column flex-md-row align-items-center justify-content-between">
                     <h5 class="card-title mb-0">Edit Kelompok</h5>
-                    <a href="{{ route('dashboard.kelompok.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('dashboard.buku.kelompok.index') }}" class="btn btn-secondary">
                         <span class="d-none d-sm-inline-block">Kembali</span>
                     </a>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('dashboard.kelompok.update', $kelompok->id_kelompok) }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <form action="{{ route('dashboard.buku.kelompok.update', $kelompok->id_kelompok) }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                         @csrf
                         @method('PUT')
 

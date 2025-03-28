@@ -50,7 +50,7 @@ class SubKelompokController extends Controller
                 'id_kelompok' => $request->id_kelompok
             ]);
 
-            return redirect()->route('dashboard.subkelompok.index')->with('success', 'SubKelompok berhasil ditambahkan.');
+            return redirect()->route('dashboard.buku.subkelompok.index')->with('success', 'SubKelompok berhasil ditambahkan.');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $th->getMessage());
         }
@@ -75,9 +75,9 @@ class SubKelompokController extends Controller
                 'nama' => $request->nama,
             ]);
 
-            return redirect()->route('dashboard.subkelompok.index')->with('success', 'Sub Kelompok berhasil diperbarui.');
+            return redirect()->route('dashboard.buku.subkelompok.index')->with('success', 'Sub Kelompok berhasil diperbarui.');
         } catch (\Throwable $th) {
-            return redirect()->route('dashboard.subkelompok.index')->with('error', 'Gagal memperbarui Sub Kelompok.');
+            return redirect()->route('dashboard.buku.subkelompok.index')->with('error', 'Gagal memperbarui Sub Kelompok.');
         }
     }
 
@@ -92,7 +92,7 @@ class SubKelompokController extends Controller
 
             $subkelompok->delete();
 
-            return redirect()->route('dashboard.subkelompok.index');
+            return redirect()->route('dashboard.buku.subkelompok.index');
         } catch (\Throwable $th) {
             return response()->json($th->getMessage());
         }

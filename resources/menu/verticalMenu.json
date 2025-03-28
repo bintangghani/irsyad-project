@@ -44,19 +44,19 @@
           "slug": "dashboard.buku."
         },
         {
-          "url": "/dashboard/jenis",
+          "url": "/dashboard/buku/jenis",
           "name": "Jenis",
-          "slug": "dashboard.jenis."
+          "slug": "dashboard.buku.jenis."
         },
         {
-          "url": "/dashboard/kelompok",
+          "url": "/dashboard/buku/kelompok",
           "name": "Kelompok",
-          "slug": "dashboard.kelompok.index"
+          "slug": "dashboard.buku.kelompok."
         },
         {
-          "url": "/dashboard/subkelompok",
+          "url": "/dashboard/buku/subkelompok",
           "name": "Sub Kelompok",
-          "slug": "dashboard.subkelompok."
+          "slug": "dashboard.buku.subkelompok."
         }
       ]
     }
