@@ -67,6 +67,8 @@
                                         <th scope="col" class="bg-primary text-white w-60">Upload</th>
                                         <th scope="col" class="bg-primary text-white w-60">Sub Kelompok</th>
                                         <th scope="col" class="bg-primary text-white w-60">Jenis</th>
+                                        <th scope="col" class="bg-primary text-white w-60">Deskripsi</th>
+                                        <th scope="col" class="bg-primary text-white w-60">Link Buku    </th>
                                         <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Aksi
                                         </th>
                                     </tr>
@@ -97,9 +99,24 @@
                                             <td class="text-capitalize">
                                                 <div>{{ $item->jenis }}</div>
                                             </td>
+                                            <td class="text-capitalize">
+                                                <div>{{ $item->deskripsi }}</div>
+                                            </td>
                                             <td class="text-center">
-                                                <a href="{{ route('dashboard.buku.edit', $item->id_buku) }}" class="btn btn-warning">Edit</a>
-                                                <form action="{{ route('dashboard.buku.destroy') }}" method="POST" class="d-inline">
+                                                @if ($item->file_buku)
+                                                    <a href="{{ asset('storage/' . $item->file_buku) }}" target="_blank"
+                                                        class="btn btn-primary btn-sm">
+                                                        Buka Buku
+                                                    </a>
+                                                @else
+                                                    <span class="text-muted">Tidak ada file</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="{{ route('dashboard.buku.edit', $item->id_buku) }}"
+                                                    class="btn btn-warning">Edit</a>
+                                                <form action="{{ route('dashboard.buku.destroy') }}" method="POST"
+                                                    class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <input type="hidden" name="id_buku" value="{{ $item->id_buku }}">

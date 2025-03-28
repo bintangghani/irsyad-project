@@ -63,12 +63,17 @@ class BukuController extends Controller
                 'tahun_terbit' => 'required|digits:4|integer|min:1900|max:' . date('Y'),
                 'jumlah_halaman' => 'required|integer',
                 'sampul' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+                'deskripsi' => 'required|string',
+                'file_buku' => 'nullable|file|mimes:pdf|max:10240',
+                'total_download' => 'integer|min:0',
+                'total_read' => 'integer|min:0',
                 'uploaded_by' => 'required|uuid|exists:users,id_user',
                 'sub_kelompok' => 'required|uuid|exists:sub_kelompok,id_sub_kelompok',
                 'jenis' => 'required|uuid|exists:jenis,id_jenis',
             ]);
 
             $sampulPath = $request->file('sampul')->store('sampuls', 'public');
+            $bukuPath = $request->file('file_buku')->store('buku', 'public');
 
             Buku::create([
                 'penerbit' => $request->penerbit,
@@ -77,6 +82,10 @@ class BukuController extends Controller
                 'tahun_terbit' => $request->tahun_terbit,
                 'jumlah_halaman' => $request->jumlah_halaman,
                 'sampul' => $sampulPath,
+                'deskripsi' => $request->deskripsi,
+                'file_buku' => $bukuPath,
+                'total_download' => $request->total_download ?? 0,
+                'total_read' => $request->total_read ?? 0,
                 'uploaded_by' => $request->uploaded_by,
                 'sub_kelompok' => $request->sub_kelompok,
                 'jenis' => $request->jenis,
@@ -121,13 +130,18 @@ class BukuController extends Controller
                 'alamat_penerbit' => 'required|string|max:255',
                 'judul' => 'required|string|max:255',
                 'tahun_terbit' => 'required|digits:4|integer|min:1900|max:' . date('Y'),
-                'jumlah_halaman' => 'required|integer|min:1',
+                'jumlah_halaman' => 'required|integer',
                 'sampul' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
-                'uploaded_by' => 'required|exists:users,id_user',
-                'sub_kelompok' => 'required|exists:sub_kelompok,id_sub_kelompok',
-                'jenis' => 'required|exists:jenis,id_jenis',
+                'deskripsi' => 'required|string',
+                'file_buku' => 'nullable|file|mimes:pdf|max:10240',
+                'total_download' => 'integer|min:0',
+                'total_read' => 'integer|min:0',
+                'uploaded_by' => 'required|uuid|exists:users,id_user',
+                'sub_kelompok' => 'required|uuid|exists:sub_kelompok,id_sub_kelompok',
+                'jenis' => 'required|uuid|exists:jenis,id_jenis',
             ]);
 
+            // Update Sampul
             if ($request->hasFile('sampul')) {
                 if ($buku->sampul) {
                     Storage::disk('public')->delete($buku->sampul);
@@ -137,6 +151,16 @@ class BukuController extends Controller
                 $sampulPath = $buku->sampul;
             }
 
+            // Update File Buku
+            if ($request->hasFile('file_buku')) {
+                if ($buku->file_buku) {
+                    Storage::disk('public')->delete($buku->file_buku);
+                }
+                $bukuPath = $request->file('file_buku')->store('buku', 'public');
+            } else {
+                $bukuPath = $buku->file_buku;
+            }
+
             // Update data buku
             $updated = $buku->update([
                 'penerbit' => $request->penerbit,
@@ -144,7 +168,11 @@ class BukuController extends Controller
                 'judul' => $request->judul,
                 'tahun_terbit' => $request->tahun_terbit,
                 'jumlah_halaman' => $request->jumlah_halaman,
-                'sampul' =>  $sampulPath,
+                'sampul' => $sampulPath,
+                'deskripsi' => $request->deskripsi,
+                'file_buku' => $bukuPath,
+                'total_download' => $request->total_download ?? 0,
+                'total_read' => $request->total_read ?? 0,
                 'uploaded_by' => $request->uploaded_by,
                 'sub_kelompok' => $request->sub_kelompok,
                 'jenis' => $request->jenis,
@@ -156,11 +184,10 @@ class BukuController extends Controller
 
             return redirect()->route('dashboard.buku.index')->with('success', 'Buku berhasil diperbarui!');
         } catch (\Throwable $th) {
-            Log::error('Update User Error: ' . $th->getMessage());
+            Log::error('Update Buku Error: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan: ' . $th->getMessage()]);
         }
     }
-
 
     /**
      * Remove the specified resource from storage.
