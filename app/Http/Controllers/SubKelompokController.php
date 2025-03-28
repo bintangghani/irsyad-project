@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Kelompok;
 use App\Models\SubKelompok;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class SubKelompokController extends Controller
 {
@@ -40,19 +42,27 @@ class SubKelompokController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $validated = $request->validate([
                 'nama' => 'required|string|max:255|unique:sub_kelompok,nama',
                 'id_kelompok' => 'required|exists:kelompok,id_kelompok'
+            ], [
+                'nama.required' => 'Nama subkelompok wajib diisi!',
+                'nama.string' => 'Nama subkelompok harus berupa teks!',
+                'nama.max' => 'Nama subkelompok maksimal 255 karakter!',
+                'nama.unique' => 'Nama subkelompok sudah terdaftar, gunakan nama lain!',
+                'id_kelompok.required' => 'Kelompok wajib dipilih!',
+                'id_kelompok.exists' => 'Kelompok yang dipilih tidak valid!'
             ]);
 
-            SubKelompok::create([
-                'nama' => $request->nama,
-                'id_kelompok' => $request->id_kelompok
-            ]);
+            SubKelompok::create($validated);
 
-            return redirect()->route('dashboard.buku.subkelompok.index')->with('success', 'SubKelompok berhasil ditambahkan.');
+            return redirect()->route('dashboard.buku.subkelompok.index')
+                ->with('success', 'SubKelompok berhasil ditambahkan.');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $th->getMessage());
+            Log::error('Error storing subkelompok: ' . $th->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menyimpan data.');
         }
     }
 
@@ -66,18 +76,31 @@ class SubKelompokController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $request->validate([
+            $validated = $request->validate([
                 'nama' => 'required|string|max:255|unique:sub_kelompok,nama,' . $id . ',id_sub_kelompok',
+                'id_kelompok' => 'required|exists:kelompok,id_kelompok'
+            ], [
+                'nama.required' => 'Nama Subkelompok wajib diisi!',
+                'nama.string' => 'Nama subkelompok harus berupa teks!',
+                'nama.max' => 'Nama subkelompok maksimal 255 karakter!',
+                'nama.unique' => 'Nama subkelompok sudah terdaftar, gunakan nama lain!',
+                'id_kelompok.required' => 'Kelompok wajib dipilih!',
+                'id_kelompok.exists' => 'Kelompok yang dipilih tidak valid!'
             ]);
 
             $subkelompok = SubKelompok::findOrFail($id);
             $subkelompok->update([
-                'nama' => $request->nama,
+                'nama' => $validated['nama'],
+                'id_kelompok' => $validated['id_kelompok']
             ]);
 
-            return redirect()->route('dashboard.buku.subkelompok.index')->with('success', 'Sub Kelompok berhasil diperbarui.');
+            return redirect()->route('dashboard.buku.subkelompok.index')
+                ->with('success', 'Sub Kelompok berhasil diperbarui.');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
-            return redirect()->route('dashboard.buku.subkelompok.index')->with('error', 'Gagal memperbarui Sub Kelompok.');
+            Log::error('Error updating subkelompok: ' . $th->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat memperbarui data.');
         }
     }
 

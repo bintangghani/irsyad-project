@@ -6,6 +6,7 @@ use App\Models\Kelompok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Validation\ValidationException;
 
 class KelompokController extends Controller
 {
@@ -54,6 +55,8 @@ class KelompokController extends Controller
 
             Alert::success('Success', 'Kelompok berhasil ditambahkan');
             return redirect()->route('dashboard.buku.kelompok.index');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
             Log::error('Error storing kelompok: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.']);
@@ -98,6 +101,8 @@ class KelompokController extends Controller
 
             Alert::success('Success', 'Kelompok berhasil diperbarui');
             return redirect()->route('dashboard.buku.kelompok.index');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
             Log::error('Error updating kelompok: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui data.']);
