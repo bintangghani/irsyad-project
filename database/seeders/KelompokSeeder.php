@@ -14,37 +14,28 @@ class KelompokSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('kelompok')->insert([
-            [
-                'id_kelompok' => Str::uuid(),
-                'nama' => 'Fiksi',
+        $kelompokData = [
+            ['nama' => 'Fiksi'],
+            ['nama' => 'Non-Fiksi'],
+            ['nama' => 'Referensi'],
+            ['nama' => 'Anak-Anak'],
+            ['nama' => 'Buku Pelajaran Sekolah'],
+        ];
+
+        $kelompokIDs = [];
+
+        foreach ($kelompokData as $data) {
+            $uuid = Str::uuid();
+            DB::table('kelompok')->insert([
+                'id_kelompok' => $uuid,
+                'nama' => $data['nama'],
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-            [
-                'id_kelompok' => Str::uuid(),
-                'nama' => 'Non-Fiksi',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id_kelompok' => Str::uuid(),
-                'nama' => 'Referensi',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id_kelompok' => Str::uuid(),
-                'nama' => 'Anak-Anak',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id_kelompok' => Str::uuid(),
-                'nama' => 'Buku Pelajaran Sekolah',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+            ]);
+
+            $kelompokIDs[$data['nama']] = $uuid;
+        }
+
+        cache()->put('kelompok_ids', $kelompokIDs, now()->addMinutes(10));
     }
 }
