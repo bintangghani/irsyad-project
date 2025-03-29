@@ -40,6 +40,7 @@ Route::prefix('auth')->name('auth.')->group(function () {
 Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('/chart-data', 'getChartData')->name('dashboard.chart-data');
     });
     Route::controller(PermissionController::class)->prefix('permission')->name('permission.')->group(function () {
         Route::get('/', 'index')->name('index');
