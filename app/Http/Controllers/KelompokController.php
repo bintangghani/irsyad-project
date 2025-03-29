@@ -54,6 +54,7 @@ class KelompokController extends Controller
             Kelompok::create($validated);
 
             Alert::success('Success', 'Kelompok berhasil ditambahkan');
+
             return redirect()->route('dashboard.buku.kelompok.index');
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
@@ -100,6 +101,7 @@ class KelompokController extends Controller
             $kelompok->update($validated);
 
             Alert::success('Success', 'Kelompok berhasil diperbarui');
+
             return redirect()->route('dashboard.buku.kelompok.index');
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();

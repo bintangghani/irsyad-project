@@ -45,6 +45,7 @@ class JenisController extends Controller
             Jenis::create($validated);
 
             Alert::success('Success', 'Jenis berhasil ditambahkan');
+
             return redirect()->route('dashboard.buku.jenis.index');
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
@@ -78,6 +79,7 @@ class JenisController extends Controller
             $jenis->update($validated);
 
             Alert::success('Success', 'Jenis berhasil diperbarui');
+
             return redirect()->route('dashboard.buku.jenis.index');
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
@@ -99,6 +101,7 @@ class JenisController extends Controller
             }
 
             Alert::success('Success', 'Jenis berhasil dihapus');
+
             return redirect()->route('dashboard.buku.jenis.index');
         } catch (\Throwable $th) {
             Log::error('Error deleting Jenis: ' . $th->getMessage());

@@ -7,6 +7,7 @@ use App\Models\SubKelompok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SubKelompokController extends Controller
 {
@@ -56,6 +57,8 @@ class SubKelompokController extends Controller
 
             SubKelompok::create($validated);
 
+            Alert::success('Success', 'Subkelompok berhasil ditambah');
+
             return redirect()->route('dashboard.buku.subkelompok.index')
                 ->with('success', 'SubKelompok berhasil ditambahkan.');
         } catch (ValidationException $e) {
@@ -93,6 +96,8 @@ class SubKelompokController extends Controller
                 'nama' => $validated['nama'],
                 'id_kelompok' => $validated['id_kelompok']
             ]);
+
+            Alert::success('Success', 'Subkelompok berhasil diperbarui');
 
             return redirect()->route('dashboard.buku.subkelompok.index')
                 ->with('success', 'Sub Kelompok berhasil diperbarui.');

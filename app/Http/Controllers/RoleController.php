@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\RolePermission;
 use App\Models\User;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RoleController extends Controller
 {
@@ -59,6 +60,8 @@ class RoleController extends Controller
                 }
             }
 
+            Alert::success('Success', 'Role berhasil ditambah');
+
             return redirect()->route('dashboard.user.role.index');
         } catch (\Throwable $th) {
             return response()->json($th->getMessage());
@@ -99,6 +102,8 @@ class RoleController extends Controller
                     ]);
                 }
             }
+
+            Alert::success('Success', 'Role berhasil diperbarui');
 
             return redirect()->route('dashboard.user.role.index')->with('success', 'Role updated successfully!');
         } catch (\Throwable $th) {

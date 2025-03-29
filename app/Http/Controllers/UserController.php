@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -76,6 +77,9 @@ class UserController extends Controller
                 'id_role' => $request->role,
                 'id_instansi' => $request->instansi,
             ]);
+
+            Alert::success('Success', 'User berhasil ditambah');
+
             return redirect()->route('dashboard.user.index')->with('success', 'User berhasil ditambahkan');
         } catch (\Throwable $th) {
             return response()->json($th->getMessage());
@@ -142,6 +146,8 @@ class UserController extends Controller
             if (!$updated) {
                 return back()->with('error', 'Gagal memperbarui user.');
             }
+
+            Alert::success('Success', 'User berhasil diperbarui');
 
             return redirect()->route('dashboard.user.index')->with('success', 'User berhasil diperbarui');
         } catch (\Exception $e) {

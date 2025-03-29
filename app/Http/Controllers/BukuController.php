@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class BukuController extends Controller
 {
@@ -18,24 +19,16 @@ class BukuController extends Controller
      */
     public function index(Request $request)
     {
-        // Ambil query awal dengan relasi
-        $bukuQuery = Buku::with(['uploaded', 'sub_kelompok', 'jenis']);
+        $buku = Buku::with(['uploaded', 'sub_kelompok', 'jenis']);
 
-        // Jika ada pencarian
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $bukuQuery->where('judul', 'LIKE', "%$search%");
+            $buku->where('judul', 'LIKE', "%$search%");
         }
 
-        // Ambil jumlah total data sebelum pagination
-        $totalData = $bukuQuery->count();
-
-        // Ambil jumlah per halaman
+        $totalData = $buku->count();
         $perPage = $request->input('per_page', 10);
-
-        // Lakukan pagination langsung dari query
-        $buku = $bukuQuery->orderBy('created_at', 'ASC')->paginate($perPage);
-
+        $buku = $buku->orderBy('created_at', 'ASC')->paginate($perPage);
         // Debugging untuk melihat struktur data
         // dd($buku->first()->toArray());
 
@@ -107,6 +100,7 @@ class BukuController extends Controller
                 'jenis' => $validated['jenis'],
             ]);
 
+            Alert::success('Success', 'Buku berhasil ditambahkan');
             return redirect()->route('dashboard.buku.index')->with('success', 'Buku berhasil ditambah!');
         } catch (ValidationException $e) {
             return redirect()->back()
@@ -114,7 +108,6 @@ class BukuController extends Controller
                 ->withInput();
         } catch (\Throwable $th) {
             Log::error('Error storing buku: ' . $th->getMessage());
-
             return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.']);
@@ -208,6 +201,7 @@ class BukuController extends Controller
                 return back()->with('error', 'Gagal memperbarui buku.');
             }
 
+            Alert::success('Success', 'Buku berhasil diperbarui');
             return redirect()->route('dashboard.buku.index')->with('success', 'Buku berhasil diperbarui!');
         } catch (ValidationException $e) {
             return redirect()->back()
@@ -222,21 +216,15 @@ class BukuController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        try {
-            $buku = Buku::find($request->id_buku);
+        $buku = Buku::find($id);
 
-            if (!$buku) {
-                return response()->json('Buku tidak ditemukan');
-            }
+        $buku->delete();
 
-            $buku->delete();
+        Alert::success('Success', 'Buku berhasil dihapus');
 
-            return redirect()->route('dashboard.buku.index');
-        } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
-        }
+        return redirect()->route('dashboard.buku.index');
     }
 
     public function search(Request $request)

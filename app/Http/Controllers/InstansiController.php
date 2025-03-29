@@ -7,6 +7,7 @@ use App\Models\Instansi;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class InstansiController extends Controller
 {
@@ -83,6 +84,8 @@ class InstansiController extends Controller
                 'background' => $validated['background']
             ]);
 
+            Alert::success('Success', 'Instansi berhasil ditambah');
+
             return redirect()->route('dashboard.instansi.index')
                 ->with('success', 'Instansi berhasil ditambahkan.');
         } catch (ValidationException $e) {
@@ -150,6 +153,8 @@ class InstansiController extends Controller
                 'profile' => $profilePath,
                 'background' => $validated['background']
             ]);
+
+            Alert::success('Success', 'Instansi berhasil diperbarui');
 
             return redirect()->route('dashboard.instansi.index')->with('success', 'Instansi berhasil diperbarui.');
         } catch (ValidationException $e) {
