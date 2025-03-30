@@ -6,6 +6,7 @@ use App\Models\Buku;
 use App\Models\Jenis;
 use App\Models\SubKelompok;
 use App\Models\User;
+use App\Models\Bookmark;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -117,9 +118,10 @@ class BukuController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $buku = Buku::findOrFail($id);   
+        return view('pages.user.buku.index', compact('buku'));
     }
 
     /**

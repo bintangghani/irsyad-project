@@ -31,4 +31,9 @@ class Buku extends Model
     {
         return $this->belongsTo(Jenis::class, 'jenis', 'id_jenis');
     }
+
+    public function bookmark()
+    {
+        return $this->hasMany(Bookmark::class, 'id_buku', 'id_buku');
+    }
 }
