@@ -102,11 +102,15 @@ class BukuController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $book = Buku::findOrFail($id);
+    
+        
+        $book->increment('total_read');
+    
+        return view('pages.user.buku.show', compact('book'));
     }
-
     /**
      * Show the form for editing the specified resource.
      */
