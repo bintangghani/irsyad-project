@@ -71,4 +71,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Buku::class, 'uploaded_by', 'id_user');
     }
+
+    public function bookmark()
+    {
+        return $this->hasMany(Bookmark::class, 'id_user', 'id_user');
+    }
 }
