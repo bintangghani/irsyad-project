@@ -91,22 +91,20 @@ class PermissionController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try {
-            $permission = Permission::find($request->id_permission);
-
-            if (!$permission) {
-                return response()->json('Permission tidak ditemukan');
-            }
-
+            $permission = Permission::findOrFail($id); // Pastikan data ada, jika tidak, lempar 404 error
             $permission->delete();
 
+            Alert::success('Success', 'Permission berhasil dihapus');
             return redirect()->route('dashboard.permission.index');
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            Log::error('Error deleting permission: ' . $th->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menghapus permission.');
         }
     }
+
 
     public function search(Request $request)
     {

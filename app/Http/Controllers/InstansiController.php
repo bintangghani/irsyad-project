@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Instansi;
 use Illuminate\Container\Attributes\Log;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class InstansiController extends Controller
 {
@@ -77,8 +78,8 @@ class InstansiController extends Controller
         try {
             $instansi = Instansi::findOrFail($id);
 
-            $request->validate([
-                'nama' => 'required|string|max:255|unique:instansi,nama',
+            $validated = $request->validate([
+                'nama' => 'required|string|max:255|unique:instansi,nama,' . $id . ',id_instansi',
                 'alamat' => 'required|string|max:255',
                 'deskripsi' => 'required|string|max:255',
                 'profile' => 'required|image|mimes:jpg,jpeg,png|max:2048',
@@ -113,21 +114,15 @@ class InstansiController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        try {
-            $instansi = Instansi::find($request->id_instansi);
+        $instansi = Instansi::find($id);
 
-            if (!$instansi) {
-                return response()->json('Instansi tidak ditemukan');
-            }
+        $instansi->delete();
 
-            $instansi->delete();
+        Alert::success('Success', 'Instansi berhasil dihapus');
 
-            return redirect()->route('dashboard.instansi.index')->with('success', 'User berhasil dihapus');
-        } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
-        }
+        return redirect()->route('dashboard.instansi.index');
     }
 
     public function search(Request $request)

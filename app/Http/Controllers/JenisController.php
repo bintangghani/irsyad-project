@@ -82,20 +82,17 @@ class JenisController extends Controller
     }
 
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try {
-            $jenis = Jenis::findOrFail($request->id_jenis);
-
-            if (!$jenis->delete()) {
-                return back()->withErrors(['error' => 'Gagal menghapus jenis.']);
-            }
+            $jenis = Jenis::findOrFail($id); // Pastikan data ada, jika tidak, lempar 404 error
+            $jenis->delete();
 
             Alert::success('Success', 'Jenis berhasil dihapus');
             return redirect()->route('dashboard.buku.jenis.index');
         } catch (\Throwable $th) {
-            Log::error('Error deleting Jenis: ' . $th->getMessage());
-            return back()->withErrors(['error' => 'Terjadi kesalahan saat menghapus data.']);
+            Log::error('Error deleting jenis: ' . $th->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menghapus jenis.');
         }
     }
 }

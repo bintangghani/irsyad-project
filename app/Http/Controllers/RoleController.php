@@ -7,6 +7,8 @@ use App\Models\Role;
 use App\Models\RolePermission;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RoleController extends Controller
 {
@@ -106,24 +108,20 @@ class RoleController extends Controller
         }
     }
 
-
-
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try {
-            $role = Role::find($request->id_role);
-
-            if (!$role) {
-                return response()->json('Role tidak ditemukan');
-            }
-
+            $role = Role::findOrFail($id);
             $role->delete();
 
-            return redirect()->route('dashboard.role.index');
+            Alert::success('Success', 'Role berhasil dihapus');
+            return redirect()->route('dashboard.user.role.index');
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            Log::error('Error deleting role: ' . $th->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menghapus role.');
         }
     }
+
 
     public function search(Request $request)
     {

@@ -107,22 +107,20 @@ class KelompokController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try {
-            $kelompok = Kelompok::findOrFail($request->id_kelompok);
-
-            if (!$kelompok->delete()) {
-                return back()->withErrors(['error' => 'Gagal menghapus kelompok.']);
-            }
+            $kelompok = Kelompok::findOrFail($id); // Pastikan data ada, jika tidak, lempar 404 error
+            $kelompok->delete();
 
             Alert::success('Success', 'Kelompok berhasil dihapus');
             return redirect()->route('dashboard.buku.kelompok.index');
         } catch (\Throwable $th) {
             Log::error('Error deleting kelompok: ' . $th->getMessage());
-            return back()->withErrors(['error' => 'Terjadi kesalahan saat menghapus data.']);
+            return back()->with('error', 'Terjadi kesalahan saat menghapus kelompok.');
         }
     }
+
 
     public function search(Request $request)
     {
