@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Kelompok;
 use App\Models\SubKelompok;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SubKelompokController extends Controller
 {
@@ -94,7 +96,6 @@ class SubKelompokController extends Controller
             return back()->with('error', 'Terjadi kesalahan saat menghapus subkelompok.');
         }
     }
-
 
     public function search(Request $request)
     {

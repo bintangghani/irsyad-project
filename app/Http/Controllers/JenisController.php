@@ -85,7 +85,7 @@ class JenisController extends Controller
     public function destroy($id)
     {
         try {
-            $jenis = Jenis::findOrFail($id); // Pastikan data ada, jika tidak, lempar 404 error
+            $jenis = Jenis::findOrFail($id);
             $jenis->delete();
 
             Alert::success('Success', 'Jenis berhasil dihapus');
@@ -94,5 +94,13 @@ class JenisController extends Controller
             Log::error('Error deleting jenis: ' . $th->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat menghapus jenis.');
         }
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->search;
+        $jenis = Jenis::where('nama', 'like', "%$keyword%")->get();
+
+        return view('pages.admin.jenis.index', compact('jenis'));
     }
 }
