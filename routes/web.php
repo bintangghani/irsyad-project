@@ -49,7 +49,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/', 'store')->name('store');
         Route::put('/{id}', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy');
+        Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
     Route::controller(InstansiController::class)->prefix('instansi')->name('instansi.')->group(function () {
@@ -58,7 +58,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/', 'store')->name('store');
         Route::put('/{id}', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy');
+        Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
 
@@ -69,7 +69,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
-            Route::delete('/', 'destroy')->name('destroy');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
     });
 
@@ -79,7 +79,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/', 'store')->name('store');
         Route::put('/{id}', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy');
+        Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
     Route::prefix('buku')->name('buku.')->group(function () {
@@ -89,7 +89,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
-            Route::delete('/', 'destroy')->name('destroy');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
         Route::controller(KelompokController::class)->prefix('kelompok')->name('kelompok.')->group(function () {
@@ -98,7 +98,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
-            Route::delete('/', 'destroy')->name('destroy');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
         Route::controller(SubKelompokController::class)->prefix('subkelompok')->name('subkelompok.')->group(function () {
@@ -107,7 +107,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
-            Route::delete('/', 'destroy')->name('destroy');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
     });
 
