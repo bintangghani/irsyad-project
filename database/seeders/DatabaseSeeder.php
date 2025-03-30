@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             // Jenis Buku //
             JenisSeeder::class,
             KelompokSeeder::class,
-            SubKelompokSeeder::class
+            SubKelompokSeeder::class,
         ]);
     }
 }

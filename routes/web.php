@@ -117,6 +117,6 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/', 'store')->name('store');
         Route::put('/{id}', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy');
+        Route::delete('/{id}', 'destroy')->name('destroy');
     });
 });

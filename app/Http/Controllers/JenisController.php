@@ -6,6 +6,7 @@ use App\Models\Jenis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Validation\ValidationException;
 
 class JenisController extends Controller
 {
@@ -35,21 +36,25 @@ class JenisController extends Controller
             $validated = $request->validate([
                 'nama' => 'required|string|max:255|unique:jenis,nama'
             ], [
-                'nama.required' => 'Nama jenis wajib diisi!',
-                'nama.string' => 'Nama jenis harus berupa teks!',
-                'nama.max' => 'Nama jenis maksimal 255 karakter!',
-                'nama.unique' => 'Nama jenis sudah terdaftar, gunakan nama lain!'
+                'nama.required' => 'Nama jenis buku wajib diisi.',
+                'nama.string' => 'Nama harus berupa teks.',
+                'nama.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+                'nama.unique' => 'Nama jenis buku sudah ada, silakan gunakan yang lain.'
             ]);
 
             Jenis::create($validated);
 
             Alert::success('Success', 'Jenis berhasil ditambahkan');
+
             return redirect()->route('dashboard.buku.jenis.index');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
             Log::error('Error storing Jenis: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.']);
         }
     }
+
 
     public function edit($id)
     {
@@ -65,16 +70,19 @@ class JenisController extends Controller
             $validated = $request->validate([
                 'nama' => 'required|string|max:255|unique:jenis,nama,' . $id . ',id_jenis'
             ], [
-                'nama.required' => 'Nama jenis wajib diisi!',
-                'nama.string' => 'Nama jenis harus berupa teks!',
-                'nama.max' => 'Nama jenis maksimal 255 karakter!',
-                'nama.unique' => 'Nama jenis sudah terdaftar, gunakan nama lain!'
+                'nama.required' => 'Nama jenis buku wajib diisi.',
+                'nama.string' => 'Nama harus berupa teks.',
+                'nama.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+                'nama.unique' => 'Nama jenis buku sudah ada, silakan gunakan yang lain.'
             ]);
 
             $jenis->update($validated);
 
             Alert::success('Success', 'Jenis berhasil diperbarui');
+
             return redirect()->route('dashboard.buku.jenis.index');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
             Log::error('Error updating Jenis: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui data.']);
@@ -89,6 +97,7 @@ class JenisController extends Controller
             $jenis->delete();
 
             Alert::success('Success', 'Jenis berhasil dihapus');
+
             return redirect()->route('dashboard.buku.jenis.index');
         } catch (\Throwable $th) {
             Log::error('Error deleting jenis: ' . $th->getMessage());

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PermissionController extends Controller
 {
@@ -49,6 +50,8 @@ class PermissionController extends Controller
                 'nama' => $request->nama
             ]);
 
+            Alert::success('Success', 'Permission berhasil ditambah');
+
             return redirect()->route('dashboard.permission.index');
         } catch (\Throwable $th) {
             return response()->json($th->getMessage());
@@ -83,6 +86,8 @@ class PermissionController extends Controller
             if (!$updated) {
                 return back()->with('error', 'Gagal memperbarui permission.');
             }
+
+            Alert::success('Success', 'Permission berhasil diperbarui');
 
             return redirect()->route('dashboard.permission.index')->with('success', 'Permission berhasil diperbarui');
         } catch (\Exception $e) {
