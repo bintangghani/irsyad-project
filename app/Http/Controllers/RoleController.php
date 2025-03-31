@@ -2,135 +2,140 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Permission;
+use App\Http\Requests\RoleRequest;
 use App\Models\Role;
-use App\Models\RolePermission;
-use App\Models\User;
+use App\Repositories\PermissionRepository\PermissionRepositoryInterface;
+use App\Repositories\RoleRepository\RoleRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RoleController extends Controller
 {
+    public function __construct(
+        protected RoleRepositoryInterface $roleRepository,
+        protected PermissionRepositoryInterface $permissionRepository
+    ) {
+    }
+
     public function index(Request $request)
     {
-        $role = Role::with('permissions');
-
-        if ($request->has('search') && $request->search != '') {
-            $search = $request->search;
-            $role->where(function ($q) use ($search) {
-                $q->where('nama', 'LIKE', "%$search%");
-            });
+        if (!haveAccessTo('view_role')) {
+            return redirect()->back();
         }
 
         $perPage = $request->input('per_page', 10);
+        $search = $request->input('search');
 
-        if ($role->count() < 10) {
-            $role = $role->orderBy('created_at', 'ASC')->paginate($role->count());
-        } else {
-            $role = $role->orderBy('created_at', 'ASC')->paginate($perPage);
-        }
+        $roles = $this->roleRepository->getRolesWithPermissions($search, $perPage);
 
-        return view('pages.admin.role.index', compact('role'));
+        return view('pages.admin.role.index', compact('roles'));
     }
 
     public function create()
     {
-        $permissions = Permission::orderBy('created_at', 'ASC')->get();
+        if (!haveAccessTo('create_role')) {
+            return redirect()->back();
+        }
+
+        $permissions = $this->permissionRepository->all();
         return view('pages.admin.role.create', compact('permissions'));
     }
 
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        try {
-            $request->validate([
-                'nama' => 'required|string|max:255',
-                'permission' => 'nullable|array'
-            ]);
+        if (!haveAccessTo('create_role')) {
+            return redirect()->back();
+        }
 
-            $role = Role::create([
+        try {
+            DB::beginTransaction();
+
+            $role = $this->roleRepository->create([
                 'nama' => $request->nama
             ]);
 
-            if ($request->permission) {
-                foreach ($request->permission as $item) {
-                    RolePermission::create([
-                        'id_role' => $role->id_role,
-                        'id_permission' => $item
-                    ]);
-                }
+            if ($request->has('permission')) {
+                $this->roleRepository->syncPermissions($role, $request->permission);
             }
 
-            Alert::success('Success', 'Role berhasil ditambah');
+            DB::commit();
 
+            Alert::success('Success', 'Role berhasil ditambah');
             return redirect()->route('dashboard.user.role.index');
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            DB::rollBack();
+            Alert::error('Error', 'Nampaknya terjadi kesalahan');
+            return redirect()->route('dashboard.user.role.index');
         }
     }
 
     public function edit($id)
     {
-        $role = Role::findOrFail($id);
-        $permissions = Permission::orderBy('created_at', 'ASC')->get();
-        $rolePermissions = RolePermission::where('id_role', $id)->pluck('id_permission')->toArray();
+        if (!haveAccessTo('update_role')) {
+            return redirect()->back();
+        }
+
+        $role = $this->roleRepository->getRoleWithPermissions($id);
+        $permissions = $this->permissionRepository->all();
+        $rolePermissions = $role->permissions->pluck('id_permission')->toArray();
 
         return view('pages.admin.role.edit', compact('role', 'permissions', 'rolePermissions'));
     }
 
 
-    public function update(Request $request, $id)
+    public function update(RoleRequest $request, $id)
     {
+        if (!haveAccessTo('update_role')) {
+            return redirect()->back();
+        }
+        
         try {
-            $request->validate([
-                'nama' => 'required|string|max:255',
-                'permission' => 'nullable|array'
-            ]);
+            DB::beginTransaction();
 
-            $role = Role::findOrFail($id);
-            $role->update([
-                'nama' => $request->nama
-            ]);
+            $this->roleRepository->updateRoleWithPermissions($id, $request->only('nama'), $request->permission ?? []);
 
-            // Sync permissions
-            RolePermission::where('id_role', $id)->delete();
-
-            if ($request->permission) {
-                foreach ($request->permission as $item) {
-                    RolePermission::create([
-                        'id_role' => $id,
-                        'id_permission' => $item
-                    ]);
-                }
-            }
+            DB::commit();
 
             Alert::success('Success', 'Role berhasil diperbarui');
-
-            return redirect()->route('dashboard.user.role.index')->with('success', 'Role updated successfully!');
+            return redirect()->route('dashboard.user.role.index');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', $th->getMessage());
+            DB::rollBack();
+            Alert::error('Error', 'Nampaknya terjadi kesalahan');
+            return redirect()->route('dashboard.user.role.index');
         }
     }
 
     public function destroy($id)
     {
+        if (!haveAccessTo('delete_role')) {
+            return redirect()->back();
+        }
+
         try {
-            $role = Role::findOrFail($id);
-            $role->delete();
+            DB::beginTransaction();
+
+            $this->roleRepository->delete($id);
+
+            DB::commit();
 
             Alert::success('Success', 'Role berhasil dihapus');
             return redirect()->route('dashboard.user.role.index');
         } catch (\Throwable $th) {
-            Log::error('Error deleting role: ' . $th->getMessage());
-            return back()->with('error', 'Terjadi kesalahan saat menghapus role.');
+            DB::rollBack();
+            Alert::error('Error', 'Nampaknya terjadi kesalahan');
+            return redirect()->route('dashboard.user.role.index');
         }
     }
 
 
     public function search(Request $request)
     {
-        $keyword = $request->search;
-        $role = Role::where('nama', 'like', "%$keyword%")->get();
+        if (!haveAccessTo('view_role')) {
+            return redirect()->back();
+        }
+
+        $role = $this->roleRepository->search($request->search);
 
         return view('pages.admin.role.index', compact('role'));
     }
