@@ -5,26 +5,22 @@
 @section('content')
     <div class="container mx-auto px-4">
         <!-- Trending Books Carousel -->
-        <div class="relative w-full max-w-4xl mx-auto overflow-hidden rounded-lg shadow-lg">
-            <div id="carousel" class="flex transition-transform duration-700 ease-in-out"
-                style="width: {{ count($trendingBooks) * 100 }}%;">
-                @foreach ($trendingBooks as $book)
-                    <div class="relative w-full h-64 flex-shrink-0" style="width: {{ 100 / count($trendingBooks) }}%;">
-                        <img src="{{ asset('storage/' . $book->sampul) }}" class="w-full h-full object-cover">
-                        <div
-                            class="absolute inset-0  bg-opacity-50 flex items-center justify-center text-white p-4 opacity-0 transition hover:opacity-100">
-                            <div class="text-center">
-                                <h3 class="text-lg font-semibold">{{ $book->judul }}</h3>
-                                <p class="text-sm">by {{ $book->uploaded->nama }}</p>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+        <div
+            class="relative w-full flex flex-col md:flex-row bg-gradient-to-r from-gray-900 to-gray-700 text-white p-8 rounded-lg shadow-lg">
+            <div class="md:w-2/3 flex flex-col justify-center">
+                <span class="text-red-400 font-semibold">Exclusive Content</span>
+                <h2 class="text-3xl font-bold mt-2">Discover libraries full of content with our annual subscription</h2>
+                <p class="mt-4 text-gray-300 text-sm">Monthly subscription allows you to instantly get access to a library of
+                    over a thousand e-books and audio premium library. It also unlocks audiobook content which contains a
+                    lot of world-known bestsellers.</p>
+                <div class="mt-6 flex gap-4">
+                    <button class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600">Go Premium</button>
+                    <span class="text-lg font-semibold bg-red-600 px-4 py-2 rounded-lg shadow">$9.99 Monthly</span>
+                </div>
             </div>
-            <button id="prev"
-                class="absolute left-2 top-1/2 -translate-y-1/2 text-white p-2 bg-gray-900 rounded-full shadow-lg hover:bg-gray-700">❮</button>
-            <button id="next"
-                class="absolute right-2 top-1/2 -translate-y-1/2 text-white p-2 bg-gray-900 rounded-full shadow-lg hover:bg-gray-700">❯</button>
+            <div class="md:w-1/3 flex justify-center mt-6 md:mt-0">
+                <img src="{{ asset('storage/subscription-image.png') }}" alt="Reading Illustration" class="h-48">
+            </div>
         </div>
 
         <!-- Trending Books List -->
