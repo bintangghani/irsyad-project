@@ -4,26 +4,28 @@
 
 @section('content')
     <div class="container mx-auto px-4">
-        <!-- Trending Books Carousel -->
         <div
-            class="relative w-full flex flex-col md:flex-row bg-gradient-to-r from-gray-900 to-gray-700 text-white p-8 rounded-lg shadow-lg">
-            <div class="md:w-2/3 flex flex-col justify-center">
-                <span class="text-red-400 font-semibold">Exclusive Content</span>
-                <h2 class="text-3xl font-bold mt-2">Discover libraries full of content with our annual subscription</h2>
-                <p class="mt-4 text-gray-300 text-sm">Monthly subscription allows you to instantly get access to a library of
-                    over a thousand e-books and audio premium library. It also unlocks audiobook content which contains a
-                    lot of world-known bestsellers.</p>
-                <div class="mt-6 flex gap-4">
-                    <button class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600">Go Premium</button>
-                    <span class="text-lg font-semibold bg-red-600 px-4 py-2 rounded-lg shadow">$9.99 Monthly</span>
+            class="relative w-full max-w-6xl mx-auto flex flex-col md:flex-row bg-[#111827] text-white p-8 rounded-xl shadow-lg overflow-hidden">
+            <div class="absolute inset-0 bg-[#1E293B] clip-path-diagonal"></div>
+            <div class="md:w-2/3 flex flex-col justify-center relative z-10">
+                <span class="text-red-400 font-semibold"> {{ $user->nama ?? 'Guest' }}!</span>
+                <h2 class="text-3xl font-bold mt-2">Selamat datang di Perpustakaan Online</h2>
+                <p class="mt-4 text-gray-300 text-sm">
+                    Jelajahi ribuan koleksi buku digital dan audiobook premium hanya dengan satu klik.
+                    Nikmati akses tanpa batas ke berbagai bacaan menarik, mulai dari novel best-seller, buku edukasi, hingga
+                    konten audio eksklusif.
+                    Perpustakaan online ini dirancang untuk memenuhi kebutuhan belajar dan hiburan Anda di mana saja, kapan
+                    saja.
+                </p>
+                <div class="mt-6">
+                    <button
+                        class="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg text-lg font-semibold hover:bg-red-600 transition">
+                        Mulai Membaca Sekarang
+                    </button>
                 </div>
-            </div>
-            <div class="md:w-1/3 flex justify-center mt-6 md:mt-0">
-                <img src="{{ asset('storage/subscription-image.png') }}" alt="Reading Illustration" class="h-48">
             </div>
         </div>
 
-        <!-- Trending Books List -->
         <div class="mt-8">
             <h2 class="text-2xl font-bold text-center">Trending Books</h2>
             <div class="relative flex items-center mt-4">
@@ -53,8 +55,6 @@
                     id="nextBtn">&#10095;</button>
             </div>
         </div>
-
-        <!-- New Uploads (same as Trending Books) -->
         <h2 class="text-2xl font-bold text-center mt-8">New Uploads</h2>
         <div class="relative flex items-center mt-4">
             <button class="absolute left-0 z-10 p-2 bg-gray-200 rounded-full shadow-md hover:bg-gray-300"
@@ -82,7 +82,17 @@
                 id="nextNewBtn">&#10095;</button>
         </div>
     </div>
-
+    <style>
+        .clip-path-diagonal {
+            clip-path: polygon(0 0, 85% 0, 100% 100%, 0% 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+    </style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             function setupCarousel(carouselId, prevBtnId, nextBtnId) {

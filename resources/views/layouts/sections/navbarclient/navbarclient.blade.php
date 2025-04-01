@@ -2,6 +2,7 @@
     use Illuminate\Support\Facades\Auth;
     use App\Models\Buku;
 @endphp
+
 <nav class="fixed top-0 left-0 w-full bg-white shadow p-3 flex items-center justify-between z-50">
     <a href="{{ url('/') }}" class="text-xl font-bold text-blue-600 ml-10">IRSYAD</a>
     <div class="hidden md:flex space-x-4 text-sm font-medium">
@@ -36,16 +37,16 @@
         </div>
     </div>
 
-    <!-- Profil atau Login -->
     <div class="relative">
         @if (Auth::check())
-            <button id="userMenuButton" class="focus:outline-none">
+            <button id="userMenuButton" class="focus:outline-none flex items-center space-x-2">
                 <img src="{{ asset(Auth::user()->profile) }}" class="w-8 h-8 rounded-full border shadow">
+                <span class="text-sm font-medium">{{ Auth::user()->nama }}</span>
             </button>
             <div id="userMenu" class="hidden absolute right-0 mt-1 w-40 bg-white shadow rounded">
                 <a href="#" class="block px-3 py-2 hover:bg-blue-100">My Profile</a>
                 <div class="border-t"></div>
-                <a href="#" class="block px-3 py-2 hover:bg-blue-100">Log Out</a>
+                <a href="{{ route('logout') }}" class="block px-3 py-2 hover:bg-blue-100">Log Out</a>
             </div>
         @else
             <a href="auth/login" class="bg-blue-600 text-white px-4 py-1.5 rounded text-sm shadow hover:bg-blue-700 mr-12">
