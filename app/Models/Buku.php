@@ -31,4 +31,9 @@ class Buku extends Model
     {
         return $this->belongsTo(Jenis::class, 'jenis', 'id_jenis');
     }
+
+    public function kelompok()
+    {
+        return $this->belongsTo(Kelompok::class, 'kelompok', 'id_kelompok');
+    }
 }
