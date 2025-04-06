@@ -46,7 +46,7 @@
             <div id="userMenu" class="hidden absolute right-0 mt-1 w-40 bg-white shadow rounded">
                 <a href="#" class="block px-3 py-2 hover:bg-blue-100">My Profile</a>
                 <div class="border-t"></div>
-                <a href="{{ route('logout') }}" class="block px-3 py-2 hover:bg-blue-100">Log Out</a>
+                <a href="{{ route('auth.logoutAction') }}" class="block px-3 py-2 hover:bg-blue-100">Log Out</a>
             </div>
         @else
             <a href="auth/login" class="bg-blue-600 text-white px-4 py-1.5 rounded text-sm shadow hover:bg-blue-700 mr-12">

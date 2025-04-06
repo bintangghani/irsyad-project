@@ -60,7 +60,7 @@
                                     <tr class="bg-primary">
                                         <th scope="col" class="text-center bg-primary text-white w-10">#</th>
                                         <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Nama</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">subkelompok</th>
+                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">kelompok</th>
                                         <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Aksi
                                         </th>
                                     </tr>

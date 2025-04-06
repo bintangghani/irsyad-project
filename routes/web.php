@@ -37,6 +37,7 @@ Route::prefix('auth')->name('auth.')->group(function () {
             Route::get('/reset-password/{token}', 'showResetPasswordForm')->name('resetPassword.form');
             Route::post('/reset-password', 'resetPassword')->name('resetPassword.action');
         });
+        Route::get('/logout', 'logoutAction')->name('logoutAction');
     });
 });
 
