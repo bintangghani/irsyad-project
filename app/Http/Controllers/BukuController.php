@@ -6,7 +6,9 @@ use App\Models\Buku;
 use App\Models\Jenis;
 use App\Models\SubKelompok;
 use App\Models\User;
+use App\Models\Bookmark;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -120,7 +122,6 @@ class BukuController extends Controller
     public function show($id)
     {
         $book = Buku::findOrFail($id);
-    
         
         $book->increment('total_read');
     
@@ -237,5 +238,32 @@ class BukuController extends Controller
         $buku = Buku::where('judul', 'like', "%$keyword%")->get();
 
         return view('pages.admin.buku.index', compact('buku'));
+    }
+
+    public function read($id)
+    {
+        try {
+            $user = Auth::user();
+        $buku = Buku::findOrFail($id);
+
+        $alreadyRead = Bookmark::where('id_user', $user->id_user)
+            ->where('id_buku', $buku->id_buku)
+            ->exists();
+
+        if (!$alreadyRead) {
+            $buku->increment('total_read');
+
+            Bookmark::create([
+                'id_user' => $user->id_user,
+                'id_buku' => $buku->id_buku
+            ]);
+        }
+
+        return view('pages.user.buku.bookmarks', compact('buku'));
+        } catch (\Throwable $th) {
+            Log::error('Read Buku Error: ' . $th->getMessage());
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat membaca buku.']);
+        }
+        
     }
 }

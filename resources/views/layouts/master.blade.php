@@ -9,8 +9,7 @@
     <div class="w-full">
         @include('layouts/sections/navbarclient/navbarclient')
     </div>
-
-    <main class="w-full mx-auto p-6 pt-16">
+    <main class="w-full mx-auto p-6">
         @yield('content')
     </main>
 

@@ -127,6 +127,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::put('/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
         Route::get('/show/{id}', 'show')->name('show');
+        Route::post('/read/{id}', 'read')->name('read');
     });
 
     Route::controller(BookmarksController::class)->prefix('bookmarks')->name('bookmarks.')->group(function () {
