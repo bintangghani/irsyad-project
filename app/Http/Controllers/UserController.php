@@ -177,4 +177,10 @@ class UserController extends Controller
 
         return view('pages.admin.user.index', compact('user'));
     }
+
+    public function profile($id)
+    {
+        $user = User::findOrFail($id);
+        return view('pages.admin.profile.index', compact('user'));
+    }
 }

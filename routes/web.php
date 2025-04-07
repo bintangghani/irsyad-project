@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\BookmarksController;
 use App\Http\Controllers\client\ClientController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\DashboardController;
@@ -82,6 +84,8 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/', 'store')->name('store');
         Route::put('/{id}', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('destroy');
+        Route::get('/profile/{id}', 'profile')->name('profile');
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
@@ -120,6 +124,13 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/', 'store')->name('store');
         Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::get('/show/{id}', 'show')->name('show');
+    });
+
+    Route::controller(BookmarksController::class)->prefix('bookmarks')->name('bookmarks.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 });
