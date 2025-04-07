@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Role extends Model
@@ -17,16 +18,11 @@ class Role extends Model
     public $incrementing = false;
     protected $guarded = [];
 
-    public function permissions()
+
+    public function permissions(): BelongsToMany
     {
-        return $this->hasManyThrough(
-            Permission::class,
-            RolePermission::class,
-            'id_role',
-            'id_permission',
-            'id_role',
-            'id_permission'
-        );
+        return $this->belongsToMany(Permission::class, 'role_permission', 'id_role', 'id_permission')
+                    ->withTimestamps();
     }
 
     public function user()

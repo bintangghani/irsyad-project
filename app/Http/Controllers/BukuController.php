@@ -121,10 +121,12 @@ class BukuController extends Controller
      */
     public function show($id)
     {
-        $buku = Buku::findOrFail($id);
-        return view('pages.user.buku.index', compact('buku'));
+        $book = Buku::findOrFail($id);
+        
+        $book->increment('total_read');
+    
+        return view('pages.user.buku.show', compact('book'));
     }
-
     /**
      * Show the form for editing the specified resource.
      */

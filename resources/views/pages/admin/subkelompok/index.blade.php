@@ -26,7 +26,8 @@
                     <div class="row mb-3 d-flex justify-content-between">
                         <div class="col-md-2">
                             <label class="form-label">Show</label>
-                            <form action="{{ route('dashboard.buku.subkelompok.index') }}" method="GET" id="paginationForm">
+                            <form action="{{ route('dashboard.buku.subkelompok.index') }}" method="GET"
+                                id="paginationForm">
                                 <select class="form-select" name="per_page"
                                     onchange="document.getElementById('paginationForm').submit();">
                                     <option value="{{ $subkelompok->count() }}"
@@ -59,7 +60,7 @@
                                     <tr class="bg-primary">
                                         <th scope="col" class="text-center bg-primary text-white w-10">#</th>
                                         <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Nama</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">subkelompok</th>
+                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">kelompok</th>
                                         <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Aksi
                                         </th>
                                     </tr>
@@ -74,12 +75,11 @@
                                             <td class="text-center">
                                                 <a href="{{ route('dashboard.buku.subkelompok.edit', $item->id_sub_kelompok) }}"
                                                     class="btn btn-warning">Edit</a>
-                                                <form action="{{ route('dashboard.buku.subkelompok.destroy') }}" method="POST"
-                                                    class="d-inline">
+                                                <form
+                                                    action="{{ route('dashboard.buku.subkelompok.destroy', $item->id_sub_kelompok) }}"
+                                                    class="d-inline" method="POST" data-confirm-delete="true">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <input type="hidden" name="id_sub_kelompok"
-                                                        value="{{ $item->id_sub_kelompok }}">
                                                     <button type="submit" class="btn btn-danger">Delete</button>
                                                 </form>
                                             </td>
@@ -101,3 +101,29 @@
         </div>
     </main>
 @endsection
+@push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll("form[data-confirm-delete]").forEach(function(form) {
+                form.addEventListener("submit", function(event) {
+                    event.preventDefault(); // Mencegah form submit langsung
+
+                    Swal.fire({
+                        title: "Yakin ingin menghapus?",
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Ya, hapus!",
+                        cancelButtonText: "Batal"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // Submit form jika user menekan "Ya, hapus!"
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+@endpush

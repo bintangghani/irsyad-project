@@ -19,12 +19,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::fallback(function () {
     return redirect()->route('home');
+    
 });
 
 Route::controller(ClientController::class)->group(function () {
     Route::get('/', 'index')->name('home');
+    Route::get('/buku/{id}', 'showBuku')->name('show');
+    Route::get('/category', 'category')->name('category'); 
 });
-
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::controller(AuthenticationController::class)->group(function () {
         Route::middleware(CheckLogin::class)->group(function () {
@@ -37,12 +39,14 @@ Route::prefix('auth')->name('auth.')->group(function () {
             Route::get('/reset-password/{token}', 'showResetPasswordForm')->name('resetPassword.form');
             Route::post('/reset-password', 'resetPassword')->name('resetPassword.action');
         });
+        Route::get('/logout', 'logoutAction')->name('logoutAction');
     });
 });
 
 Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('/chart-data', 'getChartData')->name('dashboard.chart-data');
     });
 
     Route::controller(PermissionController::class)->prefix('permission')->name('permission.')->group(function () {
@@ -51,7 +55,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/', 'store')->name('store');
         Route::put('/{id}', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy');
+        Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
     Route::controller(InstansiController::class)->prefix('instansi')->name('instansi.')->group(function () {
@@ -60,7 +64,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/', 'store')->name('store');
         Route::put('/{id}', 'update')->name('update');
-        Route::delete('/', 'destroy')->name('destroy');
+        Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
 
@@ -71,7 +75,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
-            Route::delete('/', 'destroy')->name('destroy');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
     });
 
@@ -83,6 +87,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::put('/{id}', 'update')->name('update');
         Route::delete('/', 'destroy')->name('destroy');
         Route::get('/profile/{id}', 'profile')->name('profile');
+        Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
     Route::prefix('buku')->name('buku.')->group(function () {
@@ -92,7 +97,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
-            Route::delete('/', 'destroy')->name('destroy');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
         Route::controller(KelompokController::class)->prefix('kelompok')->name('kelompok.')->group(function () {
@@ -101,7 +106,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
-            Route::delete('/', 'destroy')->name('destroy');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
         Route::controller(SubKelompokController::class)->prefix('subkelompok')->name('subkelompok.')->group(function () {
@@ -110,7 +115,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
-            Route::delete('/', 'destroy')->name('destroy');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
     });
 

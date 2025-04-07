@@ -5,9 +5,10 @@
     @extends('includes.head')
 </head>
 
-<body class="bg-gray-100 flex h-full items-center">
-
-
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <div class="w-full">
+        @include('layouts/sections/navbarclient/navbarclient')
+    </div>
     <main class="w-full mx-auto p-6">
         @yield('content')
     </main>

@@ -86,11 +86,11 @@
                                             <td class="text-center">
                                                 <a href="{{ route('dashboard.instansi.edit', $item->id_instansi) }}"
                                                     class="btn btn-warning">Edit</a>
-                                                <form action="{{ route('dashboard.instansi.destroy') }}" method="POST"
-                                                    class="d-inline">
+                                                <form
+                                                    action="{{ route('dashboard.instansi.destroy', $item->id_instansi) }}"
+                                                    class="d-inline" method="POST" data-confirm-delete="true">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <input type="hidden" name="id_instansi" value="{{ $item->id_instansi }}">
                                                     <button type="submit" class="btn btn-danger">Delete</button>
                                                 </form>
                                             </td>
@@ -112,3 +112,29 @@
         </div>
     </main>
 @endsection
+@push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll("form[data-confirm-delete]").forEach(function(form) {
+                form.addEventListener("submit", function(event) {
+                    event.preventDefault(); // Mencegah form submit langsung
+
+                    Swal.fire({
+                        title: "Yakin ingin menghapus?",
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Ya, hapus!",
+                        cancelButtonText: "Batal"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // Submit form jika user menekan "Ya, hapus!"
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+@endpush
