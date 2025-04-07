@@ -20,6 +20,43 @@
           "url": "/dashboard/user/role",
           "name": "Role",
           "slug": "dashboard.user.role.index"
+        },
+        {
+          "url": "/dashboard/permission",
+          "name": "Permission",
+          "slug": "dashboard.permission.index"
+        },
+        {
+          "url": "/dashboard/instansi",
+          "name": "Instansi",
+          "slug": "dashboard.instansi.index"
+        }
+      ]
+    },
+    {
+      "name": "Books Management",
+      "icon": "menu-icon tf-icons bx bx-user",
+      "slug": "dashboard.buku.",
+      "submenu": [
+        {
+          "url": "/dashboard/buku",
+          "name": "Buku",
+          "slug": "dashboard.buku."
+        },
+        {
+          "url": "/dashboard/buku/jenis",
+          "name": "Jenis",
+          "slug": "dashboard.buku.jenis."
+        },
+        {
+          "url": "/dashboard/buku/kelompok",
+          "name": "Kelompok",
+          "slug": "dashboard.buku.kelompok."
+        },
+        {
+          "url": "/dashboard/buku/subkelompok",
+          "name": "Sub Kelompok",
+          "slug": "dashboard.buku.subkelompok."
         }
       ]
     }

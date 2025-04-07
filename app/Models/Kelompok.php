@@ -21,4 +21,9 @@ class Kelompok extends Model
     {
         return $this->hasMany(SubKelompok::class, 'id_kelompok', 'id_kelompok');
     }
+
+    public function buku()
+    {
+        return $this->hasManyThrough(Buku::class, SubKelompok::class, 'id_kelompok', 'sub_kelompok', 'id_kelompok', 'id_sub_kelompok');
+    }
 }

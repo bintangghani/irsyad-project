@@ -4,12 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Jenis;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Validation\ValidationException;
 
 class JenisController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $jenis = Jenis::all();
+        $perPage = $request->input('per_page', 10);
+        $search = $request->input('search');
+
+        $jenis = Jenis::with('buku')
+            ->when($search, function ($query) use ($search) {
+                $query->where('nama', 'LIKE', "%$search%");
+            })
+            ->orderBy('created_at', 'ASC')
+            ->paginate($perPage);
+
         return view('pages.admin.jenis.index', compact('jenis'));
     }
 
@@ -21,53 +33,83 @@ class JenisController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $validated = $request->validate([
                 'nama' => 'required|string|max:255|unique:jenis,nama'
+            ], [
+                'nama.required' => 'Nama jenis buku wajib diisi.',
+                'nama.string' => 'Nama harus berupa teks.',
+                'nama.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+                'nama.unique' => 'Nama jenis buku sudah ada, silakan gunakan yang lain.'
             ]);
 
-            Jenis::create([
-                'nama' => $request->nama
-            ]);
+            Jenis::create($validated);
 
-            return redirect()->route('dashboard.jenis.index');
+            Alert::success('Success', 'Jenis berhasil ditambahkan');
+
+            return redirect()->route('dashboard.buku.jenis.index');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            Log::error('Error storing Jenis: ' . $th->getMessage());
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.']);
         }
     }
 
-    public function update(Request $request)
+
+    public function edit($id)
+    {
+        $jenis = Jenis::findOrFail($id);
+        return view('pages.admin.jenis.edit', compact('jenis'));
+    }
+
+    public function update(Request $request, $id)
     {
         try {
-            $jenis = Jenis::find($request->id_jenis);
-            
-            if (!$jenis) {
-                return response()->json('Jenis tidak ditemukan');
-            }
+            $jenis = Jenis::findOrFail($id);
 
-            $jenis->update([
-                'nama' => $request->nama
+            $validated = $request->validate([
+                'nama' => 'required|string|max:255|unique:jenis,nama,' . $id . ',id_jenis'
+            ], [
+                'nama.required' => 'Nama jenis buku wajib diisi.',
+                'nama.string' => 'Nama harus berupa teks.',
+                'nama.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+                'nama.unique' => 'Nama jenis buku sudah ada, silakan gunakan yang lain.'
             ]);
 
-            return redirect()->route('dashboard.jenis.index');
+            $jenis->update($validated);
+
+            Alert::success('Success', 'Jenis berhasil diperbarui');
+
+            return redirect()->route('dashboard.buku.jenis.index');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            Log::error('Error updating Jenis: ' . $th->getMessage());
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui data.']);
         }
     }
 
-    public function destroy(Request $request)
+
+    public function destroy($id)
     {
         try {
-            $jenis = Jenis::find($request->id_jenis);
-            
-            if (!$jenis) {
-                return response()->json('Jenis tidak ditemukan');
-            }
-
+            $jenis = Jenis::findOrFail($id);
             $jenis->delete();
 
-            return redirect()->route('dashboard.jenis.index');
+            Alert::success('Success', 'Jenis berhasil dihapus');
+
+            return redirect()->route('dashboard.buku.jenis.index');
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            Log::error('Error deleting jenis: ' . $th->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menghapus jenis.');
         }
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->search;
+        $jenis = Jenis::where('nama', 'like', "%$keyword%")->get();
+
+        return view('pages.admin.jenis.index', compact('jenis'));
     }
 }

@@ -58,7 +58,7 @@ class AuthenticationController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'profile' => 'assets/img/avatars/1.png',
-                'id_role' => Role::where('nama', 'superadmin')->first()->id_role,
+                'id_role' => Role::where('nama', 'client')->first()->id_role,
             ]);
 
             return redirect()->to('auth/login');
@@ -158,14 +158,11 @@ class AuthenticationController extends Controller
         }
     }
 
-
-
-
-    public function logout(Request $request)
+    public function logoutAction(Request $request)
     {
-        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        Auth::logout();
 
         return redirect('/auth/login');
     }

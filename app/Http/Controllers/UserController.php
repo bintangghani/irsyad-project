@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -76,6 +77,9 @@ class UserController extends Controller
                 'id_role' => $request->role,
                 'id_instansi' => $request->instansi,
             ]);
+
+            Alert::success('Success', 'User berhasil ditambah');
+
             return redirect()->route('dashboard.user.index')->with('success', 'User berhasil ditambahkan');
         } catch (\Throwable $th) {
             return response()->json($th->getMessage());
@@ -143,6 +147,8 @@ class UserController extends Controller
                 return back()->with('error', 'Gagal memperbarui user.');
             }
 
+            Alert::success('Success', 'User berhasil diperbarui');
+
             return redirect()->route('dashboard.user.index')->with('success', 'User berhasil diperbarui');
         } catch (\Exception $e) {
             Log::error('Update User Error: ' . $e->getMessage());
@@ -150,25 +156,18 @@ class UserController extends Controller
         }
     }
 
-
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        try {
-            $user = User::find($request->id_user);
+        $user = User::find($id);
 
-            if (!$user) {
-                return response()->json('User tidak ditemukan');
-            }
+        $user->delete();
 
-            $user->delete();
+        Alert::success('Success', 'User berhasil dihapus');
 
-            return redirect()->route('dashboard.user.index')->with('success', 'User berhasil dihapus');
-        } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
-        }
+        return redirect()->route('dashboard.user.index');
     }
 
     public function search(Request $request)
@@ -177,5 +176,11 @@ class UserController extends Controller
         $user = User::where('nama', 'like', "%$keyword%")->get();
 
         return view('pages.admin.user.index', compact('user'));
+    }
+
+    public function profile($id)
+    {
+        $user = User::findOrFail($id);
+        return view('pages.admin.profile.index', compact('user'));
     }
 }

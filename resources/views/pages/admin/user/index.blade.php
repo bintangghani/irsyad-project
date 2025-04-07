@@ -64,7 +64,8 @@
                                         <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Moto</th>
                                         <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Role</th>
                                         <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Instansi</th>
-                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Aksi</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Aksi
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -85,11 +86,12 @@
                                             <td class="text-capitalize">{{ $item->role->nama ?? 'Tidak ada' }}</td>
                                             <td class="text-capitalize">{{ $item->instansi->nama ?? 'Tidak ada' }}</td>
                                             <td class="text-center">
-                                                <a href="{{ route('dashboard.user.edit', $item->id_user) }}" class="btn btn-warning">Edit</a>
-                                                <form action="{{ route('dashboard.user.destroy') }}" method="POST" class="d-inline">
+                                                <a href="{{ route('dashboard.user.edit', $item->id_user) }}"
+                                                    class="btn btn-warning">Edit</a>
+                                                <form action="{{ route('dashboard.user.destroy', $item->id_user) }}"
+                                                    class="d-inline" method="POST" data-confirm-delete="true">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <input type="hidden" name="id_user" value="{{ $item->id_user }}">
                                                     <button type="submit" class="btn btn-danger">Delete</button>
                                                 </form>
                                             </td>
@@ -111,3 +113,29 @@
         </div>
     </main>
 @endsection
+@push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll("form[data-confirm-delete]").forEach(function(form) {
+                form.addEventListener("submit", function(event) {
+                    event.preventDefault(); // Mencegah form submit langsung
+
+                    Swal.fire({
+                        title: "Yakin ingin menghapus?",
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Ya, hapus!",
+                        cancelButtonText: "Batal"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // Submit form jika user menekan "Ya, hapus!"
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+@endpush

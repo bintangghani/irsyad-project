@@ -4,15 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelompok;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Validation\ValidationException;
 
 class KelompokController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $kelompok = Kelompok::all();
+        $perPage = $request->input('per_page', 10);
+        $search = $request->input('search');
+
+        $kelompok = Kelompok::with('sub_kelompok')
+            ->when($search, function ($query) use ($search) {
+                $query->where('nama', 'LIKE', "%$search%");
+            })
+            ->orderBy('created_at', 'ASC')
+            ->paginate($perPage);
+
         return view('pages.admin.kelompok.index', compact('kelompok'));
     }
 
@@ -30,17 +42,25 @@ class KelompokController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $validated = $request->validate([
                 'nama' => 'required|string|max:255|unique:kelompok,nama'
+            ], [
+                'nama.required' => 'Nama kelompok wajib diisi!',
+                'nama.string' => 'Nama kelompok harus berupa teks!',
+                'nama.max' => 'Nama kelompok maksimal 255 karakter!',
+                'nama.unique' => 'Nama kelompok sudah terdaftar, gunakan nama lain!'
             ]);
 
-            Kelompok::create([
-                'nama' => $request->nama
-            ]);
+            Kelompok::create($validated);
 
-            return redirect()->route('dashboard.kelompok.index');
+            Alert::success('Success', 'Kelompok berhasil ditambahkan');
+
+            return redirect()->route('dashboard.buku.kelompok.index');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            Log::error('Error storing kelompok: ' . $th->getMessage());
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.']);
         }
     }
 
@@ -57,48 +77,63 @@ class KelompokController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $kelompok = Kelompok::findOrFail($id);
+        return view('pages.admin.kelompok.edit', compact('kelompok'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         try {
-            $kelompok = Kelompok::find($request->id_jenis);
+            $kelompok = Kelompok::findOrFail($id);
 
-            if (!$kelompok) {
-                return response()->json('Kelompok tidak ditemukan');
-            }
-
-            $kelompok->update([
-                'nama' => $request->nama
+            $validated = $request->validate([
+                'nama' => 'required|string|max:255|unique:kelompok,nama,' . $id . ',id_kelompok'
+            ], [
+                'nama.required' => 'Nama kelompok wajib diisi!',
+                'nama.string' => 'Nama kelompok harus berupa teks!',
+                'nama.max' => 'Nama kelompok maksimal 255 karakter!',
+                'nama.unique' => 'Nama kelompok sudah terdaftar, gunakan nama lain!'
             ]);
 
-            return redirect()->route('dashboard.kelompok.index');
+            $kelompok->update($validated);
+
+            Alert::success('Success', 'Kelompok berhasil diperbarui');
+
+            return redirect()->route('dashboard.buku.kelompok.index');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            Log::error('Error updating kelompok: ' . $th->getMessage());
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui data.']);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try {
-            $kelompok = Kelompok::find($request->id_kelompok);
-
-            if (!$kelompok) {
-                return response()->json('Kelompok tidak ditemukan');
-            }
-
+            $kelompok = Kelompok::findOrFail($id); // Pastikan data ada, jika tidak, lempar 404 error
             $kelompok->delete();
 
-            return redirect()->route('dashboard.kelompok.index');
+            Alert::success('Success', 'Kelompok berhasil dihapus');
+            return redirect()->route('dashboard.buku.kelompok.index');
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            Log::error('Error deleting kelompok: ' . $th->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menghapus kelompok.');
         }
+    }
+
+
+    public function search(Request $request)
+    {
+        $keyword = $request->search;
+        $kelompok = Kelompok::where('nama', 'like', "%$keyword%")->get();
+
+        return view('pages.admin.kelompok.index', compact('kelompok'));
     }
 }

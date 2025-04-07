@@ -2,108 +2,140 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Permission;
+use App\Http\Requests\RoleRequest;
 use App\Models\Role;
-use App\Models\RolePermission;
+use App\Repositories\PermissionRepository\PermissionRepositoryInterface;
+use App\Repositories\RoleRepository\RoleRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RoleController extends Controller
 {
+    public function __construct(
+        protected RoleRepositoryInterface $roleRepository,
+        protected PermissionRepositoryInterface $permissionRepository
+    ) {
+    }
+
     public function index(Request $request)
     {
-        $role = Role::with('permissions');
-
-        if ($request->has('search') && $request->search != '') {
-            $search = $request->search;
-            $role->where(function ($q) use ($search) {
-                $q->where('nama', 'LIKE', "%$search%");
-            });
+        if (!haveAccessTo('view_role')) {
+            return redirect()->back();
         }
 
         $perPage = $request->input('per_page', 10);
-        
-        if ($role->count() < 10) {
-            $role = $role->orderBy('created_at', 'ASC')->paginate($role->count());
-        } else {
-            $role = $role->orderBy('created_at', 'ASC')->paginate($perPage);
-        }
+        $search = $request->input('search');
 
-        return view('pages.admin.role.index', compact('role'));
+        $roles = $this->roleRepository->getRolesWithPermissions($search, $perPage);
+
+        return view('pages.admin.role.index', compact('roles'));
     }
 
     public function create()
     {
-        $permissions = Permission::orderBy('created_at', 'ASC')->get();
+        if (!haveAccessTo('create_role')) {
+            return redirect()->back();
+        }
+
+        $permissions = $this->permissionRepository->all();
         return view('pages.admin.role.create', compact('permissions'));
     }
 
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        try {
-            $request->validate([
-                'nama' => 'required|string|max:255',
-                'permission' => 'nullable|array'
-            ]);
+        if (!haveAccessTo('create_role')) {
+            return redirect()->back();
+        }
 
-            $role = Role::create([
+        try {
+            DB::beginTransaction();
+
+            $role = $this->roleRepository->create([
                 'nama' => $request->nama
             ]);
 
-            if ($request->permission) {
-                foreach ($request->permission as $item) {
-                    RolePermission::create([
-                        'id_role' => $role->id_role,
-                        'id_permission' => $item
-                    ]);
-                }
+            if ($request->has('permission')) {
+                $this->roleRepository->syncPermissions($role, $request->permission);
             }
 
+            DB::commit();
+
+            Alert::success('Success', 'Role berhasil ditambah');
             return redirect()->route('dashboard.user.role.index');
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            DB::rollBack();
+            Alert::error('Error', 'Nampaknya terjadi kesalahan');
+            return redirect()->route('dashboard.user.role.index');
         }
     }
 
-    public function update(Request $request)
+    public function edit($id)
     {
-        try {
-            $role = Role::find($request->id_role);
-
-            if (!$role) {
-                return response()->json('Role tidak ditemukan');
-            }
-
-            $role->update([
-                'nama' => $request->nama
-            ]);
-
-            return redirect()->route('dashboard.role.index');
-        } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+        if (!haveAccessTo('update_role')) {
+            return redirect()->back();
         }
+
+        $role = $this->roleRepository->getRoleWithPermissions($id);
+        $permissions = $this->permissionRepository->all();
+        $rolePermissions = $role->permissions->pluck('id_permission')->toArray();
+
+        return view('pages.admin.role.edit', compact('role', 'permissions', 'rolePermissions'));
     }
 
-    public function destroy(Request $request)
+
+    public function update(RoleRequest $request, $id)
     {
+        if (!haveAccessTo('update_role')) {
+            return redirect()->back();
+        }
+        
         try {
-            $role = Role::find($request->id_role);
+            DB::beginTransaction();
 
-            if (!$role) {
-                return response()->json('Role tidak ditemukan');
-            }
+            $this->roleRepository->updateRoleWithPermissions($id, $request->only('nama'), $request->permission ?? []);
 
-            $role->delete();
+            DB::commit();
 
-            return redirect()->route('dashboard.role.index');
+            Alert::success('Success', 'Role berhasil diperbarui');
+            return redirect()->route('dashboard.user.role.index');
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
+            DB::rollBack();
+            Alert::error('Error', 'Nampaknya terjadi kesalahan');
+            return redirect()->route('dashboard.user.role.index');
         }
     }
+
+    public function destroy($id)
+    {
+        if (!haveAccessTo('delete_role')) {
+            return redirect()->back();
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $this->roleRepository->delete($id);
+
+            DB::commit();
+
+            Alert::success('Success', 'Role berhasil dihapus');
+            return redirect()->route('dashboard.user.role.index');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Alert::error('Error', 'Nampaknya terjadi kesalahan');
+            return redirect()->route('dashboard.user.role.index');
+        }
+    }
+
 
     public function search(Request $request)
     {
-        $keyword = $request->search;
-        $role = Role::where('nama', 'like', "%$keyword%")->get();
+        if (!haveAccessTo('view_role')) {
+            return redirect()->back();
+        }
+
+        $role = $this->roleRepository->search($request->search);
 
         return view('pages.admin.role.index', compact('role'));
     }
