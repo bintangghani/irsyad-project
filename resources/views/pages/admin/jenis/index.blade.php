@@ -71,13 +71,11 @@
                                             <td class="text-center">
                                                 <a href="{{ route('dashboard.buku.jenis.edit', $item->id_jenis) }}"
                                                     class="btn btn-warning">Edit</a>
-                                                <form action="{{ route('dashboard.buku.jenis.destroy') }}" method="POST"
-                                                    class="d-inline">
+                                                <form action="{{ route('dashboard.buku.jenis.destroy', $item->id_jenis) }}"
+                                                    class="d-inline" method="POST" data-confirm-delete="true">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <input type="hidden" name="id_jenis" value="{{ $item->id_jenis }}">
-                                                    <button type="submit" class="btn btn-danger"
-                                                        onclick="confirmDelete('{{ $item->id_jenis }}')">Delete</button>
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -98,3 +96,29 @@
         </div>
     </main>
 @endsection
+@push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll("form[data-confirm-delete]").forEach(function(form) {
+                form.addEventListener("submit", function(event) {
+                    event.preventDefault(); // Mencegah form submit langsung
+
+                    Swal.fire({
+                        title: "Yakin ingin menghapus?",
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Ya, hapus!",
+                        cancelButtonText: "Batal"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // Submit form jika user menekan "Ya, hapus!"
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+@endpush

@@ -156,25 +156,18 @@ class UserController extends Controller
         }
     }
 
-
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        try {
-            $user = User::find($request->id_user);
+        $user = User::find($id);
 
-            if (!$user) {
-                return response()->json('User tidak ditemukan');
-            }
+        $user->delete();
 
-            $user->delete();
+        Alert::success('Success', 'User berhasil dihapus');
 
-            return redirect()->route('dashboard.user.index')->with('success', 'User berhasil dihapus');
-        } catch (\Throwable $th) {
-            return response()->json($th->getMessage());
-        }
+        return redirect()->route('dashboard.user.index');
     }
 
     public function search(Request $request)

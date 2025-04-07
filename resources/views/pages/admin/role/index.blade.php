@@ -16,10 +16,12 @@
             <div class="card">
                 <div class="card-header d-flex flex-column flex-md-row align-items-center justify-content-between">
                     <h5 class="card-title mb-0 fs-3">List Role</h5>
-                    <a href="{{ route('dashboard.user.role.create') }}" class="btn btn-primary">
-                        <i class="bx bx-plus me-2"></i>
-                        <span class="d-none d-sm-inline-block">Tambah Role Baru</span>
-                    </a>
+                    @if (haveAccessTo('create_role'))
+                        <a href="{{ route('dashboard.user.role.create') }}" class="btn btn-primary">
+                            <i class="bx bx-plus me-2"></i>
+                            <span class="d-none d-sm-inline-block">Tambah Role Baru</span>
+                        </a>
+                    @endif
                 </div>
 
                 <div class="card-body">
@@ -29,9 +31,9 @@
                             <form action="{{ route('dashboard.user.role.index') }}" method="GET" id="paginationForm">
                                 <select class="form-select" name="per_page"
                                     onchange="document.getElementById('paginationForm').submit();">
-                                    <option value="{{ $role->count() }}"
-                                        {{ request('per_page') == $role->count() ? 'selected' : '' }}>
-                                        {{ $role->count() < 10 ? $role->count() : 'Semua' }}</option>
+                                    <option value="{{ $roles->count() }}" {{ request('per_page') == $roles->count() ? 'selected' : '' }}>
+                                        {{ $roles->count() < 10 ? $roles->count() : 'Semua' }}
+                                    </option>
                                     <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
                                     <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
                                     <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
@@ -54,7 +56,7 @@
 
                     <div class="table-responsive mb-5">
                         <table class="table table-bordered">
-                            @if ($role->count() > 0)
+                            @if ($roles->count() > 0)
                                 <thead class="table-light">
                                     <tr class="bg-primary">
                                         <th scope="col" class="text-center bg-primary text-white w-10">#</th>
@@ -64,24 +66,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($role as $key => $item)
+                                    @foreach ($roles as $key => $item)
                                         <tr>
                                             <th scope="row" class="text-center">{{ $key + 1 }}</th>
                                             <td class="text-capitalize">
                                                 <div class="editJenisSection">{{ $item->nama }}</div>
                                             </td>
                                             <td class="text-center">
-                                                {{-- <a href="{{ route('dashboard.user.role.edit', ['id' => $item->id_role]) }}" class="btn btn-warning editJenisBtn">Edit</a> --}}
-                                                <a href="{{ route('dashboard.user.role.edit', $item->id_role) }}"
-                                                    class="btn btn-warning">Edit</a>
-                                                <form action="{{ route('dashboard.user.role.destroy') }}" method="POST"
-                                                    class="d-inline delete-form">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <input type="hidden" name="id_role" value="{{ $item->id_role }}">
-                                                    <button type="button"
-                                                        class="btn btn-danger delete-button">Delete</button>
-                                                </form>
+                                                {{-- <a href="{{ route('dashboard.user.role.edit', ['id' => $item->id_role]) }}"
+                                                    class="btn btn-warning editJenisBtn">Edit</a> --}}
+                                                @if (haveAccessTo('update_role'))
+                                                    <a href="{{ route('dashboard.user.role.edit', $item->id_role) }}"
+                                                        class="btn btn-warning">Edit</a>
+                                                @endif
+                                                @if (haveAccessTo('delete_role'))
+                                                    <form action="{{ route('dashboard.user.role.destroy', $item->id_role) }}"
+                                                        class="d-inline" method="POST" data-confirm-delete="true">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -95,37 +100,36 @@
                     </div>
 
                     <div class="col-md-12 d-flex justify-content-end">
-                        {{ $role->links() }}
+                        {{ $roles->links() }}
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
+@endsection
+@push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const deleteButtons = document.querySelectorAll('.delete-button');
-
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const form = button.closest('.delete-form');
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll("form[data-confirm-delete]").forEach(function (form) {
+                form.addEventListener("submit", function (event) {
+                    event.preventDefault(); // Mencegah form submit langsung
 
                     Swal.fire({
-                        title: 'Apakah Anda yakin?',
-                        text: 'Data ini akan dihapus secara permanen!',
-                        icon: 'warning',
+                        title: "Yakin ingin menghapus?",
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: "warning",
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, Hapus!',
-                        cancelButtonText: 'Batal',
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Ya, hapus!",
+                        cancelButtonText: "Batal"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            form.submit();
+                            form.submit(); // Submit form jika user menekan "Ya, hapus!"
                         }
                     });
                 });
             });
         });
     </script>
-@endsection
+@endpush
