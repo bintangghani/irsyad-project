@@ -29,9 +29,9 @@
                             <form action="{{ route('dashboard.user.index') }}" method="GET" id="paginationForm">
                                 <select class="form-select" name="per_page"
                                     onchange="document.getElementById('paginationForm').submit();">
-                                    <option value="{{ $user->count() }}"
-                                        {{ request('per_page') == $user->count() ? 'selected' : '' }}>
-                                        {{ $user->count() < 10 ? $user->count() : 'Semua' }}</option>
+                                    <option value="{{ $users->count() }}"
+                                        {{ request('per_page') == $users->count() ? 'selected' : '' }}>
+                                        {{ $users->count() < 10 ? $users->count() : 'Semua' }}</option>
                                     <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
                                     <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
                                     <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
@@ -54,7 +54,7 @@
 
                     <div class="table-responsive mb-5">
                         <table class="table table-bordered">
-                            @if ($user->count() > 0)
+                            @if ($users->count() > 0)
                                 <thead class="table-light">
                                     <tr class="bg-primary">
                                         <th scope="col" class="text-center bg-primary text-white w-10">#</th>
@@ -69,9 +69,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($user as $key => $item)
+                                    @foreach ($users as $key => $item)
                                         <tr>
-                                            <th scope="row" class="text-center">{{ $user->firstItem() + $key }}</th>
+                                            <th scope="row" class="text-center">{{ $key + 1 }}</th>
                                             <td class="text-center">
                                                 @if ($item->profile)
                                                     <img src="{{ asset('storage/' . $item->profile) }}" alt="Profile"
@@ -106,7 +106,7 @@
                         </table>
                     </div>
                     <div class="col-md-12 d-flex justify-content-end">
-                        {{ $user->links() }}
+                        {{ $users->links() }}
                     </div>
                 </div>
             </div>

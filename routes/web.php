@@ -49,27 +49,26 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::get('/chart-data', 'getChartData')->name('dashboard.chart-data');
     });
 
-    Route::controller(PermissionController::class)->prefix('permission')->name('permission.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::post('/', 'store')->name('store');
-        Route::put('/{id}', 'update')->name('update');
-        Route::delete('/{id}', 'destroy')->name('destroy');
-    });
-
-    Route::controller(InstansiController::class)->prefix('instansi')->name('instansi.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::post('/', 'store')->name('store');
-        Route::put('/{id}', 'update')->name('update');
-        Route::delete('/{id}', 'destroy')->name('destroy');
-    });
-
-
     Route::prefix('user')->name('user.')->group(function () {
         Route::controller(RoleController::class)->prefix('role')->name('role.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
+
+        Route::controller(PermissionController::class)->prefix('permission')->name('permission.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
+        });
+    
+        Route::controller(InstansiController::class)->prefix('instansi')->name('instansi.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/create', 'create')->name('create');
             Route::get('/edit/{id}', 'edit')->name('edit');

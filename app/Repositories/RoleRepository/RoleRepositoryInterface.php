@@ -24,4 +24,5 @@ interface RoleRepositoryInterface
     public function getRoleWithPermissions($id);
     public function updateRoleWithPermissions($id, array $data, array $permissions);
     public function syncPermissions(Role $role, array $permission);
+    public function findByName(string $name);
 }

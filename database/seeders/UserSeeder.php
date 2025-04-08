@@ -16,7 +16,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $role = Role::where('nama', 'superadmin')->first();
         User::create([
             'nama' => 'superadmin',
             'email' => 'superadmin@irsyad.com',
@@ -24,7 +23,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('SuperadminIrsyad000_'),
             'profile' => 'assets/img/avatars/1.png',
             'moto' => 'Superadmin Irsyad',
-            'id_role' => $role->id_role
+            'id_role' => Role::where('nama', 'superadmin')->first()->id_role
         ]);
     }
 }

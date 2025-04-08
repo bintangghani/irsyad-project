@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Jenis;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -14,15 +15,13 @@ class JenisSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('jenis')->insert([
+        Jenis::insert([
             [
-                'id_jenis' => Str::uuid(),
                 'nama' => 'Buku Elektronik',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'id_jenis' => Str::uuid(),
                 'nama' => 'Buku Cetak',
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\Role;
 use App\Models\User;
+use App\Repositories\RoleRepository\RoleRepositoryInterface;
+use App\Repositories\UserRepository\UserRepositoryInterface;
+use DB;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,58 +18,60 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class AuthenticationController extends Controller
 {
+    public function __construct(
+        protected UserRepositoryInterface $userRepository,
+        protected RoleRepositoryInterface $roleRepository
+    ) {
+    }
+
     public function login()
     {
         return view('pages.auth.login');
     }
 
-    public function loginAction(Request $request)
+    public function loginAction(LoginRequest $request)
     {
         try {
-            //code...
-            $validated = $request->validate([
-                'email' => 'required|email|exists:users,email',
-                'password' => 'required|min:6',
-            ]);
-
             $remember_me = $request->has('remember-me');
 
-            if (Auth::attempt($validated, $remember_me)) {
-                return redirect()->to('dashboard');
+            if (Auth::attempt($request->only('email', 'password'), $remember_me)) {
+                if (Auth::user()->role->nama === 'superadmin') {
+                    Alert::success('Success', 'Login Berhasil');
+                    return redirect()->to('dashboard');
+                } else {
+                    Alert::success('Success', 'Login Berhasil');
+                    return redirect()->to('/');
+                }
             } else {
+                Alert::error('Error', 'Kata sandi salah');
                 return redirect()->back();
             }
         } catch (\Throwable $th) {
             //throw $th;
+            Alert::error('Error', 'Nampaknya terjadi kesalahan');
             return response()->json($th->getMessage());
         }
     }
 
     public function register()
     {
-        return view('pages.auth.register');
+        $id_role = $this->roleRepository->findByName('client')->id_role;
+        return view('pages.auth.register', compact('id_role'));
     }
 
-    public function registerAction(Request $request)
+    public function registerAction(RegisterRequest $request)
     {
         try {
-            $request->validate([
-                'nama' => 'required|min:3|max:20',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|min:6',
-            ]);
-
-            User::create([
-                'nama' => $request->nama,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'profile' => 'assets/img/avatars/1.png',
-                'id_role' => Role::where('nama', 'client')->first()->id_role,
-            ]);
-
+            DB::beginTransaction();
+            $this->userRepository->create($request->only('nama', 'email', 'profile', 'password', 'id_role'));
+            
+            DB::commit();
+            Alert::success('Success', 'Registrasi Berhasil');
             return redirect()->to('auth/login');
         } catch (\Throwable $th) {
             //throw $th;
+            DB::rollBack();
+            Alert::error('Error', 'Nampaknya terjadi kesalahan');
             return response()->json($th->getMessage());
         }
     }
@@ -73,14 +81,10 @@ class AuthenticationController extends Controller
         return view('pages.auth.forgotPassword');
     }
 
-    public function forgotPasswordAction(Request $request)
+    public function forgotPasswordAction(ForgotPasswordRequest $request)
     {
         try {
-            $request->validate([
-                'nama' => 'required|min:3|max:20',
-                'email' => 'required|email|exists:users,email',
-            ]);
-            $user = User::where('email', $request->email)->first();
+            $user = $this->userRepository->findOneByEmail($request->email);
 
             if (!$user) {
                 Alert::error('Gagal', 'Email tidak ditemukan.');
@@ -122,22 +126,12 @@ class AuthenticationController extends Controller
     public function resetPassword(Request $request)
     {
         try {
-            $request->validate([
-                'password' => 'required|min:6|confirmed',
-                'token' => 'required',
-            ], [
-                'password.confirmed' => 'Konfirmasi password tidak sesuai.',
-                'password.required' => 'Password baru wajib diisi.',
-            ]);
-
             if (!session()->has('reset_email')) {
                 Alert::error('Session Habis', 'Silakan ulangi proses forgot password.');
                 return redirect()->route('auth.forgotPassword');
             }
 
-            $user = User::where('email', session('reset_email'))
-                ->where('nama', session('reset_nama'))
-                ->first();
+            $user = $this->userRepository->findOneByEmailAndName(session('reset_email'), session('reset_nama'));
 
             if (!$user) {
                 Alert::error('User Tidak Ditemukan', 'Email atau Nama tidak valid.');

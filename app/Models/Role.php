@@ -25,7 +25,7 @@ class Role extends Model
                     ->withTimestamps();
     }
 
-    public function user()
+    public function users()
     {
         return $this->hasMany(User::class, 'id_role', 'id_role');
     }

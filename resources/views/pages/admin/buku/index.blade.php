@@ -94,7 +94,7 @@
                                                 <div>{{ $item->uploaded->nama }}</div>
                                             </td>
                                             <td class="text-capitalize">
-                                                <div>{{ $item->sub_kelompok->nama ?? 'KEBACANYA UUID'}}</div>
+                                                <div>{{ $item->sub_kelompok}}</div>
                                             </td>
                                             <td class="text-capitalize">
                                                 <div>{{ $item->jenis }}</div>

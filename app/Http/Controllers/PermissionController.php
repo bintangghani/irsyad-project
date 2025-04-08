@@ -13,7 +13,7 @@ class PermissionController extends Controller
 {
     public function index(Request $request)
     {
-        $permission = Permission::with('role');
+        $permission = Permission::with('roles');
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;

@@ -21,7 +21,7 @@ class BukuController extends Controller
      */
     public function index(Request $request)
     {
-        $buku = Buku::with(['uploaded', 'sub_kelompok', 'jenis']);
+        $buku = Buku::with('uploaded', 'sub_kelompok', 'jenis');
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
@@ -30,10 +30,13 @@ class BukuController extends Controller
 
         $totalData = $buku->count();
         $perPage = $request->input('per_page', 10);
-        $buku = $buku->orderBy('created_at', 'ASC')->paginate($perPage);
+        if ($buku->count() < 10) {
+            $buku = $buku->orderBy('created_at', 'ASC')->paginate($buku->count());
+        } else {
+            $buku = $buku->orderBy('created_at', 'ASC')->paginate($perPage);
+        }
         // Debugging untuk melihat struktur data
         // dd($buku->first()->toArray());
-
         return view('pages.admin.buku.index', compact('buku'));
     }
 

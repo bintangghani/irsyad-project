@@ -14,7 +14,7 @@
         {
           "url": "/dashboard/user",
           "name": "User",
-          "slug": "dashboard.user."
+          "slug": "dashboard.user.index"
         },
         {
           "url": "/dashboard/user/role",
@@ -22,14 +22,14 @@
           "slug": "dashboard.user.role.index"
         },
         {
-          "url": "/dashboard/permission",
+          "url": "/dashboard/user/permission",
           "name": "Permission",
-          "slug": "dashboard.permission.index"
+          "slug": "dashboard.user.permission.index"
         },
         {
-          "url": "/dashboard/instansi",
+          "url": "/dashboard/user/instansi",
           "name": "Instansi",
-          "slug": "dashboard.instansi.index"
+          "slug": "dashboard.user.instansi.index"
         }
       ]
     },
@@ -41,22 +41,22 @@
         {
           "url": "/dashboard/buku",
           "name": "Buku",
-          "slug": "dashboard.buku."
+          "slug": "dashboard.buku.index"
         },
         {
           "url": "/dashboard/buku/jenis",
           "name": "Jenis",
-          "slug": "dashboard.buku.jenis."
+          "slug": "dashboard.buku.jenis.index"
         },
         {
           "url": "/dashboard/buku/kelompok",
           "name": "Kelompok",
-          "slug": "dashboard.buku.kelompok."
+          "slug": "dashboard.buku.kelompok.index"
         },
         {
           "url": "/dashboard/buku/subkelompok",
           "name": "Sub Kelompok",
-          "slug": "dashboard.buku.subkelompok."
+          "slug": "dashboard.buku.subkelompok.index"
         }
       ]
     }
