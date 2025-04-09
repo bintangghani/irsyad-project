@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Kelompok;
 use App\Repositories\InstansiRepository\InstansiRepository;
 use App\Repositories\InstansiRepository\InstansiRepositoryInterface;
 use App\Repositories\jenisRepository\JenisRepository;
 use App\Repositories\JenisRepository\JenisRepositoryInterface;
+use App\Repositories\KelompokRepository\KelompokRepository;
+use App\Repositories\KelompokRepository\KelompokRepositoryInterface;
 use App\Repositories\PermissionRepository\PermissionRepository;
 use App\Repositories\PermissionRepository\PermissionRepositoryInterface;
 use App\Repositories\RoleRepository\RoleRepository;
@@ -28,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(InstansiRepositoryInterface::class, InstansiRepository::class);
         $this->app->bind(JenisRepositoryInterface::class, JenisRepository::class);
+        $this->app->bind(KelompokRepositoryInterface::class, KelompokRepository::class);
     }
 
     /**

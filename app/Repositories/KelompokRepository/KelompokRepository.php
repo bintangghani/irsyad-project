@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Repositories\JenisRepository;
+namespace App\Repositories\KelompokRepository;
 
-use App\Models\Jenis;
+use App\Models\Kelompok;
 use App\Repositories\BaseRepository;
-use App\Repositories\JenisRepository\JenisRepositoryInterface;
+use App\Repositories\KelompokRepository\KelompokRepositoryInterface;
 
-class JenisRepository extends BaseRepository implements JenisRepositoryInterface
+class KelompokRepository extends BaseRepository implements KelompokRepositoryInterface
 {
-    public function __construct(Jenis $jenis)
+    public function __construct(Kelompok $Kelompok)
     {
-        parent::__construct($jenis);
+        parent::__construct($Kelompok);
     }
 
     public function create(array $data)
@@ -20,8 +20,8 @@ class JenisRepository extends BaseRepository implements JenisRepositoryInterface
 
     public function update($id, array $data)
     {
-        $jenis = $this->model->findOrFail($id);
-        return $jenis->update($data);
+        $Kelompok = $this->model->findOrFail($id);
+        return $Kelompok->update($data);
     }
 
     public function search($keyword)
