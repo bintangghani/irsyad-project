@@ -28,11 +28,17 @@ class JenisController extends Controller
 
     public function create()
     {
+        if (!haveAccessTo('create_jenis')) {
+            return redirect()->back();
+        }
         return view('pages.admin.jenis.create');
     }
 
     public function store(JenisRequest $request)
     {
+        if (!haveAccessTo('create_jenis')) {
+            return redirect()->back();
+        }
         try {
             DB::beginTransaction();
 
@@ -54,12 +60,18 @@ class JenisController extends Controller
 
     public function edit($id)
     {
+        if (!haveAccessTo('update_jenis')) {
+            return redirect()->back();
+        }
         $jenis = $this->jenisRepository->find($id);
         return view('pages.admin.jenis.edit', compact('jenis'));
     }
 
     public function update(JenisRequest $request, $id)
     {
+        if (!haveAccessTo('update_jenis')) {
+            return redirect()->back();
+        }
         try {
             DB::beginTransaction();
 
@@ -81,6 +93,9 @@ class JenisController extends Controller
 
     public function destroy($id)
     {
+        if (!haveAccessTo('delete_jenis')) {
+            return redirect()->back();
+        }
         try {
             DB::beginTransaction();
 
@@ -100,6 +115,9 @@ class JenisController extends Controller
 
     public function search(Request $request)
     {
+        if (!haveAccessTo('view_jenis')) {
+            return redirect()->back();
+        }
         $keyword = $request->search;
         $jenis = $this->jenisRepository->search($keyword);
 

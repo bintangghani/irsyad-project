@@ -27,11 +27,17 @@ class KelompokController extends Controller
 
     public function create()
     {
+        if (!haveAccessTo('create_kelompok')) {
+            return redirect()->back();
+        }
         return view('pages.admin.kelompok.create');
     }
 
     public function store(KelompokRequest $request)
     {
+        if (!haveAccessTo('create_kelompok')) {
+            return redirect()->back();
+        }
         try {
             DB::beginTransaction();
 
@@ -53,12 +59,18 @@ class KelompokController extends Controller
 
     public function edit($id)
     {
+        if (!haveAccessTo('update_kelompok')) {
+            return redirect()->back();
+        }
         $kelompok = $this->kelompokRepository->find($id);
         return view('pages.admin.kelompok.edit', compact('kelompok'));
     }
 
     public function update(KelompokRequest $request, $id)
     {
+        if (!haveAccessTo('update_kelompok')) {
+            return redirect()->back();
+        }
         try {
             DB::beginTransaction();
 
@@ -80,6 +92,9 @@ class KelompokController extends Controller
 
     public function destroy($id)
     {
+        if (!haveAccessTo('delete_kelompok')) {
+            return redirect()->back();
+        }
         try {
             DB::beginTransaction();
 
@@ -99,6 +114,9 @@ class KelompokController extends Controller
 
     public function search(Request $request)
     {
+        if (!haveAccessTo('view_kelompok')) {
+            return redirect()->back();
+        }
         $keyword = $request->search;
         $kelompok = $this->kelompokRepository->search($keyword)->paginate(10);
 
