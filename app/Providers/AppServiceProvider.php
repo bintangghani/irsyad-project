@@ -13,6 +13,8 @@ use App\Repositories\PermissionRepository\PermissionRepository;
 use App\Repositories\PermissionRepository\PermissionRepositoryInterface;
 use App\Repositories\RoleRepository\RoleRepository;
 use App\Repositories\RoleRepository\RoleRepositoryInterface;
+use App\Repositories\SubKelompokRepository\SubKelompokRepository;
+use App\Repositories\SubKelompokRepository\SubKelompokRepositoryInterface;
 use App\Repositories\UserRepository\UserRepository;
 use App\Repositories\UserRepository\UserRepositoryInterface;
 use Illuminate\Pagination\Paginator;
@@ -32,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(InstansiRepositoryInterface::class, InstansiRepository::class);
         $this->app->bind(JenisRepositoryInterface::class, JenisRepository::class);
         $this->app->bind(KelompokRepositoryInterface::class, KelompokRepository::class);
+        $this->app->bind(SubKelompokRepositoryInterface::class, SubKelompokRepository::class);
     }
 
     /**
