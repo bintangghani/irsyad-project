@@ -16,36 +16,47 @@ class PermissionSeeder extends Seeder
     {
         Permission::insert([
             [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'view_dashboard'
             ],
             [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'view_user'
             ],
             [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'create_user'
             ],
             [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'update_user'
             ],
             [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'update_profile'
             ],
             [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'verified_user'
             ],
             [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'delete_user'
             ],
             [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'view_role'
             ],
             [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'create_role'
             ],
             [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'update_role'
             ],
             [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'delete_role'
             ],
         ]);

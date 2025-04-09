@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Ramsey\Uuid\Uuid;
 
 class UserSeeder extends Seeder
 {
@@ -17,6 +18,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
+            'id_user' => Uuid::uuid4(),
             'nama' => 'superadmin',
             'email' => 'superadmin@irsyad.com',
             'email_verified_at' => Carbon::now(),

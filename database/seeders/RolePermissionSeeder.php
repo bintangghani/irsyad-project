@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\RolePermission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Ramsey\Uuid\Uuid;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -19,6 +20,7 @@ class RolePermissionSeeder extends Seeder
         $permissions = Permission::get();
         foreach ($permissions as $item) {
             RolePermission::create([
+                'id_role_permission' => Uuid::uuid4(),
                'id_role' => $role->id_role,
                'id_permission' => $item->id_permission 
             ]);
