@@ -65,11 +65,18 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label for="background" class="form-label">background</label>
                             <input type="background" name="background" id="background"
                                 class="form-control @error('background') is-invalid @enderror" required>
+                            @error('background')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div> --}}
+                        <div class="mb-3">
+                            <label for="background" class="form-label">Foto Profil</label>
+                            <input type="file" name="background" id="background"
+                                class="form-control @error('background') is-invalid @enderror" accept="image/*" required>
                             @error('background')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

@@ -82,8 +82,16 @@
                                             <td class="text-capitalize">{{ $item->nama }}</td>
                                             <td class="text-capitalize">{{ $item->alamat }}</td>
                                             <td class="text-capitalize">{{ $item->deskripsi }}</td>
-                                            <td class="text-capitalize">{{ $item->background }}</td>
+                                            {{-- <td class="text-capitalize">{{ $item->background }}</td> --}}
                                             <td class="text-center">
+                                                @if ($item->profile)
+                                                    <img src="{{ asset('storage/' . $item->background) }}" alt="Background"
+                                                        class="img-thumbnail" width="50">
+                                                @else
+                                                    <span class="text-muted">No Image</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-center text-truncate">
                                                 <a href="{{ route('dashboard.user.instansi.edit', $item->id_instansi) }}"
                                                     class="btn btn-warning">Edit</a>
                                                 <form

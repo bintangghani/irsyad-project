@@ -59,6 +59,86 @@ class PermissionSeeder extends Seeder
                 'id_permission' => Uuid::uuid4(),
                 'nama' => 'delete_role'
             ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'view_buku'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'create_buku'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'update_buku'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'delete_buku'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'view_jenis'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'create_jenis'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'update_jenis'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'delete_jenis'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'view_kelompok'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'create_kelompok'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'update_kelompok'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'delete_kelompok'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'view_subkelompok'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'create_subkelompok'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'update_subkelompok'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'delete_subkelompok'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'view_instansi'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'create_instansi'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'update_instansi'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'delete_instansi'
+            ],
         ]);
     }
 }
