@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InstansiRequest;
 use Illuminate\Http\Request;
 use App\Models\Instansi;
+use App\Repositories\InstansiRepository\InstansiRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +14,10 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class InstansiController extends Controller
 {
+    public function __construct(
+        protected InstansiRepositoryInterface $instansiRepository
+    ) {}
+
     public function index(Request $request)
     {
         $instansi = Instansi::with('user');
@@ -37,150 +44,102 @@ class InstansiController extends Controller
 
     public function create()
     {
+        if (!haveAccessTo('create_instansi')) {
+            return redirect()->back();
+        }
         return view('pages.admin.instansi.create');
     }
 
-    public function store(Request $request)
+    public function store(InstansiRequest $request)
     {
+        if (!haveAccessTo('create_instansi')) {
+            return redirect()->back();
+        }
         try {
-            // Validasi input dengan pesan error yang jelas
-            $validated = $request->validate([
-                'nama' => 'required|string|max:255|unique:instansi,nama',
-                'alamat' => 'required|string|max:255',
-                'deskripsi' => 'required|string|max:255',
-                'profile' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-                'background' => 'required|string|max:255'
-            ], [
-                'nama.required' => 'Nama instansi wajib diisi!',
-                'nama.string' => 'Nama instansi harus berupa teks!',
-                'nama.max' => 'Nama instansi maksimal 255 karakter!',
-                'nama.unique' => 'Nama instansi sudah terdaftar, gunakan nama lain!',
-
-                'alamat.required' => 'Alamat instansi wajib diisi!',
-                'alamat.string' => 'Alamat harus berupa teks!',
-                'alamat.max' => 'Alamat maksimal 255 karakter!',
-
-                'deskripsi.required' => 'Deskripsi instansi wajib diisi!',
-                'deskripsi.string' => 'Deskripsi harus berupa teks!',
-                'deskripsi.max' => 'Deskripsi maksimal 255 karakter!',
-
-                'profile.required' => 'Foto profil wajib diunggah!',
-                'profile.image' => 'File harus berupa gambar!',
-                'profile.mimes' => 'Format yang diperbolehkan hanya JPG, JPEG, PNG!',
-                'profile.max' => 'Ukuran maksimal gambar adalah 2MB!',
-
-                'background.required' => 'Background wajib diisi!',
-                'background.string' => 'Background harus berupa teks!',
-                'background.max' => 'Background maksimal 255 karakter!',
-            ]);
-
+            DB::beginTransaction();
             $profilePath = $request->file('profile')->store('profiles', 'public');
+            $backgroundPath = $request->file('background')->store('backgrounds', 'public');
 
-            Instansi::create([
-                'nama' => $validated['nama'],
-                'alamat' => $validated['alamat'],
-                'deskripsi' => $validated['deskripsi'],
-                'profile' => $profilePath,
-                'background' => $validated['background']
-            ]);
+            $data = $request->validated();
+            $data['profile'] = $profilePath;
+            $data['background'] = $backgroundPath;
 
+            $this->instansiRepository->create($data);
+
+            DB::commit();
             Alert::success('Success', 'Instansi berhasil ditambah');
-
-            return redirect()->route('dashboard.instansi.index')
-                ->with('success', 'Instansi berhasil ditambahkan.');
-        } catch (ValidationException $e) {
-            return back()->withErrors($e->errors())->withInput();
+            return redirect()->route('dashboard.instansi.index');
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error('Error storing instansi: ' . $th->getMessage());
-            return back()->with('error', 'Terjadi kesalahan saat menyimpan data.');
+            return back()->with('error', 'Terjadi kesalahan saat menyimpan data.')->withInput();
         }
     }
 
     public function edit($id)
     {
-        $instansi = Instansi::findOrFail($id);
+        if (!haveAccessTo('update_instansi')) {
+            return redirect()->back();
+        }
+        $instansi = $this->instansiRepository->findById($id);
         return view('pages.admin.instansi.edit', compact('instansi'));
     }
 
 
     public function update(Request $request, $id)
     {
+        if (!haveAccessTo('update_instansi')) {
+            return redirect()->back();
+        }
         try {
-            $instansi = Instansi::findOrFail($id);
+            DB::beginTransaction();
+            $instansi = $this->instansiRepository->findById($id);
 
-            $validated = $request->validate([
-                'nama' => 'required|string|max:255|unique:instansi,nama,' . $id . ',id_instansi',
-                'alamat' => 'required|string|max:255',
-                'deskripsi' => 'required|string|max:255',
-                'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-                'background' => 'required|string|max:255'
-            ], [
-                'nama.required' => 'Nama instansi wajib diisi!',
-                'nama.string' => 'Nama instansi harus berupa teks!',
-                'nama.max' => 'Nama instansi maksimal 255 karakter!',
-                'nama.unique' => 'Nama instansi sudah terdaftar, gunakan nama lain!',
-
-                'alamat.required' => 'Alamat instansi wajib diisi!',
-                'alamat.string' => 'Alamat harus berupa teks!',
-                'alamat.max' => 'Alamat maksimal 255 karakter!',
-
-                'deskripsi.required' => 'Deskripsi instansi wajib diisi!',
-                'deskripsi.string' => 'Deskripsi harus berupa teks!',
-                'deskripsi.max' => 'Deskripsi maksimal 255 karakter!',
-
-                'profile.image' => 'File harus berupa gambar!',
-                'profile.mimes' => 'Format yang diperbolehkan hanya JPG, JPEG, PNG!',
-                'profile.max' => 'Ukuran maksimal gambar adalah 2MB!',
-
-                'background.required' => 'Background wajib diisi!',
-                'background.string' => 'Background harus berupa teks!',
-                'background.max' => 'Background maksimal 255 karakter!',
-            ]);
-
+            $profilePath = $instansi->profile;
             if ($request->hasFile('profile')) {
-                if ($instansi->profile) {
-                    Storage::disk('public')->delete($instansi->profile);
-                }
+                Storage::disk('public')->delete($profilePath);
                 $profilePath = $request->file('profile')->store('profiles', 'public');
-            } else {
-                $profilePath = $instansi->profile;
             }
 
-            $instansi->update([
-                'nama' => $validated['nama'],
-                'alamat' => $validated['alamat'],
-                'deskripsi' => $validated['deskripsi'],
-                'profile' => $profilePath,
-                'background' => $validated['background']
-            ]);
+            $backgroundPath = $instansi->background;
+            if ($request->hasFile('background')) {
+                Storage::disk('public')->delete($backgroundPath);
+                $backgroundPath = $request->file('background')->store('backgrounds', 'public');
+            }
 
+            $data = $request->validated();
+            $data['profile'] = $profilePath;
+            $data['background'] = $backgroundPath;
+
+            $this->instansiRepository->update($id, $data);
+
+            DB::commit();
             Alert::success('Success', 'Instansi berhasil diperbarui');
-
-            return redirect()->route('dashboard.instansi.index')->with('success', 'Instansi berhasil diperbarui.');
-        } catch (ValidationException $e) {
-            return back()->withErrors($e->errors())->withInput();
+            return redirect()->route('dashboard.instansi.index');
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error('Error updating instansi: ' . $th->getMessage());
-            return back()->with('error', 'Terjadi kesalahan saat memperbarui data.');
+            return back()->with('error', 'Terjadi kesalahan saat memperbarui data.')->withInput();
         }
     }
 
     public function destroy($id)
     {
-        $instansi = Instansi::find($id);
-
-        $instansi->delete();
+        if (!haveAccessTo('delete_instansi')) {
+            return redirect()->back();
+        }
+        $this->instansiRepository->delete($id);
 
         Alert::success('Success', 'Instansi berhasil dihapus');
-
-        return redirect()->route('dashboard.instansi.index');
+        return redirect()->route('dashboard.user.instansi.index');
     }
 
     public function search(Request $request)
     {
-        $keyword = $request->search;
-        $instansi = Instansi::where('nama', 'like', "%$keyword%")->get();
-
+        if (!haveAccessTo('view_instansi')) {
+            return redirect()->back();
+        }
+        $instansi = $this->instansiRepository->search($request->search);
         return view('pages.admin.instansi.index', compact('instansi'));
     }
 }

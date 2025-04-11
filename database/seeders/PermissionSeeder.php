@@ -123,6 +123,22 @@ class PermissionSeeder extends Seeder
                 'id_permission' => Uuid::uuid4(),
                 'nama' => 'delete_subkelompok'
             ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'view_instansi'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'create_instansi'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'update_instansi'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'delete_instansi'
+            ],
         ]);
     }
 }

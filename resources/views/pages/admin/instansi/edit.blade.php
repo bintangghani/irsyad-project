@@ -68,12 +68,26 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
+                        {{-- <div class="mb-3">
+                            <label for="background" class="form-label">Background</label>
+                            <input type="file" name="background" id="background"
+                                class="form-control @error('background') is-invalid @enderror" accept="image/*">
+                            @if ($instansi->background)
+                                <img src="{{ asset('storage/' . $instansi->background) }}" alt="Background"
+                                    class="img-thumbnail mt-2" width="100">
+                            @endif
+                            @error('background')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div> --}}
                         <div class="mb-3">
                             <label for="background" class="form-label">Background</label>
-                            <input type="text" name="background" id="background"
-                                class="form-control @error('background') is-invalid @enderror"
-                                value="{{ old('background', $instansi->background) }}" required>
+                            <input type="file" name="background" id="background"
+                                class="form-control @error('background') is-invalid @enderror" accept="image/*">
+                            @if ($instansi->background)
+                                <img src="{{ asset('storage/' . $instansi->background) }}" alt="Background"
+                                    class="img-thumbnail mt-2" width="100">
+                            @endif
                             @error('background')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
