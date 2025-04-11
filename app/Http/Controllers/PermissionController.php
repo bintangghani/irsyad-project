@@ -52,7 +52,7 @@ class PermissionController extends Controller
 
             Alert::success('Success', 'Permission berhasil ditambah');
 
-            return redirect()->route('dashboard.permission.index');
+            return redirect()->route('dashboard.user.permission.index');
         } catch (\Throwable $th) {
             return response()->json($th->getMessage());
         }

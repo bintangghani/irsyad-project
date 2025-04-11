@@ -40,8 +40,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="kelompok" class="form-label">Kelompok</label>
-                            <select name="kelompok" id="kelompok" class="form-select @error('kelompok') is-invalid @enderror"
+                            <label for="id_kelompok" class="form-label">Kelompok</label>
+                            <select name="id_kelompok" id="id_kelompok" class="form-select @error('id_kelompok') is-invalid @enderror"
                                 required>
                                 <option value="">Pilih Kelompok</option>
                                 @foreach ($kelompok as $ke)
@@ -49,7 +49,7 @@
                                         {{ $subkelompok->id_kelompok == $ke->id_kelompok ? 'selected' : '' }}>{{ $ke->nama }}</option>
                                 @endforeach
                             </select>
-                            @error('kelompok')
+                            @error('id_kelompok')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
