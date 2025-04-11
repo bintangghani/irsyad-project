@@ -43,6 +43,9 @@ class BukuController extends Controller
 
     public function create()
     {
+        if (!haveAccessTo('create_buku')) {
+            return redirect()->back();
+        }
         $subkelompok = $this->subKelompokRepository->all();
         $jenis = $this->jenisRepository->all();
         $user = $this->userRepository->all();
@@ -52,6 +55,9 @@ class BukuController extends Controller
 
     public function store(BukuRequest $request)
     {
+        if (!haveAccessTo('create_buku')) {
+            return redirect()->back();
+        }
         try {
             DB::beginTransaction();
             $validated = $request->validated();
@@ -88,6 +94,9 @@ class BukuController extends Controller
 
     public function edit(string $id)
     {
+        if (!haveAccessTo('update_buku')) {
+            return redirect()->back();
+        }
         // $buku = Buku::findOrFail($id);
         $buku = $this->bukuRepository->find($id);
         $subkelompok = $this->subKelompokRepository->all();
@@ -99,6 +108,9 @@ class BukuController extends Controller
 
     public function update(BukuRequest $request, $id)
     {
+        if (!haveAccessTo('update_buku')) {
+            return redirect()->back();
+        }
         try {
             DB::beginTransaction();
             $validated = $request->validated();
@@ -132,6 +144,9 @@ class BukuController extends Controller
 
     public function destroy($id)
     {
+        if (!haveAccessTo('delete_buku')) {
+            return redirect()->back();
+        }
         // $buku = Buku::findOrFail($id);
         $buku = $this->bukuRepository->find($id);
         $buku->delete();
@@ -141,6 +156,9 @@ class BukuController extends Controller
 
     public function search(Request $request)
     {
+        if (!haveAccessTo('view_buku')) {
+            return redirect()->back();
+        }
         $keyword = $request->search;
         $buku = Buku::where('judul', 'like', "%$keyword%")->get();
         return view('pages.admin.buku.index', compact('buku'));
