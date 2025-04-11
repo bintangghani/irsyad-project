@@ -11,89 +11,97 @@ use Carbon\Carbon;
 class DashboardController extends Controller
 {
     public function index(Request $request)
-{
-    if (!haveAccessTo('view_dashboard')) {
-        abort(403);
+    {
+        if (!haveAccessTo('view_dashboard')) {
+            abort(403);
+        }
+
+        $now = Carbon::now();
+        $currentYear = $now->year;
+        $years = range($currentYear, $currentYear - 4);
+        $selectedYear = $request->query('year', $currentYear);
+
+        $periods = [
+            'lastMonth' => [
+                'start' => $now->copy()->subMonth()->startOfMonth(),
+                'end' => $now->copy()->subMonth()->endOfMonth(),
+            ],
+            'currentMonth' => [
+                'start' => $now->copy()->startOfMonth(),
+                'end' => $now->copy()->endOfMonth(),
+            ],
+        ];
+
+        $totals = [
+            'users' => User::count(),
+            'buku' => Buku::count(),
+            'instansi' => Instansi::count(),
+            'download' => Buku::sum('total_download'),
+            'viewBuku' => Buku::whereYear('created_at', $selectedYear)->sum('total_read'),
+        ];
+
+        $getMonthlyData = function ($model, $field = 'created_at') use ($periods) {
+            return [
+                'last' => $model::whereBetween($field, [$periods['lastMonth']['start'], $periods['lastMonth']['end']])->count(),
+                'current' => $model::whereBetween($field, [$periods['currentMonth']['start'], $periods['currentMonth']['end']])->count(),
+            ];
+        };
+
+        $monthlyData = [
+            'users' => $getMonthlyData(User::class),
+            'buku' => $getMonthlyData(Buku::class),
+            'instansi' => $getMonthlyData(Instansi::class),
+            'download' => [
+                'last' => Buku::whereBetween('created_at', [$periods['lastMonth']['start'], $periods['lastMonth']['end']])->sum('total_download'),
+                'current' => Buku::whereBetween('created_at', [$periods['currentMonth']['start'], $periods['currentMonth']['end']])->sum('total_download'),
+            ],
+        ];
+
+        $calculateGrowth = fn($current, $last) => [
+            'growth' => round(abs($last ? (($current - $last) / $last) * 100 : $current * 100), 2),
+            'trend' => $current >= $last ? 'up' : 'down',
+        ];
+
+        $data = [
+            'totalUsers' => $totals['users'],
+            'userGrowth' => $calculateGrowth($monthlyData['users']['current'], $monthlyData['users']['last'])['growth'],
+            'userTrend' => $calculateGrowth($monthlyData['users']['current'], $monthlyData['users']['last'])['trend'],
+
+            'totalBuku' => $totals['buku'],
+            'bukuGrowth' => $calculateGrowth($monthlyData['buku']['current'], $monthlyData['buku']['last'])['growth'],
+            'bukuTrend' => $calculateGrowth($monthlyData['buku']['current'], $monthlyData['buku']['last'])['trend'],
+
+            'totalInstansi' => $totals['instansi'],
+            'instansiGrowth' => $calculateGrowth($monthlyData['instansi']['current'], $monthlyData['instansi']['last'])['growth'],
+            'instansiTrend' => $calculateGrowth($monthlyData['instansi']['current'], $monthlyData['instansi']['last'])['trend'],
+
+            'totalDownload' => $totals['download'],
+            'downloadGrowth' => $calculateGrowth($monthlyData['download']['current'], $monthlyData['download']['last'])['growth'],
+            'downloadTrend' => $calculateGrowth($monthlyData['download']['current'], $monthlyData['download']['last'])['trend'],
+
+            'totalViewBuku' => $totals['viewBuku'],
+        ];
+
+        return view('pages.admin.dashboard', compact('data', 'years', 'selectedYear'));
     }
 
-    $currentYear = date('Y');
-    $years = range($currentYear, $currentYear - 5); // 5 tahun terakhir
-
-    $selectedYear = $request->query('year', $currentYear); // Tahun default = sekarang
-
-    $now = Carbon::now();
-    $lastMonthStart = $now->subMonth()->startOfMonth();
-    $lastMonthEnd = $now->endOfMonth();
-
-    $totalUsers = User::count();
-    $totalBuku = Buku::count();
-    $totalInstansi = Instansi::count();
-    $totalDownload = Buku::sum('total_download');
-
-    $totalViewBuku = Buku::whereYear('created_at', $selectedYear)->sum('total_read');
-
-    $lastMonthUsers = User::whereBetween('created_at', [$lastMonthStart, $lastMonthEnd])->count();
-    $lastMonthBuku = Buku::whereBetween('created_at', [$lastMonthStart, $lastMonthEnd])->count();
-    $lastMonthInstansi = Instansi::whereBetween('created_at', [$lastMonthStart, $lastMonthEnd])->count();
-    $lastMonthDownload = Buku::whereBetween('created_at', [$lastMonthStart, $lastMonthEnd])->sum('total_download');
-
-    $calculateGrowth = function ($current, $lastMonth) {
-        if ($lastMonth > 0) {
-            $growth = (($current - $lastMonth) / $lastMonth) * 100;
-            return ['growth' => round(abs($growth), 2), 'trend' => $growth >= 0 ? 'up' : 'down'];
-        }
-        return ['growth' => 0, 'trend' => 'up'];
-    };
-
-    $userStats = $calculateGrowth($totalUsers, $lastMonthUsers);
-    $bukuStats = $calculateGrowth($totalBuku, $lastMonthBuku);
-    $instansiStats = $calculateGrowth($totalInstansi, $lastMonthInstansi);
-    $downloadStats = $calculateGrowth($totalDownload, $lastMonthDownload);
-
-    $data = [
-        'totalUsers' => $totalUsers,
-        'userGrowth' => $userStats['growth'],
-        'userTrend' => $userStats['trend'],
-        'totalBuku' => $totalBuku,
-        'bukuGrowth' => $bukuStats['growth'],
-        'bukuTrend' => $bukuStats['trend'],
-        'totalInstansi' => $totalInstansi,
-        'instansiGrowth' => $instansiStats['growth'],
-        'instansiTrend' => $instansiStats['trend'],
-        'totalDownload' => $totalDownload,
-        'downloadGrowth' => $downloadStats['growth'],
-        'downloadTrend' => $downloadStats['trend'],
-        'totalViewBuku' => $totalViewBuku,
-    ];
-
-    return view('pages.admin.dashboard', compact('data', 'years', 'selectedYear'));
-}
 
     public function getChartData(Request $request)
     {
         $year = $request->query('year', date('Y'));
-        $previousYear = $year - 1;
-
-        $totalReadsThisYear = Buku::whereYear('created_at', $year)
-            ->selectRaw('MONTH(created_at) as month, SUM(total_read) as total')
+    
+        $userRegistrations = User::whereYear('created_at', $year)
+            ->selectRaw('MONTH(created_at) as month, COUNT(*) as total')
             ->groupBy('month')
             ->orderBy('month')
             ->pluck('total', 'month')
             ->toArray();
 
-        $totalReadsLastYear = Buku::whereYear('created_at', $previousYear)
-            ->selectRaw('MONTH(created_at) as month, SUM(total_read) as total')
-            ->groupBy('month')
-            ->orderBy('month')
-            ->pluck('total', 'month')
-            ->toArray();
-
-        // Konversi data tahun lalu menjadi negatif agar muncul di bawah
-        $formattedLastYear = array_map(fn($value) => -abs($value), $totalReadsLastYear);
-
+        $userAtSelectedYear = User::whereYear('created_at', $year)->count();
+    
         return response()->json([
-            'thisYear' => $totalReadsThisYear,
-            'lastYear' => $formattedLastYear, // Data dibuat negatif
+            'registrations' => $userRegistrations,
+            'dataUser' => $userAtSelectedYear
         ]);
     }
 }
