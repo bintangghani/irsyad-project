@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Kelompok;
+use App\Repositories\BukuRepository\BukuRepository;
+use App\Repositories\BukuRepository\BukuRepositoryInterface;
 use App\Repositories\InstansiRepository\InstansiRepository;
 use App\Repositories\InstansiRepository\InstansiRepositoryInterface;
 use App\Repositories\jenisRepository\JenisRepository;
@@ -35,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(JenisRepositoryInterface::class, JenisRepository::class);
         $this->app->bind(KelompokRepositoryInterface::class, KelompokRepository::class);
         $this->app->bind(SubKelompokRepositoryInterface::class, SubKelompokRepository::class);
+        $this->app->bind(BukuRepositoryInterface::class, BukuRepository::class);
     }
 
     /**
