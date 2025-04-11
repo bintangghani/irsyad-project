@@ -58,11 +58,11 @@
                                 <thead class="table-light">
                                     <tr class="bg-primary">
                                         <th scope="col" class="text-center bg-primary text-white w-10">#</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Profile</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Nama</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Alamat</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Deskripsi</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Background</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Profile</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Nama</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Alamat</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Deskripsi</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Background</th>
                                         <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Aksi
                                         </th>
                                     </tr>
@@ -83,7 +83,7 @@
                                             <td class="text-capitalize">{{ $item->alamat }}</td>
                                             <td class="text-capitalize">{{ $item->deskripsi }}</td>
                                             <td class="text-capitalize">{{ $item->background }}</td>
-                                            <td class="text-center">
+                                            <td class="text-center text-truncate">
                                                 <a href="{{ route('dashboard.user.instansi.edit', $item->id_instansi) }}"
                                                     class="btn btn-warning">Edit</a>
                                                 <form

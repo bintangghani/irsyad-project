@@ -60,7 +60,7 @@
                                 <thead class="table-light">
                                     <tr class="bg-primary">
                                         <th scope="col" class="text-center bg-primary text-white w-10">#</th>
-                                        <th scope="col" class="bg-primary text-white w-60">Nama</th>
+                                        <th scope="col" class="text-center bg-primary text-white w-60">Nama</th>
                                         <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Aksi
                                         </th>
                                     </tr>

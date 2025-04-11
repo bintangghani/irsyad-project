@@ -24,12 +24,15 @@
                     </a>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('dashboard.user.store') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <form action="{{ route('dashboard.user.store') }}" method="POST" enctype="multipart/form-data"
+                        class="needs-validation" novalidate>
                         @csrf
-                        
+
                         <div class="mb-3">
                             <label for="nama" class="form-label">Nama</label>
-                            <input type="text" name="nama" id="nama" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}" required>
+                            <input type="text" name="nama" id="nama"
+                                class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}"
+                                required>
                             @error('nama')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -37,7 +40,9 @@
 
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required>
+                            <input type="email" name="email" id="email"
+                                class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}"
+                                required>
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -45,7 +50,8 @@
 
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" required>
+                            <input type="password" name="password" id="password"
+                                class="form-control @error('password') is-invalid @enderror" required>
                             @error('password')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -53,7 +59,8 @@
 
                         <div class="mb-3">
                             <label for="profile" class="form-label">Foto Profil</label>
-                            <input type="file" name="profile" id="profile" class="form-control @error('profile') is-invalid @enderror" accept="image/*">
+                            <input type="file" name="profile" id="profile"
+                                class="form-control @error('profile') is-invalid @enderror" accept="image/*">
                             @error('profile')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -61,7 +68,8 @@
 
                         <div class="mb-3">
                             <label for="moto" class="form-label">Moto</label>
-                            <input type="text" name="moto" id="moto" class="form-control @error('moto') is-invalid @enderror" value="{{ old('moto') }}" required>
+                            <textarea name="moto" id="moto" rows="3" class="form-control @error('moto') is-invalid @enderror"
+                                required>{{ old('moto') }}</textarea>
                             @error('moto')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -71,9 +79,10 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="id_role" class="form-label">Role</label>
-                                    <select name="id_role" id="id_role" class="form-select @error('id_role') is-invalid @enderror" required>
+                                    <select name="id_role" id="id_role"
+                                        class="form-select @error('id_role') is-invalid @enderror" required>
                                         <option value="">Pilih Role</option>
-                                        @foreach($role as $ro)
+                                        @foreach ($role as $ro)
                                             <option value="{{ $ro->id_role }}">{{ $ro->nama }}</option>
                                         @endforeach
                                     </select>
@@ -86,9 +95,10 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="id_instansi" class="form-label">Instansi</label>
-                                    <select name="id_instansi" id="id_instansi" class="form-select @error('id_instansi') is-invalid @enderror">
+                                    <select name="id_instansi" id="id_instansi"
+                                        class="form-select @error('id_instansi') is-invalid @enderror">
                                         <option value="">Pilih Instansi</option>
-                                        @foreach($instansi as $ins)
+                                        @foreach ($instansi as $ins)
                                             <option value="{{ $ins->id_instansi }}">{{ $ins->nama }}</option>
                                         @endforeach
                                     </select>

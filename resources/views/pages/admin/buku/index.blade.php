@@ -49,7 +49,7 @@
                         </form>
                     </div>
 
-                    <div class="table-responsive mb-5">
+                    <div class="table-responsive mb-5" style="min-width: 1000px; max-width: 100%;">
                         <table class="table table-bordered">
                             @if ($buku->count() > 0)
                                 <thead class="table-light">
@@ -78,7 +78,7 @@
                                             <td class="text-capitalize text-truncate">{{ $item->uploaded->nama }}</td>
                                             <td class="text-capitalize text-truncate">{{ $item->sub_kelompok }}</td>
                                             <td class="text-capitalize text-truncate">{{ $item->jenis }}</td>
-                                            <td class="text-capitalize text-truncate">{{ $item->deskripsi }}</td>
+                                            <td class="text-capitalize text-truncate" style="max-width: 200px;">{{ $item->deskripsi }}</td>
                                             <td class="text-center text-truncate">
                                                 @if ($item->file_buku)
                                                     <a href="{{ asset('storage/' . $item->file_buku) }}" target="_blank" class="btn btn-primary btn-sm">Buka Buku</a>

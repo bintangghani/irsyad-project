@@ -20,7 +20,8 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('dashboard.buku.update', $buku->id_buku) }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <form action="{{ route('dashboard.buku.update', $buku->id_buku) }}" method="POST"
+                        enctype="multipart/form-data" class="needs-validation" novalidate>
                         @csrf
                         @method('PUT')
 
@@ -29,17 +30,19 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <label for="judul" class="form-label">Judul Buku</label>
-                                <input type="text" name="judul" id="judul" value="{{ old('judul', $buku->judul) }}" required class="form-control">
+                                <input type="text" name="judul" id="judul" value="{{ old('judul', $buku->judul) }}"
+                                    required class="form-control">
                             </div>
                             <div class="col-md-6">
                                 <label for="penerbit" class="form-label">Penerbit</label>
-                                <input type="text" name="penerbit" id="penerbit" value="{{ old('penerbit', $buku->penerbit) }}" required class="form-control">
+                                <input type="text" name="penerbit" id="penerbit"
+                                    value="{{ old('penerbit', $buku->penerbit) }}" required class="form-control">
                             </div>
                         </div>
 
                         <div class="mb-4">
                             <label for="alamat_penerbit" class="form-label">Alamat Penerbit</label>
-                            <input type="text" name="alamat_penerbit" id="alamat_penerbit" value="{{ old('alamat_penerbit', $buku->alamat_penerbit) }}" required class="form-control">
+                            <textarea name="alamat_penerbit" id="alamat_penerbit" rows="3" required class="form-control">{{ old('alamat_penerbit', $buku->alamat_penerbit) }}</textarea>
                         </div>
 
                         {{-- Tahun & Halaman --}}
@@ -47,11 +50,14 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <label for="tahun_terbit" class="form-label">Tahun Terbit</label>
-                                <input type="number" name="tahun_terbit" id="tahun_terbit" value="{{ old('tahun_terbit', $buku->tahun_terbit) }}" required class="form-control">
+                                <input type="number" name="tahun_terbit" id="tahun_terbit"
+                                    value="{{ old('tahun_terbit', $buku->tahun_terbit) }}" required class="form-control">
                             </div>
                             <div class="col-md-6">
                                 <label for="jumlah_halaman" class="form-label">Jumlah Halaman</label>
-                                <input type="number" name="jumlah_halaman" id="jumlah_halaman" value="{{ old('jumlah_halaman', $buku->jumlah_halaman) }}" required class="form-control">
+                                <input type="number" name="jumlah_halaman" id="jumlah_halaman"
+                                    value="{{ old('jumlah_halaman', $buku->jumlah_halaman) }}" required
+                                    class="form-control">
                             </div>
                         </div>
 
@@ -62,14 +68,17 @@
                                 <label for="sampul" class="form-label">Sampul Buku</label>
                                 <input type="file" name="sampul" id="sampul" class="form-control" accept="image/*">
                                 @if ($buku->sampul)
-                                    <img src="{{ asset('storage/' . $buku->sampul) }}" alt="Sampul Buku" class="mt-2 img-thumbnail" width="100">
+                                    <img src="{{ asset('storage/' . $buku->sampul) }}" alt="Sampul Buku"
+                                        class="mt-2 img-thumbnail" width="100">
                                 @endif
                             </div>
                             <div class="col-md-6">
                                 <label for="file_buku" class="form-label">File Buku (PDF)</label>
-                                <input type="file" name="file_buku" id="file_buku" class="form-control" accept="application/pdf">
+                                <input type="file" name="file_buku" id="file_buku" class="form-control"
+                                    accept="application/pdf">
                                 @if ($buku->file_buku)
-                                    <a href="{{ asset('storage/' . $buku->file_buku) }}" target="_blank" class="btn btn-info mt-2">Lihat Buku</a>
+                                    <a href="{{ asset('storage/' . $buku->file_buku) }}" target="_blank"
+                                        class="btn btn-info mt-2">Lihat Buku</a>
                                 @endif
                             </div>
                         </div>
@@ -81,7 +90,9 @@
                                 <label for="sub_kelompok" class="form-label">Sub Kelompok</label>
                                 <select name="sub_kelompok" id="sub_kelompok" required class="form-select">
                                     @foreach ($subkelompok as $sub)
-                                        <option value="{{ $sub->id_sub_kelompok }}" {{ $buku->sub_kelompok == $sub->id_sub_kelompok ? 'selected' : '' }}>{{ $sub->nama }}</option>
+                                        <option value="{{ $sub->id_sub_kelompok }}"
+                                            {{ $buku->sub_kelompok == $sub->id_sub_kelompok ? 'selected' : '' }}>
+                                            {{ $sub->nama }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -89,7 +100,9 @@
                                 <label for="jenis" class="form-label">Jenis</label>
                                 <select name="jenis" id="jenis" required class="form-select">
                                     @foreach ($jenis as $j)
-                                        <option value="{{ $j->id_jenis }}" {{ $buku->jenis == $j->id_jenis ? 'selected' : '' }}>{{ $j->nama }}</option>
+                                        <option value="{{ $j->id_jenis }}"
+                                            {{ $buku->jenis == $j->id_jenis ? 'selected' : '' }}>{{ $j->nama }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
