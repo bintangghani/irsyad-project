@@ -35,7 +35,6 @@ class Buku extends Model
     public function bookmark()
     {
         return $this->hasMany(Bookmark::class, 'id_buku', 'id_buku');
-      
     }
     public function kelompok()
     {

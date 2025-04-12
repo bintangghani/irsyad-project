@@ -26,7 +26,7 @@
                                 Kelola sistem dengan mudah dan pantau aktivitas pengguna secara real-time.
                             </p>
 
-                            <a href="/" class="btn btn-sm btn-outline-primary">Lihat Dashboard Client</a>
+                            <a href="/" class="btn btn-sm btn-outline-primary">Lihat Page Client</a>
                         </div>
                     </div>
 
@@ -99,8 +99,6 @@
                 </div>
             </div>
         </div>
-        <!-- Total Baca -->
-        <!-- Total Baca -->
         <div class="col-12 col-xxl-8 order-2 order-md-3 order-xxl-2 mb-6">
             <div class="card">
                 <div class="row row-bordered g-0">
