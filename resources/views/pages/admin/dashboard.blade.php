@@ -27,7 +27,6 @@
                             <p class="mb-6">
                                 Kelola sistem dengan mudah dan pantau aktivitas pengguna secara real-time.
                             </p>
-
                             <a href="/" class="btn btn-sm btn-outline-primary">Lihat Website</a>
                         </div>
                     </div>
