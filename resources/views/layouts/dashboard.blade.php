@@ -7,7 +7,7 @@
     $isNavbar = $isNavbar ?? true;
     $isMenu = $isMenu ?? true;
     $isFlex = $isFlex ?? false;
-    $isFooter = $isFooter ?? true;
+    // $isFooter = $isFooter ?? true;
 
     /* HTML Classes */
     $navbarDetached = 'navbar-detached';
@@ -51,9 +51,6 @@
                 <!-- / Content -->
 
                 <!-- Footer -->
-                @if ($isFooter)
-                    @include('layouts/sections/footer/footer')
-                @endif
                 <!-- / Footer -->
                 <div class="content-backdrop fade"></div>
             </div>

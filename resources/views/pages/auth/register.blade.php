@@ -29,9 +29,11 @@
 
           <form id="formAuthentication" class="mb-6" action="{{ route('auth.register')  }}" method="POST">
             @csrf
+            <input type="hidden" name="profile" value="assets/img/avatars/1.png">
+            <input type="hidden" name="id_role" value="{{ $id_role }}">
             <div class="mb-6">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="nama" value="{{ old('username') }}" placeholder="Enter your username" autofocus>
+                <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="nama" placeholder="Enter your username" autocomplete="name" autofocus>
                 @error('nama')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -39,7 +41,7 @@
             
             <div class="mb-6">
                 <label for="email" class="form-label">Email</label>
-                <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="Enter your email">
+                <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Enter your email"  autocomplete="email" autofocus>
                 @error('email')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror

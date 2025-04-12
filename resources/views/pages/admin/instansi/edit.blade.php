@@ -9,7 +9,7 @@
                 <a href="{{ route('dashboard.index') }}">Home</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('dashboard.instansi.index') }}">instansi</a>
+                <a href="{{ route('dashboard.user.instansi.index') }}">instansi</a>
             </li>
             <li class="breadcrumb-item active">Edit</li>
         </ol>
@@ -19,12 +19,12 @@
             <div class="card">
                 <div class="card-header d-flex flex-column flex-md-row align-items-center justify-content-between">
                     <h5 class="card-title mb-0">Edit Pengguna</h5>
-                    <a href="{{ route('dashboard.instansi.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('dashboard.user.instansi.index') }}" class="btn btn-secondary">
                         <span class="d-none d-sm-inline-block">Kembali</span>
                     </a>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('dashboard.instansi.update', $instansi->id_instansi) }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <form action="{{ route('dashboard.user.instansi.update', $instansi->id_instansi) }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                         @csrf
                         @method('PUT')
 
@@ -60,9 +60,26 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        {{-- <div class="mb-3">
+                            <label for="background" class="form-label">Background</label>
+                            <input type="file" name="background" id="background"
+                                class="form-control @error('background') is-invalid @enderror" accept="image/*">
+                            @if ($instansi->background)
+                                <img src="{{ asset('storage/' . $instansi->background) }}" alt="Background"
+                                    class="img-thumbnail mt-2" width="100">
+                            @endif
+                            @error('background')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div> --}}
                         <div class="mb-3">
                             <label for="background" class="form-label">Background</label>
-                            <input type="text" name="background" id="background" class="form-control @error('background') is-invalid @enderror" value="{{ old('background', $instansi->background) }}" required>
+                            <input type="file" name="background" id="background"
+                                class="form-control @error('background') is-invalid @enderror" accept="image/*">
+                            @if ($instansi->background)
+                                <img src="{{ asset('storage/' . $instansi->background) }}" alt="Background"
+                                    class="img-thumbnail mt-2" width="100">
+                            @endif
                             @error('background')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

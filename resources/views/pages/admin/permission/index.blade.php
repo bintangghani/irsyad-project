@@ -16,7 +16,7 @@
             <div class="card">
                 <div class="card-header d-flex flex-column flex-md-row align-items-center justify-content-between">
                     <h5 class="card-title mb-0 fs-3">List Permission</h5>
-                    <a href="{{ route('dashboard.permission.create') }}" class="btn btn-primary">
+                    <a href="{{ route('dashboard.user.permission.create') }}" class="btn btn-primary">
                         <i class="bx bx-plus me-2"></i>
                         <span class="d-none d-sm-inline-block">Tambah Permission</span>
                     </a>
@@ -26,7 +26,7 @@
                     <div class="row mb-3 d-flex justify-content-between">
                         <div class="col-md-2">
                             <label class="form-label">Show</label>
-                            <form action="{{ route('dashboard.permission.index') }}" method="GET" id="paginationForm">
+                            <form action="{{ route('dashboard.user.permission.index') }}" method="GET" id="paginationForm">
                                 <select class="form-select" name="per_page"
                                     onchange="document.getElementById('paginationForm').submit();">
                                     <option value="{{ $permission->count() }}"
@@ -41,7 +41,7 @@
                             </form>
                         </div>
 
-                        <form action="{{ route('dashboard.permission.index') }}" method="GET"
+                        <form action="{{ route('dashboard.user.permission.index') }}" method="GET"
                             class="col-md-6 text-md-end mt-3 mt-md-0">
                             <label class="form-label">Search</label>
                             <div class="input-group">
@@ -70,10 +70,10 @@
                                             </th>
                                             <td class="text-capitalize">{{ $item->nama }}</td>
                                             <td class="text-center">
-                                                <a href="{{ route('dashboard.permission.edit', $item->id_permission) }}"
+                                                <a href="{{ route('dashboard.user.permission.edit', $item->id_permission) }}"
                                                     class="btn btn-warning">Edit</a>
                                                 <form
-                                                    action="{{ route('dashboard.permission.destroy', $item->id_permission) }}"
+                                                    action="{{ route('dashboard.user.permission.destroy', $item->id_permission) }}"
                                                     class="d-inline" method="POST" data-confirm-delete="true">
                                                     @csrf
                                                     @method('DELETE')

@@ -65,7 +65,7 @@
 
                         <div class="mb-3">
                             <label for="moto" class="form-label">Moto</label>
-                            <input type="text" name="moto" id="moto" class="form-control @error('moto') is-invalid @enderror" value="{{ old('moto', $user->moto) }}" required>
+                            <input type="text" name="moto" id="moto" class="form-control @error('moto') is-invalid @enderror" value="{{ old('moto', $user->moto) }}">
                             @error('moto')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -74,14 +74,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="role" class="form-label">Role</label>
-                                    <select name="role" id="role" class="form-select @error('role') is-invalid @enderror" required>
+                                    <label for="id_role" class="form-label">Role</label>
+                                    <select name="id_role" id="id_role" class="form-select @error('id_role') is-invalid @enderror" required>
                                         <option value="">Pilih Role</option>
                                         @foreach($role as $ro)
                                             <option value="{{ $ro->id_role }}" {{ $user->id_role == $ro->id_role ? 'selected' : '' }}>{{ $ro->nama }}</option>
                                         @endforeach
                                     </select>
-                                    @error('role')
+                                    @error('id_role')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -89,14 +89,14 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="instansi" class="form-label">Instansi</label>
-                                    <select name="instansi" id="instansi" class="form-select @error('instansi') is-invalid @enderror" required>
+                                    <label for="id_instansi" class="form-label">Instansi</label>
+                                    <select name="id_instansi" id="id_instansi" class="form-select @error('id_instansi') is-invalid @enderror">
                                         <option value="">Pilih Instansi</option>
                                         @foreach($instansi as $ins)
                                             <option value="{{ $ins->id_instansi }}" {{ $user->id_instansi == $ins->id_instansi ? 'selected' : '' }}>{{ $ins->nama }}</option>
                                         @endforeach
                                     </select>
-                                    @error('instansi')
+                                    @error('id_instansi')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

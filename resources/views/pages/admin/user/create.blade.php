@@ -53,7 +53,7 @@
 
                         <div class="mb-3">
                             <label for="profile" class="form-label">Foto Profil</label>
-                            <input type="file" name="profile" id="profile" class="form-control @error('profile') is-invalid @enderror" accept="image/*" required>
+                            <input type="file" name="profile" id="profile" class="form-control @error('profile') is-invalid @enderror" accept="image/*">
                             @error('profile')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -70,14 +70,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="role" class="form-label">Role</label>
-                                    <select name="role" id="role" class="form-select @error('role') is-invalid @enderror" required>
+                                    <label for="id_role" class="form-label">Role</label>
+                                    <select name="id_role" id="id_role" class="form-select @error('id_role') is-invalid @enderror" required>
                                         <option value="">Pilih Role</option>
                                         @foreach($role as $ro)
                                             <option value="{{ $ro->id_role }}">{{ $ro->nama }}</option>
                                         @endforeach
                                     </select>
-                                    @error('role')
+                                    @error('id_role')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -85,14 +85,14 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="instansi" class="form-label">Instansi</label>
-                                    <select name="instansi" id="instansi" class="form-select @error('instansi') is-invalid @enderror" required>
+                                    <label for="id_instansi" class="form-label">Instansi</label>
+                                    <select name="id_instansi" id="id_instansi" class="form-select @error('id_instansi') is-invalid @enderror">
                                         <option value="">Pilih Instansi</option>
                                         @foreach($instansi as $ins)
                                             <option value="{{ $ins->id_instansi }}">{{ $ins->nama }}</option>
                                         @endforeach
                                     </select>
-                                    @error('instansi')
+                                    @error('id_instansi')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Role;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Ramsey\Uuid\Uuid;
 
 class RoleSeeder extends Seeder
 {
@@ -13,12 +14,15 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create([
-            'nama' => 'superadmin',
-        ]);
-
-        Role::create([
-            'nama' => 'client'
+        Role::insert([
+            [
+                'id_role' => Uuid::uuid4(),
+                'nama' => 'superadmin',
+            ],
+            [
+                'id_role' => Uuid::uuid4(),
+                'nama' => 'client'
+            ]
         ]);
     }
 }

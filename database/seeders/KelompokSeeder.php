@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Kelompok;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
 class KelompokSeeder extends Seeder
 {
@@ -25,8 +27,8 @@ class KelompokSeeder extends Seeder
         $kelompokIDs = [];
 
         foreach ($kelompokData as $data) {
-            $uuid = Str::uuid();
-            DB::table('kelompok')->insert([
+            $uuid = Uuid::uuid4();
+            Kelompok::create([
                 'id_kelompok' => $uuid,
                 'nama' => $data['nama'],
                 'created_at' => now(),

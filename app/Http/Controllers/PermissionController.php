@@ -13,7 +13,7 @@ class PermissionController extends Controller
 {
     public function index(Request $request)
     {
-        $permission = Permission::with('role');
+        $permission = Permission::with('roles');
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
@@ -52,7 +52,7 @@ class PermissionController extends Controller
 
             Alert::success('Success', 'Permission berhasil ditambah');
 
-            return redirect()->route('dashboard.permission.index');
+            return redirect()->route('dashboard.user.permission.index');
         } catch (\Throwable $th) {
             return response()->json($th->getMessage());
         }

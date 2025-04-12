@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RolePermissionSeeder::class,
             UserSeeder::class,
-            // Jenis Buku //
             JenisSeeder::class,
             KelompokSeeder::class,
             SubKelompokSeeder::class,

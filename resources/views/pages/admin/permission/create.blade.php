@@ -6,10 +6,10 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item">
-                <a href="{{ route('dashboard.index') }}">Home</a>
+                <a href="{{ route('dashboard.user.index') }}">Home</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('dashboard.permission.index') }}">permission</a>
+                <a href="{{ route('dashboard.user.permission.index') }}">permission</a>
             </li>
             <li class="breadcrumb-item active">Create</li>
         </ol>
@@ -19,12 +19,12 @@
             <div class="card">
                 <div class="card-header d-flex flex-column flex-md-row align-items-center justify-content-between">
                     <h5 class="card-title mb-0">Tambah Pengguna</h5>
-                    <a href="{{ route('dashboard.permission.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('dashboard.user.permission.index') }}" class="btn btn-secondary">
                         <span class="d-none d-sm-inline-block">Kembali</span>
                     </a>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('dashboard.permission.store') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <form action="{{ route('dashboard.user.permission.store') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                         @csrf
 
                         <div class="mb-3">

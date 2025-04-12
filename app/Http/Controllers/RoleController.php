@@ -20,9 +20,7 @@ class RoleController extends Controller
 
     public function index(Request $request)
     {
-        if (!haveAccessTo('view_role')) {
-            return redirect()->back();
-        }
+
 
         $perPage = $request->input('per_page', 10);
         $search = $request->input('search');

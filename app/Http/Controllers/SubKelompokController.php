@@ -2,67 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kelompok;
-use App\Models\SubKelompok;
+use App\Http\Requests\SubKelompokRequest;
+use App\Repositories\SubKelompokRepository\SubKelompokRepositoryInterface;
+use App\Repositories\KelompokRepository\KelompokRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class SubKelompokController extends Controller
 {
+    public function __construct(
+        protected SubKelompokRepositoryInterface $subKelompokRepository,
+        protected KelompokRepositoryInterface $kelompokRepository
+    ) {}
+
     public function index(Request $request)
     {
-        $subkelompok = SubKelompok::with('kelompok');
-
-        if ($request->has('search') && $request->search != '') {
-            $search = $request->search;
-            $subkelompok->where(function ($q) use ($search) {
-                $q->where('nama', 'LIKE', "%$search%");
-            });
-        }
-
+        $search = $request->input('search');
         $perPage = $request->input('per_page', 10);
 
-        if ($subkelompok->count() < 10) {
-            $subkelompok = $subkelompok->orderBy('created_at', 'ASC')->paginate($subkelompok->count());
-        } else {
-            $subkelompok = $subkelompok->orderBy('created_at', 'ASC')->paginate($perPage);
-        }
+        $subkelompok = $this->subKelompokRepository->search($search)->paginate($perPage);
 
         return view('pages.admin.subkelompok.index', compact('subkelompok'));
     }
 
     public function create()
     {
-        $subkelompok = SubKelompok::orderBy('created_at', 'ASC')->get();
-        $kelompok = Kelompok::all();
+        if (!haveAccessTo('create_subkelompok')) {
+            return redirect()->back();
+        }
+        $subkelompok = $this->subKelompokRepository->all();
+        $kelompok = $this->kelompokRepository->all();
         return view('pages.admin.subkelompok.create', compact('subkelompok', 'kelompok'));
     }
 
-    public function store(Request $request)
+    public function store(SubKelompokRequest $request)
     {
+        if (!haveAccessTo('create_subkelompok')) {
+            return redirect()->back();
+        }
+
         try {
-            $validated = $request->validate([
-                'nama' => 'required|string|max:255|unique:sub_kelompok,nama',
-                'id_kelompok' => 'required|exists:kelompok,id_kelompok'
-            ], [
-                'nama.required' => 'Nama subkelompok wajib diisi!',
-                'nama.string' => 'Nama subkelompok harus berupa teks!',
-                'nama.max' => 'Nama subkelompok maksimal 255 karakter!',
-                'nama.unique' => 'Nama subkelompok sudah terdaftar, gunakan nama lain!',
-                'id_kelompok.required' => 'Kelompok wajib dipilih!',
-                'id_kelompok.exists' => 'Kelompok yang dipilih tidak valid!'
-            ]);
+            DB::beginTransaction();
 
-            SubKelompok::create($validated);
+            $validated = $request->validated();
 
+            $this->subKelompokRepository->create($validated);
+
+            DB::commit();
             Alert::success('Success', 'Subkelompok berhasil ditambah');
 
             return redirect()->route('dashboard.buku.subkelompok.index')
                 ->with('success', 'SubKelompok berhasil ditambahkan.');
-        } catch (ValidationException $e) {
-            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error('Error storing subkelompok: ' . $th->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat menyimpan data.');
         }
@@ -70,39 +64,37 @@ class SubKelompokController extends Controller
 
     public function edit($id)
     {
-        $subkelompok = SubKelompok::findOrFail($id);
-        $kelompok = Kelompok::all();
+        if (!haveAccessTo('update_subkelompok')) {
+            return redirect()->back();
+        }
+        $subkelompok = $this->subKelompokRepository->find($id);
+        $kelompok = $this->kelompokRepository->all();
         return view('pages.admin.subkelompok.edit', compact('kelompok', 'subkelompok'));
     }
 
-    public function update(Request $request, $id)
+    public function update(SubKelompokRequest $request, $id)
     {
+        if (!haveAccessTo('update_subkelompok')) {
+            return redirect()->back();
+        }
         try {
-            $validated = $request->validate([
-                'nama' => 'required|string|max:255|unique:sub_kelompok,nama,' . $id . ',id_sub_kelompok',
-                'id_kelompok' => 'required|exists:kelompok,id_kelompok'
-            ], [
-                'nama.required' => 'Nama Subkelompok wajib diisi!',
-                'nama.string' => 'Nama subkelompok harus berupa teks!',
-                'nama.max' => 'Nama subkelompok maksimal 255 karakter!',
-                'nama.unique' => 'Nama subkelompok sudah terdaftar, gunakan nama lain!',
-                'id_kelompok.required' => 'Kelompok wajib dipilih!',
-                'id_kelompok.exists' => 'Kelompok yang dipilih tidak valid!'
-            ]);
+            DB::beginTransaction();
+            $validated = $request->validated();
 
-            $subkelompok = SubKelompok::findOrFail($id);
-            $subkelompok->update([
-                'nama' => $validated['nama'],
-                'id_kelompok' => $validated['id_kelompok']
-            ]);
+            $updated = $this->subKelompokRepository->update($id, $validated);
 
+            if (!$updated) {
+                DB::rollBack();
+                return back()->with('error', 'Gagal memperbarui subkelompok.');
+            }
+
+            DB::commit();
             Alert::success('Success', 'Subkelompok berhasil diperbarui');
 
             return redirect()->route('dashboard.buku.subkelompok.index')
                 ->with('success', 'Sub Kelompok berhasil diperbarui.');
-        } catch (ValidationException $e) {
-            return back()->withErrors($e->errors())->withInput();
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error('Error updating subkelompok: ' . $th->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat memperbarui data.');
         }
@@ -110,13 +102,18 @@ class SubKelompokController extends Controller
 
     public function destroy($id)
     {
+        if (!haveAccessTo('delete_subkelompok')) {
+            return redirect()->back();
+        }
         try {
-            $subkelompok = Subkelompok::findOrFail($id); // Pastikan data ada, jika tidak, lempar 404 error
-            $subkelompok->delete();
+            DB::beginTransaction();
+            $this->subKelompokRepository->delete($id);
 
+            DB::commit();
             Alert::success('Success', 'Subkelompok berhasil dihapus');
             return redirect()->route('dashboard.buku.subkelompok.index');
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error('Error deleting subkelompok: ' . $th->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat menghapus subkelompok.');
         }
@@ -124,8 +121,11 @@ class SubKelompokController extends Controller
 
     public function search(Request $request)
     {
+        if (!haveAccessTo('view_subkelompok')) {
+            return redirect()->back();
+        }
         $keyword = $request->search;
-        $subkelompok = SubKelompok::where('nama', 'like', "%$keyword%")->get();
+        $subkelompok = $this->subKelompokRepository->search($keyword)->paginate(10);
 
         return view('pages.admin.subkelompok.index', compact('subkelompok'));
     }

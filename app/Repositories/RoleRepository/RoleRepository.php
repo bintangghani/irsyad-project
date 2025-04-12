@@ -24,6 +24,13 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
         return $model ? $model : null;
     }
 
+    public function findByName($name)
+    {
+        $model = $this->model->where('nama', $name)->first();
+
+        return $model ? $model : null;
+    }
+
     public function getRolesWithPermissions($keyword, $perPage)
     {
         $query = $this->model->with(['permissions:id_permission,nama'])->select(['id_role', 'nama']);

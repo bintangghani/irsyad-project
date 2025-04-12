@@ -9,7 +9,7 @@
                 <a href="{{ route('dashboard.index') }}">Home</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('dashboard.instansi.index') }}">instansi</a>
+                <a href="{{ route('dashboard.user.instansi.index') }}">instansi</a>
             </li>
             <li class="breadcrumb-item active">Create</li>
         </ol>
@@ -19,12 +19,12 @@
             <div class="card">
                 <div class="card-header d-flex flex-column flex-md-row align-items-center justify-content-between">
                     <h5 class="card-title mb-0">Tambah Instansi</h5>
-                    <a href="{{ route('dashboard.instansi.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('dashboard.user.instansi.index') }}" class="btn btn-secondary">
                         <span class="d-none d-sm-inline-block">Kembali</span>
                     </a>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('dashboard.instansi.store') }}" method="POST" enctype="multipart/form-data"
+                    <form action="{{ route('dashboard.user.instansi.store') }}" method="POST" enctype="multipart/form-data"
                         class="needs-validation" novalidate>
                         @csrf
 
@@ -65,11 +65,18 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label for="background" class="form-label">background</label>
                             <input type="background" name="background" id="background"
                                 class="form-control @error('background') is-invalid @enderror" required>
+                            @error('background')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div> --}}
+                        <div class="mb-3">
+                            <label for="background" class="form-label">Foto Profil</label>
+                            <input type="file" name="background" id="background"
+                                class="form-control @error('background') is-invalid @enderror" accept="image/*" required>
                             @error('background')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
