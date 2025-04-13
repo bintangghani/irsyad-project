@@ -22,6 +22,10 @@ Route::fallback(function () {
     
 });
 
+Route::prefix('client')->name('client.')->group(function () {
+
+});
+
 Route::controller(ClientController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/buku/{id}', 'showBuku')->name('showBuku');
@@ -29,6 +33,7 @@ Route::controller(ClientController::class)->group(function () {
     Route::get('/instansi', 'instansi')->name('instansi');
     Route::get('/instansi/{id}', 'showInstansi')->name('instansi.show');
 });
+
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::controller(AuthenticationController::class)->group(function () {
         Route::middleware(CheckLogin::class)->group(function () {
