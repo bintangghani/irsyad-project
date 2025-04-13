@@ -5,6 +5,7 @@ namespace App\Http\Controllers\client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Buku;
+use App\Models\Instansi;
 use App\Models\Jenis;
 use App\Models\Kelompok;
 use App\Models\User;
@@ -65,6 +66,67 @@ class ClientController extends Controller
             'categories' => $filteredCategories,
             'genres' => Kelompok::pluck('nama'),
             'jenisList' => Jenis::pluck('nama'),
+            'selectedGenre' => $selectedGenre,
+            'selectedJenis' => $selectedJenis,
+        ]);
+    }
+
+    public function instansi(Request $request)
+    {
+        $instansis = Instansi::orderBy('nama')->get();
+        $kelompoks = Kelompok::with(['buku', 'sub_kelompok.buku.uploaded'])->get();
+
+        $selectedGenre = $request->genre;
+        $selectedJenis = $request->jenis;
+
+        $filteredCategories = $kelompoks->map(function ($kelompok) use ($selectedGenre, $selectedJenis) {
+            $books = $kelompok->buku;
+
+            if ($selectedJenis) {
+                $books = $books->filter(function ($book) use ($selectedJenis) {
+                    return $book->jenis === $selectedJenis;
+                });
+            }
+
+            $books->load('uploaded');
+            $kelompok->filteredBooks = $books;
+
+            return $kelompok;
+        });
+
+        return view('pages.user.instansi.index', [
+            'instansis' => $instansis,
+            'categories' => $filteredCategories,
+            'selectedGenre' => $selectedGenre,
+            'selectedJenis' => $selectedJenis,
+        ]);
+    }
+
+    public function showInstansi(Request $request, $id)
+    {
+        $instansi = Instansi::findOrFail($id);
+        $kelompoks = Kelompok::with(['buku', 'sub_kelompok.buku.uploaded'])->get();
+
+        $selectedGenre = $request->genre;
+        $selectedJenis = $request->jenis;
+
+        $filteredCategories = $kelompoks->map(function ($kelompok) use ($selectedGenre, $selectedJenis) {
+            $books = $kelompok->buku;
+
+            if ($selectedJenis) {
+                $books = $books->filter(function ($book) use ($selectedJenis) {
+                    return $book->jenis === $selectedJenis;
+                });
+            }
+
+            $books->load('uploaded');
+            $kelompok->filteredBooks = $books;
+
+            return $kelompok;
+        });
+        return view('pages.user.instansi.show', [
+            'instansi' => $instansi,
+            'categories' => $filteredCategories,
             'selectedGenre' => $selectedGenre,
             'selectedJenis' => $selectedJenis,
         ]);
