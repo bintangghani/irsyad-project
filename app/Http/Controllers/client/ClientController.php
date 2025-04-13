@@ -6,9 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Buku;
 use App\Models\Instansi;
-use App\Models\Jenis;
 use App\Models\Kelompok;
-use App\Models\User;
+use App\Services\CommonDataService;
 use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
@@ -16,7 +15,6 @@ class ClientController extends Controller
     public function index()
     {
         $user = Auth::user();
-
         $categories = Kelompok::with('buku')->get();
 
         $categories = $categories->map(function ($category) {
@@ -37,98 +35,32 @@ class ClientController extends Controller
     public function showBuku($id)
     {
         $buku = Buku::findOrFail($id);
-
-        return view('pages.user.buku.show', compact('buku'));
+        return view('pages.user.buku.index', compact('buku'));
     }
 
-    public function category(Request $request)
+    public function category()
     {
-        $kelompoks = Kelompok::with(['buku', 'sub_kelompok.buku.uploaded'])->get();
-
-        $selectedGenre = $request->genre;
-        $selectedJenis = $request->jenis;
-
-        $filteredCategories = $kelompoks->map(function ($kelompok) use ($selectedGenre, $selectedJenis) {
-            $books = $kelompok->buku;
-
-            if ($selectedJenis) {
-                $books = $books->filter(function ($book) use ($selectedJenis) {
-                    return $book->jenis === $selectedJenis;
-                });
-            }
-            $books->load('uploaded');
-
-            $kelompok->filteredBooks = $books;
-            return $kelompok;
-        });
-
-        return view('pages.user.category.index', [
-            'categories' => $filteredCategories,
-            'genres' => Kelompok::pluck('nama'),
-            'jenisList' => Jenis::pluck('nama'),
-            'selectedGenre' => $selectedGenre,
-            'selectedJenis' => $selectedJenis,
-        ]);
+        return view('pages.user.category.index', CommonDataService::getCommonData([]));
     }
 
-    public function instansi(Request $request)
+    public function instansi()
     {
-        $instansis = Instansi::orderBy('nama')->get();
-        $kelompoks = Kelompok::with(['buku', 'sub_kelompok.buku.uploaded'])->get();
-
-        $selectedGenre = $request->genre;
-        $selectedJenis = $request->jenis;
-
-        $filteredCategories = $kelompoks->map(function ($kelompok) use ($selectedGenre, $selectedJenis) {
-            $books = $kelompok->buku;
-
-            if ($selectedJenis) {
-                $books = $books->filter(function ($book) use ($selectedJenis) {
-                    return $book->jenis === $selectedJenis;
-                });
-            }
-
-            $books->load('uploaded');
-            $kelompok->filteredBooks = $books;
-
-            return $kelompok;
-        });
-
-        return view('pages.user.instansi.index', [
-            'instansis' => $instansis,
-            'categories' => $filteredCategories,
-            'selectedGenre' => $selectedGenre,
-            'selectedJenis' => $selectedJenis,
-        ]);
+        return view(
+            'pages.user.instansi.index',
+            CommonDataService::getCommonData([
+                'instansis' => Instansi::orderBy('nama')->get()
+            ])
+        );
     }
 
-    public function showInstansi(Request $request, $id)
+    public function showInstansi($id)
     {
-        $instansi = Instansi::findOrFail($id);
-        $kelompoks = Kelompok::with(['buku', 'sub_kelompok.buku.uploaded'])->get();
-
-        $selectedGenre = $request->genre;
-        $selectedJenis = $request->jenis;
-
-        $filteredCategories = $kelompoks->map(function ($kelompok) use ($selectedGenre, $selectedJenis) {
-            $books = $kelompok->buku;
-
-            if ($selectedJenis) {
-                $books = $books->filter(function ($book) use ($selectedJenis) {
-                    return $book->jenis === $selectedJenis;
-                });
-            }
-
-            $books->load('uploaded');
-            $kelompok->filteredBooks = $books;
-
-            return $kelompok;
-        });
-        return view('pages.user.instansi.show', [
-            'instansi' => $instansi,
-            'categories' => $filteredCategories,
-            'selectedGenre' => $selectedGenre,
-            'selectedJenis' => $selectedJenis,
-        ]);
+        return view('pages.user.instansi.show', CommonDataService::getCommonData([
+            'instansi' => Instansi::findOrFail($id),
+            'bukuInstansi' => Buku::with('uploaded')
+                ->whereIn('uploaded_by', Instansi::findOrFail($id)->user()->pluck('id_user'))
+                ->latest()
+                ->get()
+        ]));
     }
 }
