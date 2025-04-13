@@ -28,8 +28,10 @@ Route::prefix('client')->name('client.')->group(function () {
 
 Route::controller(ClientController::class)->group(function () {
     Route::get('/', 'index')->name('home');
-    Route::get('/buku/{id}', 'showBuku')->name('show');
-    Route::get('/category', 'category')->name('category'); 
+    Route::get('/buku/{id}', 'showBuku')->name('showBuku');
+    Route::get('/category', 'category')->name('category');
+    Route::get('/instansi', 'instansi')->name('instansi');
+    Route::get('/instansi/{id}', 'showInstansi')->name('instansi.show');
 });
 
 Route::prefix('auth')->name('auth.')->group(function () {
