@@ -22,7 +22,7 @@ Route::fallback(function () {
     
 });
 
-Route::prefix('client')->name('name.')->group(function () {
+Route::prefix('client')->name('client.')->group(function () {
 
 });
 
