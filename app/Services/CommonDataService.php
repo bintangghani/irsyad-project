@@ -2,35 +2,68 @@
 
 namespace App\Services;
 
+use App\Models\Buku;
+use App\Models\Instansi;
 use App\Models\Kelompok;
 use App\Models\Jenis;
+use App\Models\SubKelompok;
+use App\Models\User;
 
 class CommonDataService
 {
     public static function getCommonData($extraData = [])
     {
-        // Mengambil kelompok dengan buku dan sub_kelompok terkait
         $kelompoks = Kelompok::with(['buku', 'sub_kelompok.buku.uploaded'])->get();
 
-        // Menyaring kategori dan jenis berdasarkan filter
+        // Ambil filter dari request
         $selectedGenre = request()->get('genre');
         $selectedJenis = request()->get('jenis');
+        $selectedSubCategory = request()->get('sub_category');
+        $selectedInstansi = request()->get('instansi');
+        $selectedPenerbit = request()->get('penerbit');
+        $search = request()->get('search');
 
-        // Filter buku berdasarkan jenis dan genre
-        $filteredCategories = $kelompoks->map(function ($kelompok) use ($selectedGenre, $selectedJenis) {
+        // Ambil data dasar untuk dropdown/filter
+        $subGenres = SubKelompok::pluck('nama', 'id_sub_kelompok');
+        $instansis = Instansi::pluck('nama', 'id_instansi');
+        $penerbits = buku::pluck( 'penerbit');
+        $genres = Kelompok::pluck('nama');
+        $jenisList = Jenis::pluck('nama');
+
+        // Filter buku dalam setiap kelompok
+        $filteredCategories = $kelompoks->map(function ($kelompok) use (
+            $selectedGenre,
+            $selectedJenis,
+            $selectedSubCategory,
+            $selectedInstansi,
+            $selectedPenerbit,
+            $search,
+        ) {
             $books = $kelompok->buku;
 
-            // Filter berdasarkan jenis
             if ($selectedJenis) {
-                $books = $books->filter(function ($book) use ($selectedJenis) {
-                    return $book->jenis === $selectedJenis;
-                });
+                $books = $books->where('jenis', $selectedJenis);
             }
 
-            // Filter berdasarkan genre
             if ($selectedGenre) {
-                $books = $books->filter(function ($book) use ($selectedGenre) {
-                    return $book->genre === $selectedGenre;
+                $books = $books->where('genre', $selectedGenre);
+            }
+
+            if ($selectedSubCategory) {
+                $books = $books->where('id_sub_kelompok', $selectedSubCategory);
+            }
+
+            if ($selectedInstansi) {
+                $books = $books->where('instansi_id', $selectedInstansi); 
+            }
+
+            if ($selectedPenerbit) {
+                $books = $books->where('penerbit_id', $selectedPenerbit); 
+            }
+
+            if ($search) {
+                $books = $books->filter(function ($book) use ($search) {
+                    return stripos($book->judul, $search) !== false;
                 });
             }
 
@@ -40,13 +73,27 @@ class CommonDataService
             return $kelompok;
         });
 
-        // Mengambil list genre dan jenis untuk ditampilkan pada view
-        $genres = Kelompok::pluck('nama');
-        $jenisList = Jenis::pluck('nama');
+        $subcategories = SubKelompok::withCount('buku')
+            ->orderByDesc('buku_count')
+            ->take(6)
+            ->get();
+
         $categories = $filteredCategories;
 
-        // Menyatukan data umum
-        $commonData = compact('categories', 'genres', 'jenisList', 'selectedGenre', 'selectedJenis');
+        $commonData = compact(
+            'categories',
+            'genres',
+            'jenisList',
+            'selectedGenre',
+            'selectedSubCategory',
+            'selectedInstansi',
+            'selectedJenis',
+            'subGenres',
+            'subcategories',
+            'instansis',
+            'penerbits',
+            'search'
+        );
 
         return array_merge($commonData, $extraData);
     }

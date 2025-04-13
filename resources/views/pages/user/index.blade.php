@@ -22,14 +22,11 @@
                         bacaan menarik, mulai dari novel best-seller hingga konten edukasi eksklusif.
                     </p>
                     <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                        <button
+                        <a href="/category"
                             class="bg-[#696cff] hover:bg-[#5a5cff] text-white px-8 py-3 rounded-lg shadow-lg text-lg font-semibold transition-all transform hover:scale-105">
                             Mulai Membaca Sekarang
-                        </button>
-                        <button
-                            class="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg border border-white/20 text-lg font-semibold transition-all">
-                            Pelajari Lebih Lanjut
-                        </button>
+                        </a>
+
                     </div>
                 </div>
             </div>
@@ -69,7 +66,7 @@
                                     </div>
                                     <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
                                         <span class="text-[#696cff] font-medium">{{ $book->jenis->nama ?? 'Genre' }}</span>
-                                        <span>{{ $book->uploaded->nama }}</span>
+                                        <span>{{ $book->penerbit ?? $book->uploaded->nama }}</span>
                                     </div>
                                 </div>
                                 <p class="text-sm text-[#333333] mt-2 line-clamp-2">
@@ -156,12 +153,20 @@
                                     </h3>
                                 </a>
                                 <div class="text-xs text-[#333333] mt-1 flex items-center gap-1">
-                                    <span class="text-[#696cff] font-medium">{{ $book->kategori->nama ?? 'Genre' }}</span>
-                                    <span>·</span>
-                                    <span>{{ $book->uploaded->nama }}</span>
+                                    <div class="flex flex-wrap items-center gap-1 text-xs">
+                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis karna yang tampil nya uuid --}}
+                                        <span
+                                            class="text-[#696cff] font-medium">{{ $book->kategori->nama ?? 'Genre' }}</span>
+                                        <span
+                                            class="text-[#696cff] font-medium">{{ $book->sub_kelompok->nama ?? 'Genre' }}</span>
+                                    </div>
+                                    <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
+                                        <span class="text-[#696cff] font-medium">{{ $book->jenis->nama ?? 'Genre' }}</span>
+                                        <span>{{ \Illuminate\Support\Str::words($book->penerbit ?? $book->uploaded->nama ,1,"...") }}</span>
+                                    </div>
                                 </div>
-                                <p class="text-sm text-[#333333]  mt-2 line-clamp-2">
-                                    {{ $book->deskripsi }}
+                                <p class="text-sm text-[#333333] mt-2 line-clamp-2">
+                                    {{ \Illuminate\Support\Str::words($book->deskripsi, 100, '...') }}
                                 </p>
                             </div>
                             <div class="text-xs text-[#3a4a5a99] mt-3">
@@ -176,31 +181,6 @@
                 @endforeach
             </div>
         </div>
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div class="flex flex-col md:flex-row">
-                <div class="md:w-1/2 bg-[#696cff] p-8 md:p-12 text-white">
-                    <h2 class="text-2xl md:text-3xl font-bold mb-4">Bergabunglah dengan Komunitas Pembaca Kami</h2>
-                    <p class="mb-6 text-white/90">Dapatkan akses eksklusif ke buku-buku terbaru, diskon spesial, dan konten
-                        anggota hanya untuk Anda.</p>
-                    <button
-                        class="bg-white text-[#696cff] px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                        Daftar Sekarang - Gratis!
-                    </button>
-                </div>
-                <div class="md:w-1/2 bg-gray-50 p-8 md:p-12">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Tetap Terhubung</h3>
-                    <p class="text-gray-600 mb-6">Berlangganan newsletter kami untuk mendapatkan update buku terbaru
-                        langsung ke email Anda.</p>
-                    <div class="flex">
-                        <input type="email" placeholder="Alamat email Anda"
-                            class="flex-grow px-4 py-3 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#696cff] focus:border-transparent">
-                        <button
-                            class="bg-[#696cff] text-white px-6 py-3 rounded-r-lg font-medium hover:bg-[#5a5cff] transition">
-                            Berlangganan
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
 @endsection

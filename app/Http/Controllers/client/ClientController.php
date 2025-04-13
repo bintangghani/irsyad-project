@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Buku;
 use App\Models\Instansi;
 use App\Models\Kelompok;
+use App\Models\SubKelompok;
 use App\Services\CommonDataService;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +17,10 @@ class ClientController extends Controller
     {
         $user = Auth::user();
         $categories = Kelompok::with('buku')->get();
-
+        $subcategories = SubKelompok::withCount('buku')
+            ->orderByDesc('buku_count')
+            ->take(6)
+            ->get();
         $categories = $categories->map(function ($category) {
             $category->buku = $category->buku->take(8);
             return $category;
@@ -29,7 +33,7 @@ class ClientController extends Controller
             ->get();
 
         $newUploads = Buku::orderBy('created_at', 'desc')->take(8)->get();
-        return view('pages.user.index', compact('trendingBooks', 'newUploads', 'categories', 'user', 'trendingNavbar'));
+        return view('pages.user.index', compact('trendingBooks', 'newUploads', 'categories', 'user', 'trendingNavbar', 'subcategories'));
     }
 
     public function showBuku($id)

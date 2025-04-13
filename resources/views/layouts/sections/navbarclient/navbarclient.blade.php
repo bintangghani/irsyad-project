@@ -13,8 +13,14 @@
                 <div class="flex items-center space-x-6">
                     <div class="relative group">
                         <a href="/category"
-                            class="text-gray-700 hover:text-[#696cff] transition-colors font-medium text-sm">
+                            class="text-gray-700 hover:text-[#696cff] transition-colors font-medium text-sm flex">
                             Genre
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
                         </a>
                         <div
                             class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-gray-100">
@@ -26,6 +32,29 @@
                             @endforeach
                         </div>
                     </div>
+                    <div class="relative group">
+                        <a href="/category"
+                            class="text-gray-700 hover:text-[#696cff] transition-colors font-medium text-sm flex">
+                            Sub Genre
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <div
+                            class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-gray-100">
+                            @foreach ($subcategories as $sub)
+                                <a href="{{ url('category?subgenre=' . urlencode($sub->nama)) }}"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-[#696cff] transition-colors">
+                                    {{ $sub->nama }}
+                                </a>
+                            @endforeach
+
+                        </div>
+                    </div>
+
 
                     <a href="/category"
                         class="text-gray-700 hover:text-[#696cff] transition-colors font-medium text-sm">
@@ -101,7 +130,7 @@
                     @endif
                 </div>
 
-                
+
                 <button id="hamburger" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -204,7 +233,6 @@
 </div>
 
 <script>
-    
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobileMenu');
 
