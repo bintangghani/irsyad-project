@@ -48,19 +48,18 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="alamat" class="form-label">alamat</label>
-                            <input type="alamat" name="alamat" id="alamat"
-                                class="form-control @error('alamat') is-invalid @enderror" value="{{ old('alamat') }}"
-                                required>
+                            <label for="alamat" class="form-label">Alamat</label>
+                            <textarea name="alamat" id="alamat" rows="3" class="form-control @error('alamat') is-invalid @enderror"
+                                required>{{ old('alamat') }}</textarea>
                             @error('alamat')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-3">
-                            <label for="deskripsi" class="form-label">deskripsi</label>
-                            <input type="deskripsi" name="deskripsi" id="deskripsi"
-                                class="form-control @error('deskripsi') is-invalid @enderror" required>
+                            <label for="deskripsi" class="form-label">Deskripsi</label>
+                            <textarea name="deskripsi" id="deskripsi" rows="3" class="form-control @error('deskripsi') is-invalid @enderror"
+                                required>{{ old('deskripsi') }}</textarea>
                             @error('deskripsi')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

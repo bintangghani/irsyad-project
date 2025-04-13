@@ -58,12 +58,12 @@
                                 <thead class="table-light">
                                     <tr class="bg-primary">
                                         <th scope="col" class="text-center bg-primary text-white w-10">#</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Profile</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Nama</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Email</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Moto</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Role</th>
-                                        <th scope="col" class="bg-primary text-white max-w-[100px] w-30">Instansi</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Profile</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Nama</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Email</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Moto</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Role</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Instansi</th>
                                         <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Aksi
                                         </th>
                                     </tr>
@@ -82,18 +82,18 @@
                                             </td>
                                             <td class="text-capitalize">{{ $item->nama }}</td>
                                             <td>{{ $item->email }}</td>
-                                            <td class="text-capitalize">{{ $item->moto ?? '-' }}</td>
-                                            <td class="text-capitalize">{{ $item->role->nama ?? 'Tidak ada' }}</td>
-                                            <td class="text-capitalize">{{ $item->instansi->nama ?? 'Tidak ada' }}</td>
-                                            <td class="text-center">
-                                                <a href="{{ route('dashboard.user.edit', $item->id_user) }}"
-                                                    class="btn btn-warning">Edit</a>
-                                                <form action="{{ route('dashboard.user.destroy', $item->id_user) }}"
-                                                    class="d-inline" method="POST" data-confirm-delete="true">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                                </form>
+                                            <td class="text-capitalize text-truncate">{{ $item->moto ?? '-' }}</td>
+                                            <td class="text-capitalize text-truncate">{{ $item->role->nama ?? 'Tidak ada' }}</td>
+                                            <td class="text-capitalize text-truncate">{{ $item->instansi->nama ?? 'Tidak ada' }}</td>
+                                            <td class="text-center align-middle">
+                                                <div class="d-flex flex-column gap-1 align-items-center">
+                                                    <a href="{{ route('dashboard.user.edit', $item->id_user) }}" class="btn btn-warning btn-sm w-100">Edit</a>
+                                                    <form action="{{ route('dashboard.user.destroy', $item->id_user) }}" method="POST" data-confirm-delete="true" class="w-100">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm w-100">Delete</button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
