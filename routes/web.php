@@ -22,11 +22,16 @@ Route::fallback(function () {
     
 });
 
+Route::prefix('client')->name('name.')->group(function () {
+
+});
+
 Route::controller(ClientController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/buku/{id}', 'showBuku')->name('show');
     Route::get('/category', 'category')->name('category'); 
 });
+
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::controller(AuthenticationController::class)->group(function () {
         Route::middleware(CheckLogin::class)->group(function () {
