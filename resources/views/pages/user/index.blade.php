@@ -66,11 +66,11 @@
                                     </div>
                                     <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
                                         <span class="text-[#696cff] font-medium">{{ $book->jenis->nama ?? 'Genre' }}</span>
-                                        <span>{{ $book->penerbit ?? $book->uploaded->nama }}</span>
+                                        <span>{{ \Illuminate\Support\Str::words($book->penerbit ?? $book->uploaded->nama ,1,"...") }}</span>
                                     </div>
                                 </div>
                                 <p class="text-sm text-[#333333] mt-2 line-clamp-2">
-                                    {{ \Illuminate\Support\Str::words($book->deskripsi, 100, '...') }}
+                                    {{ \Illuminate\Support\Str::words($book->deskripsi, 40, '...') }}
                                 </p>
                             </div>
                             <div class="text-xs text-[#3a4a5a99] mt-3">
@@ -166,7 +166,7 @@
                                     </div>
                                 </div>
                                 <p class="text-sm text-[#333333] mt-2 line-clamp-2">
-                                    {{ \Illuminate\Support\Str::words($book->deskripsi, 100, '...') }}
+                                    {{ \Illuminate\Support\Str::words($book->deskripsi,40 , '...') }}
                                 </p>
                             </div>
                             <div class="text-xs text-[#3a4a5a99] mt-3">

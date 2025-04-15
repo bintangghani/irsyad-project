@@ -177,10 +177,10 @@
         @endif
     </div>
 </nav>
-
 <div id="searchPopup"
-    class="fixed  left-1/2 transform -translate-x-1/2 bg-white rounded-xl shadow-xl w-full max-w-2xl z-50 hidden border border-gray-200">
+    class="fixed left-1/2 transform -translate-x-1/2 bg-white rounded-xl shadow-xl w-full max-w-2xl z-50 hidden border border-gray-200">
     <div class="p-4">
+        {{-- Search Input --}}
         <div class="flex items-center mb-4">
             <div class="relative flex-grow">
                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -202,8 +202,9 @@
             </button>
         </div>
 
+        {{-- Result List --}}
         <div class="max-h-96 overflow-y-auto">
-            <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center">
+            <h3 id="trendingHeader" class="text-sm font-semibold text-gray-700 mb-2 flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-red-500" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -211,9 +212,10 @@
                 </svg>
                 Trending Now
             </h3>
-            <ul class="space-y-2">
-                @if (isset($trendingBooks) && count($trendingBooks))
-                    @foreach ($trendingBooks as $book)
+
+            <ul id="trendingList" class="space-y-2">
+                @if (isset($trendingNavbar) && count($trendingNavbar))
+                    @foreach ($trendingNavbar as $book)
                         <li>
                             <a href="{{ route('dashboard.buku.create', $book->id) }}"
                                 class="flex items-center px-3 py-2 hover:bg-blue-50 rounded-lg transition-colors">
@@ -226,6 +228,8 @@
                     <li class="px-3 py-2 text-gray-500 text-sm">No trending books available</li>
                 @endif
             </ul>
+
+            <ul id="searchResultList" class="space-y-2 mt-4"></ul>
         </div>
 
         <p class="mt-3 text-xs text-gray-500 text-center">Press Enter to see all results</p>
@@ -278,6 +282,44 @@
             }
         });
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('popupSearchInput');
+        const searchResultList = document.getElementById('searchResultList');
+        const trendingList = document.getElementById('trendingList');
+        let timeout = null;
+
+        input.addEventListener('input', function() {
+            const keyword = this.value.trim();
+
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                if (keyword.length === 0) {
+                    searchResultList.innerHTML = ''; // biarkan trending tetap muncul
+                    return;
+                }
+
+                fetch(`/search-books?q=${encodeURIComponent(keyword)}`)
+                    .then(response => response.json())
+                    .then(books => {
+                        if (books.length) {
+                            searchResultList.innerHTML = books.map(book => `
+                            <li>
+                                <a href="/dashboard/buku/create/${book.id}"
+                                    class="flex items-center px-3 py-2 hover:bg-blue-50 rounded-lg transition-colors">
+                                    <span class="text-blue-500 mr-2">🔍</span>
+                                    <span class="text-gray-800">${book.judul}</span>
+                                </a>
+                            </li>
+                        `).join('');
+                        } else {
+                            searchResultList.innerHTML =
+                                `<li class="px-3 py-2 text-gray-500 text-sm">No books found</li>`;
+                        }
+                    });
+            }, 300);
+        });
+    });
 </script>
 
 <style>

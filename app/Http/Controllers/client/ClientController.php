@@ -42,10 +42,34 @@ class ClientController extends Controller
         return view('pages.user.buku.index', compact('buku'));
     }
 
-    public function category()
+    public function category(Request $request)
     {
-        return view('pages.user.category.index', CommonDataService::getCommonData([]));
+
+        $trendingBooks = Buku::with(['jenis', 'sub_kelompok.kelompok', 'uploaded'])
+        ->where('total_read', '>', 0)
+        ->orderBy('total_read', 'desc')
+        ->take(8)
+        ->get();
+        $filters = [
+            'genre' => $request->genre,
+            'jenis' => $request->jenis,
+            'sub_category' => $request->sub_category,
+            'instansi' => $request->instansi,
+            'penerbit' => $request->penerbit,
+            'search' => $request->search,
+        ];
+        
+        $data = CommonDataService::getCommonData($filters);
+    
+        if ($data['showMostReadBooks']) {
+            $books = $data['categories'][0]->filteredBooks ?? collect();
+        } else {
+            $books = $data['categories']->pluck('filteredBooks')->flatten();
+        }
+    
+        return view('pages.user.category.index', array_merge($data, ['books' => $books], ['trendingBooks' => $trendingBooks]));
     }
+    
 
     public function instansi()
     {

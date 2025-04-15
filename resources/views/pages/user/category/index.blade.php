@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Str;
+@endphp
+
 @extends('layouts.master')
 
 @section('title', 'Kategori Buku')
@@ -7,7 +11,7 @@
         <div class="bg-white rounded-xl shadow-md p-6 mb-8">
             <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Jelajahi Koleksi Buku Kami</h1>
 
-            <form method="GET" action="{{ route('category') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form method="GET" id="filterForm" action="{{ route('category') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="flex-1">
                     <label for="genre" class="block text-sm font-medium text-gray-700 mb-1">Filter Genre</label>
                     <div class="relative">
@@ -38,9 +42,8 @@
                             class="block w-full pl-4 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#696cff] focus:border-transparent rounded-lg appearance-none bg-white">
                             <option value="">Semua Jenis</option>
                             @foreach ($jenisList as $id => $nama)
-                                <option value="{{ $id }}" {{ $selectedJenis === $id ? 'selected' : '' }}>
-                                    {{ ucfirst($nama) }}
-                                </option>
+                                <option value="{{ $id }}" {{ request('jenis') == $id ? 'selected' : '' }}>
+                                    {{ $nama }}</option>
                             @endforeach
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -82,7 +85,7 @@
                             class="block w-full pl-4 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#696cff] focus:border-transparent rounded-lg appearance-none bg-white">
                             <option value="">Semua Instansi</option>
                             @foreach ($instansis as $id => $nama)
-                                <option value="{{ $id }}" {{ $selectedJenis === $id ? 'selected' : '' }}>
+                                <option value="{{ $id }}" {{ $selectedInstansi === $id ? 'selected' : '' }}>
                                     {{ $nama }}
                                 </option>
                             @endforeach
@@ -100,14 +103,16 @@
                 <div class="flex-1">
                     <label for="penerbit" class="block text-sm font-medium text-gray-700 mb-1">Filter Penerbit</label>
                     <div class="relative">
-                        <select id="jenis" name="jenis" onchange="this.form.submit()"
+                        <select id="penerbit" name="penerbit" onchange="this.form.submit()"
                             class="block w-full pl-4 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#696cff] focus:border-transparent rounded-lg appearance-none bg-white">
                             <option value="">Semua Penerbit</option>
-                            @foreach ($penerbits as $id => $nama)
-                                <option value="{{ $id }}" {{ $selectedJenis === $id ? 'selected' : '' }}>
-                                    {{ $nama }}
+                            @foreach ($penerbits as $penerbit)
+                                <option value="{{ $penerbit }}"
+                                    {{ $selectedPenerbit === $penerbit ? 'selected' : '' }}>
+                                    {{ $penerbit }}
                                 </option>
                             @endforeach
+
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -143,95 +148,142 @@
                 @endif
             </form>
         </div>
-        <div class="space-y-10">
-            @foreach ($categories as $category)
-                @if ($selectedGenre && $category->nama !== $selectedGenre)
-                    @continue
-                @endif
+        @if ($trendingBooks)
+            <h2 class="text-2xl font-bold mb-4">Paling Banyak Dibaca</h2>
+        @endif
 
-                <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-xl md:text-2xl font-bold text-gray-800">{{ $category->nama }}</h2>
-                            @if (!$selectedGenre && $category->filteredBooks->count() > 6)
-                                <a href="{{ route('category', ['genre' => $category->nama]) }}"
-                                    class="text-[#696cff] hover:text-[#5a5cff] text-sm font-medium hover:underline flex items-center">
-                                    Lihat Semua <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5l7 7-7 7" />
-                                    </svg>
+        @if ($books->count())
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach ($books as $book)
+                    <div class="flex gap-4">
+                        <a href="{{ route('dashboard.buku.create', $book->id) }}" class="flex-shrink-0">
+                            <img src="{{ asset('storage/' . $book->sampul) }}" alt="{{ $book->judul }}"
+                                class="w-32 h-48 md:w-36 md:h-52 object-cover rounded-lg shadow" />
+                        </a>
+                        <div class="flex flex-col justify-between">
+                            <div>
+                                <a href="{{ route('dashboard.buku.create', $book->id) }}">
+                                    <h3 class="text-lg text-[#222222] md:text-lg font-semibold leading-snug">
+                                        {{ $book->judul }}
+                                    </h3>
                                 </a>
-                            @endif
+                                <div class="text-xs text-[#333333] mt-1 flex items-center gap-1">
+                                    <div class="flex flex-wrap items-center gap-1 text-xs">
+                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis karna yang tampil nya uuid --}}
+                                        <span
+                                            class="text-[#696cff] font-medium">{{ $book->kategori->nama ?? 'Genre' }}</span>
+                                        <span
+                                            class="text-[#696cff] font-medium">{{ $book->sub_kelompok->nama ?? 'Genre' }}</span>
+                                    </div>
+                                    <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
+                                        <span
+                                            class="text-[#696cff] font-medium">{{ $book->jenis->nama ?? 'Genre' }}</span>
+                                        <span>{{ \Illuminate\Support\Str::words($book->penerbit ?? $book->uploaded->nama, 1, '...') }}</span>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-[#333333] mt-2 line-clamp-2">
+                                    {{ \Illuminate\Support\Str::words($book->deskripsi, 40, '...') }}
+                                </p>
+                            </div>
+                            <div class="text-xs text-[#3a4a5a99] mt-3">
+                                <span>{{ number_format($book->total_read) }} views</span>
+                                <span
+                                    class="ml-2 {{ $book->status === 'Completed' ? 'text-green-600' : 'text-yellow-600' }} font-semibold">
+                                    {{ ucfirst($book->status) ?? 'Ongoing' }}
+                                </span>
+                            </div>
                         </div>
                     </div>
+                @endforeach
+            </div>
+        @else
+            <div class="text-center py-8 text-gray-500">
+                @if ($selectedGenre || $selectedJenis || $selectedSubCategory || $selectedInstansi || $selectedPenerbit || $search)
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-800">
+                        Menampilkan buku
+                        @if ($selectedGenre)
+                            dengan genre <span class="font-bold">{{ $selectedGenre }}</span>
+                        @endif
+                        @if ($selectedJenis)
+                            {{ $selectedGenre ? ',' : '' }} jenis <span class="font-bold">{{ $selectedJenis }}</span>
+                        @endif
+                        @if ($selectedSubCategory)
+                            {{ $selectedGenre || $selectedJenis ? ',' : '' }} sub genre <span
+                                class="font-bold">{{ $selectedSubCategory }}</span>
+                        @endif
+                        @if ($selectedInstansi)
+                            {{ $selectedGenre || $selectedJenis || $selectedSubCategory ? ',' : '' }} dari instansi <span
+                                class="font-bold">{{ $selectedInstansi }}</span>
+                        @endif
+                        @if ($selectedPenerbit)
+                            {{ $selectedGenre || $selectedJenis || $selectedSubCategory || $selectedInstansi ? ',' : '' }}
+                            penerbit <span class="font-bold">{{ $selectedPenerbit }}</span>
+                        @endif
+                        @if ($search)
+                            {{ $selectedGenre || $selectedJenis || $selectedSubCategory || $selectedInstansi || $selectedPenerbit ? ',' : '' }}
+                            dengan pencarian judul "<span class="font-bold">{{ $search }}</span>"
+                        @endif
+                    </h2>
+                    @foreach ($categories as $category)
+                        @if ($category->filteredBooks->isNotEmpty())
+                            <h3 class="text-lg font-bold text-[#696cff] mt-6 mb-2">{{ $category->nama }}</h3>
 
-                    <div class="p-6">
-                        @php
-                            $booksToShow = $selectedGenre
-                                ? $category->filteredBooks
-                                : $category->filteredBooks->take(6);
-                        @endphp
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                @foreach ($category->filteredBooks as $book)
+                                    <div
+                                        class="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+                                        <a href="{{ route('dashboard.buku.create', $book->id) }}" class="flex gap-4">
+                                            <img src="{{ asset('storage/' . $book->sampul) }}" alt="{{ $book->judul }}"
+                                                class="w-24 h-36 md:w-28 md:h-40 object-cover rounded-lg shadow">
 
-                        @if ($booksToShow->count() > 0)
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                @foreach ($booksToShow as $book)
-                                    <div class="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow">
-                                        <a href="{{ route('dashboard.buku.create', $book->id) }}" class="block">
-                                            <div class="flex gap-4">
-                                                <img src="{{ asset('storage/' . $book->sampul) }}"
-                                                    alt="{{ $book->judul }}"
-                                                    class="w-24 h-36 md:w-28 md:h-40 object-cover rounded-lg shadow">
-                                                <div class="flex-1">
-                                                    <h3
-                                                        class="text-lg font-semibold text-gray-800 hover:text-[#696cff] transition-colors">
-                                                        {{ $book->judul }}
-                                                    </h3>
-                                                    <div class="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                                            <div class="flex-1">
+                                                <h3
+                                                    class="text-base font-semibold text-gray-800 hover:text-[#696cff] transition-colors line-clamp-2">
+                                                    {{ $book->judul }}
+                                                </h3>
+
+                                                <div class="text-xs text-[#333333] mt-1 flex items-center gap-1">
+                                                    <div class="flex flex-wrap items-center gap-1 text-xs">
+                                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis karna yang tampil nya uuid --}}
                                                         <span
                                                             class="text-[#696cff] font-medium">{{ $book->kategori->nama ?? 'Genre' }}</span>
-                                                        <span>•</span>
-                                                        <span>{{ $book->uploaded->nama }}</span>
-                                                    </div>
-                                                    <p class="text-sm text-gray-600 mt-2 line-clamp-2">
-                                                        {{ $book->deskripsi }}
-                                                    </p>
-                                                    <div
-                                                        class="flex justify-between items-center mt-3 text-xs text-gray-400">
-                                                        <span>{{ number_format($book->total_read) }} views</span>
                                                         <span
-                                                            class="{{ $book->status === 'Completed' ? 'text-green-600' : 'text-yellow-600' }} font-semibold">
-                                                            {{ ucfirst($book->status) ?? 'Ongoing' }}
-                                                        </span>
+                                                            class="text-[#696cff] font-medium">{{ $book->sub_kelompok->nama ?? 'Genre' }}</span>
                                                     </div>
+                                                    <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
+                                                        <span
+                                                            class="text-[#696cff] font-medium">{{ $book->jenis->nama ?? 'Genre' }}</span>
+                                                        <span>{{ $book->penerbit ?? $book->uploaded->nama }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <p class="text-sm text-[#333333] mt-2 line-clamp-2">
+                                                    {{ \Illuminate\Support\Str::words($book->deskripsi, 100, '...') }}
+                                                </p>
+
+                                                <div class="flex justify-between items-center mt-3 text-xs text-gray-400">
+                                                    <span>{{ number_format($book->total_read) }} views</span>
+                                                    <span
+                                                        class="{{ $book->status === 'Completed' ? 'text-green-600' : 'text-yellow-600' }} font-semibold">
+                                                        {{ ucfirst($book->status) ?? 'Ongoing' }}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </a>
                                     </div>
                                 @endforeach
                             </div>
-                        @else
-                            <div class="text-center py-8">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                </svg>
-                                <p class="mt-2 text-gray-500">Tidak ada buku yang ditemukan</p>
-                                @if ($selectedGenre || $selectedJenis)
-                                    <a href="{{ route('category') }}"
-                                        class="mt-2 inline-block text-[#696cff] hover:underline">Reset filter</a>
-                                @endif
-                            </div>
                         @endif
-                    </div>
-                </div>
-            @endforeach
-        </div>
+                    @endforeach
+                @endif
+            </div>
+        @endif
+
+
     </div>
     <script>
         let typingTimer;
-        const delay = 600; 
+        const delay = 600;
 
         function submitFormAfterDelay() {
             clearTimeout(typingTimer);
