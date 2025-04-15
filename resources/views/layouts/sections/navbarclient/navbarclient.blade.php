@@ -13,14 +13,8 @@
                 <div class="flex items-center space-x-6">
                     <div class="relative group">
                         <a href="/category"
-                            class="text-gray-700 hover:text-[#696cff] transition-colors font-medium text-sm flex">
+                            class="text-gray-700 hover:text-[#696cff] transition-colors font-medium text-sm">
                             Genre
-                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
                         </a>
                         <div
                             class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-gray-100">
@@ -32,29 +26,6 @@
                             @endforeach
                         </div>
                     </div>
-                    <div class="relative group">
-                        <a href="/category"
-                            class="text-gray-700 hover:text-[#696cff] transition-colors font-medium text-sm flex">
-                            Sub Genre
-                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                        <div
-                            class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-gray-100">
-                            @foreach ($subcategories as $sub)
-                                <a href="{{ url('category?subgenre=' . urlencode($sub->nama)) }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-[#696cff] transition-colors">
-                                    {{ $sub->nama }}
-                                </a>
-                            @endforeach
-
-                        </div>
-                    </div>
-
 
                     <a href="/category"
                         class="text-gray-700 hover:text-[#696cff] transition-colors font-medium text-sm">
@@ -81,14 +52,14 @@
                 <div class="relative ">
                     @if (Auth::check())
                         <button id="userMenuButton" class="focus:outline-none flex items-center space-x-1 group">
-                            <img src="{{ asset(Auth::user()->profile) }}"
+                            <img src="{{ asset('/storage/'. Auth::user()->profile) }}"
                                 class="w-8 h-8 rounded-full border-2 border-transparent group-hover:border-blue-200 transition-all shadow-sm">
                             <span
                                 class="text-sm font-medium text-gray-700 hidden lg:inline-block">{{ Auth::user()->nama }}</span>
                         </button>
                         <div id="userMenu"
                             class="hidden absolute  mt-2 w-56 bg-white shadow-lg rounded-md py-1 z-50 border border-gray-100">
-                            <a href="#"
+                            <a href="{{route('profile', ['id' => Auth::user()])}}"
                                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
                                 <svg class="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -97,14 +68,16 @@
                                 </svg>
                                 My Profile
                             </a>
-                            <a href="#"
+                            <a href="{{ route('dashboard.bookmarks.index') }}"
                                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
                                 {{-- ini jek svg nya ganti sama bookmarks --}}
-                                <svg class="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                class="bi bi-bookmarks-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M2 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L7 13.101l-4.223 2.815A.5.5 0 0 1 2 15.5z" />
+                                <path
+                                    d="M4.268 1A2 2 0 0 1 6 0h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L13 13.768V2a1 1 0 0 0-1-1z" />
+                            </svg>
                                 Bookmarks
                             </a>
                             <div class="border-t border-gray-100 my-1"></div>
@@ -130,7 +103,7 @@
                     @endif
                 </div>
 
-
+                
                 <button id="hamburger" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -233,6 +206,7 @@
 </div>
 
 <script>
+    
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobileMenu');
 
@@ -243,6 +217,7 @@
             '<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
     });
 
+    // Search popup functionality
     const openSearch = document.getElementById("openSearch");
     const closeSearchPopup = document.getElementById("closeSearchPopup");
     const searchPopup = document.getElementById("searchPopup");
@@ -263,6 +238,7 @@
         }
     });
 
+    // User dropdown functionality
     const userMenuButton = document.getElementById("userMenuButton");
     const userMenu = document.getElementById("userMenu");
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Bookmark;
+use App\Models\Kelompok;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -14,7 +15,13 @@ class BookmarksController extends Controller
     public function index()
     {
         $bookmark = Bookmark::where('id_user', Auth::user()->id_user)->get();
-        return view('pages.user.buku.bookmarks.index', compact('bookmark'));
+        $categories = Kelompok::with('buku')->get();
+
+        $categories = $categories->map(function($category) {
+            $category->nuku = $category->buku();
+            return $category;
+        });
+        return view('pages.user.buku.bookmarks.index', compact('bookmark', 'categories'));
     }
 
     public function store(Request $request)

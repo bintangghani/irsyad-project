@@ -5,10 +5,11 @@
 @section('content')
     <div class="container w-full p-20">
         <div class="flex flex-rows bg-white shadow rounded-lg">
-            <div class="flex flex-col items-start p-5">
-                <img src="{{ asset($buku->sampul) }}" alt="Cover Buku" class="w-48 h-48 object-cover">
+            <div class="flex items-center flex-col p-5">
+                <img src="{{ asset('storage/' . $buku->sampul) }}" class="object-contain object-center rounded w-full h-64"> 
                 <a href="{{ asset('storage/' . $buku->file_buku) }}" target="_blank">
-                    <button id="wantToReadBtn" class="mt-5 bg-blue-500 text-white py-2 px-6 rounded hover:bg-blue-600">
+                    <button id="wantToReadBtn"
+                        class="mt-5 bg-blue-500 text-white py-2 px-6 rounded hover:bg-blue-600 needvalidation ">
                         Read Now
                     </button>
                 </a>
@@ -19,13 +20,13 @@
                             <path
                                 d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5" />
                         </svg>
-                        <span>Share</span>
+                        <span>Download</span>
                     </div>
                     <form action="{{ route('dashboard.bookmarks.store') }}" method="POST" enctype="multipart/form-data"
                         class="needs-validation" novalidate>
                         @csrf
                         <div class="flex flex-col items-center ml-3">
-                            <button>
+                            <button id= 'downloadBtn' class="flex flex-col items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                     class="bi bi-bookmarks-fill" viewBox="0 0 16 16">
                                     <path
@@ -47,7 +48,9 @@
                             <path d="M.5 9.9v4.6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.9h-1V14H1V9.9H.5z" />
                             <path d="M5.354 5.354 8 8l2.646-2.646-.708-.708L8.5 6.293V0h-1v6.293L6.062 4.646l-.708.708z" />
                         </svg>
-                        <a href="{{ asset('storage/' . $buku->file_buku) }}" target="_blank" class="btn btn-primary btn-sm">
+                        <a href="{{ asset('storage/' . $buku->file_buku) }}" 
+                            download 
+                            class="btn btn-primary btn-sm needvalidation">
                             Download
                         </a>
                     @else
@@ -86,39 +89,83 @@
         </div>
     </div>
 
-    <div class="mt-10">
-        <h2 class="text-xl font-bold mb-4">Related Books</h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            @foreach ($buku as $related)
-                <div class="bg-white shadow rounded-lg p-4">
-                    <img src="{{ asset($buku->sampul) }}" alt="{{ $related }}"
-                        class="w-full h-48 object-cover rounded">
-                    <h3 class="mt-2 text-sm font-semibold">{{ $related }}</h3>
-                    <p class="text-xs text-gray-500">By {{ $related }}</p>
+    <div class="mt-8">
+        <h2 class="text-2xl font-bold text-center">Related Books</h2>
+        <div class="relative flex items-center mt-4">
+            <button class="absolute left-0 z-10 p-2 bg-gray-200 rounded-full shadow-md hover:bg-gray-300"
+                id="prevBtn">&#10094;</button>
+            <div class="overflow-hidden w-full px-8">
+                <div class="flex gap-4 transition-transform duration-300 ease-in-out" id="bookCarousel">
+                    @foreach ($relatedBooks as $book)
+                        <div
+                            class="min-w-[220px] bg-white shadow-md rounded-lg overflow-hidden p-4 transition hover:scale-105">
+                            <a href="" class="block">
+                                <img src="{{ asset('storage/' . $book->sampul) }}"
+                                    class="w-full h-48 object-cover object-center rounded">
+                                <h3 class="text-lg font-semibold mt-2">{{ $book->judul }}</h3>
+                                <p class="text-gray-500 text-sm">by {{ $book->uploaded->nama }}</p>
+                                <p class="text-xs text-gray-400 mt-1">{{ Str::limit($book->deskripsi, 60) }}</p>
+                            </a>
+                            <a href="{{ route('show', $book->id_buku) }}"
+                                class="mt-2 w-full block py-2 text-center rounded text-white bg-blue-600 hover:bg-blue-700">
+                                View Book
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
-            @endforeach
-        </div>
-        <div class="mt-4">
-            {{-- {{ $buku->links() }} --}}
+            </div>
+            <button class="absolute right-0 z-10 p-2 bg-gray-200 rounded-full shadow-md hover:bg-gray-300"
+                id="nextBtn">&#10095;</button>
         </div>
     </div>
 
-    <div class="mt-10">
-        <h2 class="text-xl font-bold mb-4">More by {{ $buku->penulis }}</h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            @foreach ($buku as $book)
-                <div class="bg-white shadow rounded-lg p-4">
-                    <img src="{{ asset($buku->sampul) }}" alt="{{ $book }}"
-                        class="w-full h-48 object-cover rounded">
-                    <h3 class="mt-2 text-sm font-semibold">{{ $book }}</h3>
+    <div class="mt-8">
+        <h2 class="text-2xl font-bold text-center capitalize">More By {{ $buku->uploaded->nama }}</h2>
+        <div class="relative flex items-center mt-4">
+            <button class="absolute left-0 z-10 p-2 bg-gray-200 rounded-full shadow-md hover:bg-gray-300"
+                id="prevBtn">&#10094;</button>
+            <div class="overflow-hidden w-full px-8">
+                <div class="flex gap-4 transition-transform duration-300 ease-in-out" id="bookCarousel">
+                    @foreach ($moreBy as $book)
+                        <div
+                            class="min-w-[220px] bg-white shadow-md rounded-lg overflow-hidden p-4 transition hover:scale-105">
+                            <a href="" class="block">
+                                <img src="{{ asset('storage/' . $book->sampul) }}"
+                                    class="w-full h-48 object-cover object-center rounded">
+                                <h3 class="text-lg font-semibold mt-2">{{ $book->judul }}</h3>
+                                <p class="text-gray-500 text-sm">by {{ $book->uploaded->nama }}</p>
+                                <p class="text-xs text-gray-400 mt-1">{{ Str::limit($book->deskripsi, 60) }}</p>
+                            </a>
+                            <a href="{{ route('show', $book->id_buku) }}"
+                                class="mt-2 w-full block py-2 text-center rounded text-white bg-blue-600 hover:bg-blue-700">
+                                View Book
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
-            @endforeach
+            </div>
+            <button class="absolute right-0 z-10 p-2 bg-gray-200 rounded-full shadow-md hover:bg-gray-300"
+                id="nextBtn">&#10095;</button>
         </div>
-        <div class="mt-4">
-            {{-- {{ $buku->links() }} --}}
-        </div>
-        <script>
-            document.getElementById('wantToReadBtn').addEventListener('click', function() {
+    </div>
+    <script>
+        document.getElementById('wantToReadBtn').addEventListener('click', function(event) {
+            if (!isUserLoggedIn()) {
+                event.preventDefault();
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Login Required',
+                    text: 'You need to log in to read this book.',
+                    showCancelButton: true,
+                    confirmButtonText: 'Login',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '{{ route('auth.login') }}';
+                    }
+                });
+            } else {
                 fetch('{{ route('dashboard.buku.read', $buku->id_buku) }}', {
                         method: 'POST',
                         headers: {
@@ -127,12 +174,23 @@
                         },
                         body: JSON.stringify({})
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         alert(data.message);
+
+                        window.open('{{ asset('storage/' . $buku->file_buku) }}', '_blank');
                     })
-                    .catch(error => console.error('Error:', error));
-            });
-        </script>
+            }
+        });
+
+        function isUserLoggedIn() {
+            return {{ auth()->check() ? 'true' : 'false' }};
+        }
+    </script>
     </div>
 @endsection

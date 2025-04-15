@@ -39,7 +39,27 @@ class ClientController extends Controller
     public function showBuku($id)
     {
         $buku = Buku::findOrFail($id);
-        return view('pages.user.buku.index', compact('buku'));
+
+        $categories = Kelompok::with('buku')->get();
+
+        $categories = $categories->map(function($category) {
+            $category->nuku = $category->buku();
+            return $category;
+        });
+        $relatedBooks = Buku::where('sub_kelompok', $buku->sub_kelompok)->take(8)->get();
+        $moreBy = Buku::where('penerbit', $buku->penerbit)->take(8)->get();
+
+        return view('pages.user.buku.index', compact('buku', 'categories', 'relatedBooks','moreBy'));
+    }
+
+    public function readBook($id) {
+        
+        $buku = Buku::findOrFail($id);
+        
+        $buku->increment('total_read');
+        $buku->increment('total_download');
+
+        return view('pages.user.buku.index', compact('buku', 'total_read', 'total_download'));
     }
 
     public function category()
@@ -66,5 +86,59 @@ class ClientController extends Controller
                 ->latest()
                 ->get()
         ]));
+    }
+
+    public function profile()
+    {
+        $categories = Kelompok::with('buku')->get();
+
+        $categories = $categories->map(function($category) {
+            $category->nuku = $category->buku();
+            return $category;
+        });
+        $user = Auth::user();
+        return view('pages.user.profile.index', compact('user', 'categories'));
+    }
+
+    public function editClientProfil($id)
+    {
+        $user = User::findOrFail($id);
+        return view('pages.user.profile.index', compact('user'));
+    }
+
+    public function updateClientProfile(Request $request,$id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            // dd($request->all());
+            $request->validate([
+               'nama' => 'required|string|max:255',
+               'email' => 'required|string|email|max:255',
+               'moto'=> 'nullable|string|max:255',
+               'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            ]);
+            
+            if ($request->hasFile('profile')) {
+                if ($user->profile != 'assets/img/avatars/1.png') {
+                    Storage::disk('public')->delete($user->profile);
+                }
+                $profilePath = $request->file('profile')->store('profiles', 'public');
+            } else {
+                $profilePath = $user->profile;
+            }
+
+            $user->update([
+                'nama' => $request->input('nama'),
+                'email' => $request->input('email'),
+                'moto' => $request->input('moto'),
+                'profile' => $profilePath,
+            ]);
+            Alert::success('Success', 'Profile berhasil diperbarui');
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            Alert::error('Error', 'Nampaknya terjadi kesalahan');
+            log::error($th);
+            return redirect()->back();
+        }
     }
 }

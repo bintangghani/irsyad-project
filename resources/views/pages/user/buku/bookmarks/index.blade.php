@@ -15,7 +15,7 @@
                     
                     <div class="mt-4 flex items-center space-x-2">
                         <!-- Tombol Read Now -->
-                        <a href="{{ route('dashboard.buku.show', $bookmarks->buku->id_buku) }}"
+                        <a href="{{ route('show', $bookmarks->buku->id_buku) }}"
                             class="flex-1 text-center text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 transition duration-300 ease-in-out">
                             Read Now
                         </a>

@@ -23,14 +23,16 @@ Route::fallback(function () {
 });
 
 Route::prefix('client')->name('client.')->group(function () {
-
+    
 });
 Route::controller(ClientController::class)->group(function () {
     Route::get('/', 'index')->name('home');
-    Route::get('/buku/{id}', 'showBuku')->name('showBuku');
+    Route::get('/buku/{id}', 'showBuku')->name('show');
     Route::get('/category', 'category')->name('category');
-    Route::get('/instansi', 'instansi')->name('instansi');
-    Route::get('/instansi/{id}', 'showInstansi')->name('instansi.show');
+    Route::get('/read/{id}', 'readBook')->name('read');
+    Route::get('/profile', 'profile')->name('profile');
+    Route::get('/profile/{id}', 'profile')->name('profile');
+    Route::put('/profile/{id}', 'updateClientProfile')->name('updateClientProfile');
 });
 
 
@@ -94,6 +96,8 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::delete('/', 'destroy')->name('destroy');
         Route::get('/profile/{id}', 'profile')->name('profile');
         Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::get('edit/profile/{id}', 'profile')->name('profile');
+        Route::put('/profile/{id}', 'updateProfile')->name('updateProfile');
     });
 
     Route::prefix('buku')->name('buku.')->group(function () {
