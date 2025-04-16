@@ -23,8 +23,7 @@ class UserController extends Controller
         protected UserRepositoryInterface $userRepository,
         protected RoleRepositoryInterface $roleRepository,
         protected InstansiRepositoryInterface $instansiRepository
-    ) {
-    }
+    ) {}
     /**
      * Display a listing of the resource.
      */
@@ -158,11 +157,11 @@ class UserController extends Controller
                 return redirect()->back();
             }
             DB::beginTransaction();
-    
+
             $this->userRepository->delete($id);
-    
+
             DB::commit();
-    
+
             Alert::success('Success', 'User berhasil dihapus');
             return redirect()->route('dashboard.user.index');
         } catch (\Throwable $th) {
@@ -192,5 +191,47 @@ class UserController extends Controller
 
         $user = $this->userRepository->findByIdWithRoleAndInstansi($id);
         return view('pages.admin.profile.index', compact('user'));
+    }
+
+    public function editProfil($id)
+    {
+        $user = User::findOrFail($id);
+        return view('pages.admin.profile.index', compact('user'));
+    }
+
+    public function updateProfile(Request $request,$id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            // dd($request->all());
+            $request->validate([
+               'nama' => 'required|string|max:255',
+               'email' => 'required|string|email|max:255',
+               'moto'=> 'nullable|string|max:255',
+               'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            ]);
+            
+            if ($request->hasFile('profile')) {
+                if ($user->profile != 'assets/img/avatars/1.png') {
+                    Storage::disk('public')->delete($user->profile);
+                }
+                $profilePath = $request->file('profile')->store('profiles', 'public');
+            } else {
+                $profilePath = $user->profile;
+            }
+
+            $user->update([
+                'nama' => $request->input('nama'),
+                'email' => $request->input('email'),
+                'moto' => $request->input('moto'),
+                'profile' => $profilePath,
+            ]);
+            Alert::success('Success', 'Profile berhasil diperbarui');
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            Alert::error('Error', 'Nampaknya terjadi kesalahan');
+            log::error($th);
+            return redirect()->back();
+        }
     }
 }

@@ -3,45 +3,79 @@
 @section('title', 'Profile')
 
 @section('content')
-<div class="row">
-  <div class="col-md-12">
-    <div class="card mb-6">
-      <!-- Account -->
-      <div class="card-body">
-        <div class="d-flex align-items-start align-items-sm-center gap-6 pb-4 border-bottom">
-          <img src="{{ asset(Auth::user()->profile) }}" alt="user-avatar" class="d-block w-px-100 h-px-100 rounded" id="profile" />
-          <div class="button-wrapper">
-            <form action="" method="POST" enctype="multipart/form-data">
-              @csrf
-              @method('PUT')
-              <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
-                <span class="d-none d-sm-block">Upload new photo</span>
-                <i class="bx bx-upload d-block d-sm-none"></i>
-                <input type="file" id="upload" name="profile" class="account-file-input" hidden accept="image/png, image/jpeg" />
-              </label>
-              <button type="submit" class="btn btn-secondary mb-4">Save</button>
-            </form>
-          </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-6">
+                <!-- Account -->
+                <div class="card-body">
+                    <div class="d-flex align-items-start align-items-sm-center gap-6 pb-4 border-bottom">
+                        <img src="{{ asset('storage/' . Auth::user()->profile) }}" alt="user-avatar"
+                            class="d-block w-px-100 h-px-100 rounded" id="profile" />
+                    </div>
+                </div>
+
+                <div class="card-body pt-4">
+                    <form action="{{ route('dashboard.user.updateProfile', ['id' => Auth::user()]) }}" method="POST"
+                        enctype="multipart/form-data" id="profile-form">
+                        @csrf
+                        @method('PUT')
+                        <div class="row g-6">
+                            <div class="col-md-6">
+                                <label for="nama" class="form-label">Name</label>
+                                <input type="text" id="nama" name="nama" class="form-control"
+                                    value="{{ Auth::user()->nama }}" disabled required />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="email" id="email" name="email" class="form-control"
+                                    value="{{ Auth::user()->email }}" disabled required />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="moto" class="form-label">Moto</label>
+                                <input type="text" id="moto" name="moto" class="form-control"
+                                    value="{{ Auth::user()->moto }}" disabled />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="profile" class="form-label">Profile Picture</label>
+                                <input type="file" id="profile" name="profile" class="form-control"
+                                    accept="image/png, image/jpeg, image/jpg" disabled />
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button type="button" class="btn btn-secondary" id="edit-button">Edit</button>
+                                <button type="submit" class="btn btn-primary" id="save-button" style="display: none;">Save Changes</button>
+                                <button type="button" class="btn btn-secondary" id="cancel-button" style="display: none;">Cancel</button>
+                            </div>
+                        </div>
+                    </form> 
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="card-body pt-4">
-        <div class="row g-6">
-          <div class="col-md-6">
-            <label class="form-label">Name</label>
-            <p>{{ Auth::user()->nama }}</p>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">E-mail</label>
-            <p>{{ Auth::user()->email }}</p>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Moto</label>
-            <p>{{ Auth::user()->moto }}</p>
-          </div>
-        </div>
-      </div>
-      <!-- /Account -->
     </div>
-  </div>
-</div>
+
+    <script>
+        const editButton = document.getElementById('edit-button');
+        const saveButton = document.getElementById('save-button');
+        const cancelButton = document.getElementById('cancel-button');
+        const formInputs = document.querySelectorAll('#profile-form input');
+
+        function enableEdit() {
+            formInputs.forEach(input => input.disabled = false);
+            editButton.style.display = 'none';
+            saveButton.style.display = 'inline-block';
+            cancelButton.style.display = 'inline-block';
+        }
+
+        function disableEdit() {
+            formInputs.forEach(input => input.disabled = true);
+            editButton.style.display = 'inline-block';
+            saveButton.style.display = 'none';
+            cancelButton.style.display = 'none';
+        }
+
+        editButton.addEventListener('click', enableEdit);
+        cancelButton.addEventListener('click', () => {
+            disableEdit();
+            document.getElementById('profile-form').reset(); // Reset form values
+        });
+    </script>
 @endsection
