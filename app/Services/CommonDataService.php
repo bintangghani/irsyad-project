@@ -48,7 +48,7 @@ class CommonDataService
             $showMostReadBooks = false;
             $kelompoks = Kelompok::with([
                 'sub_kelompok.buku.uploaded',
-                'sub_kelompok.buku.jenis',
+                'sub_kelompok.buku.jenisBuku',
             ])->get();
 
             $categories = $kelompoks->map(function ($kelompok) use (

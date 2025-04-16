@@ -11,7 +11,7 @@
         @include('layouts.sections.navbarclient.navbarclient')
     </header>
 
-    <main class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-12">
+    <main class="flex-1 w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-12">
         @yield('content')
     </main>
     <footer>

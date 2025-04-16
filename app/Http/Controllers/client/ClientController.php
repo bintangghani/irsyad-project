@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\client;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Buku;
 use App\Models\Instansi;
@@ -10,11 +11,17 @@ use App\Models\Kelompok;
 use App\Models\SubKelompok;
 use App\Services\CommonDataService;
 use Illuminate\Support\Facades\Auth;
+use Log;
+use RealRashid\SweetAlert\Facades\Alert;
+use Storage;
 
 class ClientController extends Controller
 {
     public function index()
     {
+        if (!haveAccessTo('read_buku')) {
+            return redirect()->back();
+        }
         $user = Auth::user();
         $categories = Kelompok::with('buku')->get();
         $subcategories = SubKelompok::withCount('buku')
@@ -26,18 +33,21 @@ class ClientController extends Controller
             return $category;
         });
         $trendingNavbar = Buku::where('total_read', '>', 0)->orderBy('total_read', 'desc')->take(4)->get();
-        $trendingBooks = Buku::with(['jenis', 'sub_kelompok.kelompok', 'uploaded'])
+        $trendingBooks = Buku::with(['jenisBuku', 'subKelompok', 'uploaded', 'subKelompok.kelompok'])
             ->where('total_read', '>', 0)
             ->orderBy('total_read', 'desc')
             ->take(8)
             ->get();
 
-        $newUploads = Buku::orderBy('created_at', 'desc')->take(8)->get();
+        $newUploads = Buku::with(['jenisBuku', 'subKelompok', 'uploaded', 'subKelompok.kelompok'])->orderBy('created_at', 'desc')->take(8)->get();
         return view('pages.user.index', compact('trendingBooks', 'newUploads', 'categories', 'user', 'trendingNavbar', 'subcategories'));
     }
 
     public function showBuku($id)
     {
+        if (!haveAccessTo('read_buku')) {
+            return redirect()->back();
+        }
         $buku = Buku::findOrFail($id);
 
         $categories = Kelompok::with('buku')->get();
@@ -53,7 +63,9 @@ class ClientController extends Controller
     }
 
     public function readBook($id) {
-        
+        if (!haveAccessTo('read_buku')) {
+            return redirect()->back();
+        }
         $buku = Buku::findOrFail($id);
         
         $buku->increment('total_read');
@@ -64,15 +76,17 @@ class ClientController extends Controller
 
     public function category(Request $request)
     {
-
-        $trendingBooks = Buku::with(['jenis', 'sub_kelompok.kelompok', 'uploaded'])
+        if (!haveAccessTo('read_buku')) {
+            return redirect()->back();
+        }
+        $trendingBooks = Buku::with(['jenisBuku', 'subKelompok.kelompok', 'uploaded'])
         ->where('total_read', '>', 0)
         ->orderBy('total_read', 'desc')
         ->take(8)
         ->get();
         $filters = [
             'genre' => $request->genre,
-            'jenis' => $request->jenis,
+            'jenisBuku' => $request->jenisBuku,
             'sub_category' => $request->sub_category,
             'instansi' => $request->instansi,
             'penerbit' => $request->penerbit,
@@ -93,6 +107,9 @@ class ClientController extends Controller
 
     public function instansi()
     {
+        if (!haveAccessTo('read_buku')) {
+            return redirect()->back();
+        }
         return view(
             'pages.user.instansi.index',
             CommonDataService::getCommonData([
@@ -103,6 +120,9 @@ class ClientController extends Controller
 
     public function showInstansi($id)
     {
+        if (!haveAccessTo('read_buku')) {
+            return redirect()->back();
+        }
         return view('pages.user.instansi.show', CommonDataService::getCommonData([
             'instansi' => Instansi::findOrFail($id),
             'bukuInstansi' => Buku::with('uploaded')
@@ -114,6 +134,9 @@ class ClientController extends Controller
 
     public function profile()
     {
+        if (!haveAccessTo('read_buku')) {
+            return redirect()->back();
+        }
         $categories = Kelompok::with('buku')->get();
 
         $categories = $categories->map(function($category) {
@@ -126,12 +149,18 @@ class ClientController extends Controller
 
     public function editClientProfil($id)
     {
+        if (!haveAccessTo('read_buku')) {
+            return redirect()->back();
+        }
         $user = User::findOrFail($id);
         return view('pages.user.profile.index', compact('user'));
     }
 
     public function updateClientProfile(Request $request,$id)
     {
+        if (!haveAccessTo('read_buku')) {
+            return redirect()->back();
+        }
         try {
             $user = User::findOrFail($id);
             // dd($request->all());
@@ -161,7 +190,7 @@ class ClientController extends Controller
             return redirect()->back();
         } catch (\Throwable $th) {
             Alert::error('Error', 'Nampaknya terjadi kesalahan');
-            log::error($th);
+            Log::error($th);
             return redirect()->back();
         }
     }

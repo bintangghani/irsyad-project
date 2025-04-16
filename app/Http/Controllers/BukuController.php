@@ -27,6 +27,9 @@ class BukuController extends Controller
 
     public function index(Request $request)
     {
+        if (!haveAccessTo('create_buku')) {
+            return redirect()->back();
+        }
         $buku = Buku::with(['uploaded', 'subKelompok', 'jenisBuku']);
 
         if ($request->has('search') && $request->search != '') {

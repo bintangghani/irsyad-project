@@ -14,6 +14,9 @@ class BookmarksController extends Controller
 {
     public function index()
     {
+        if (!haveAccessTo('read_buku')) {
+            return redirect()->back();
+        }
         $bookmark = Bookmark::where('id_user', Auth::user()->id_user)->get();
         $categories = Kelompok::with('buku')->get();
 
@@ -26,6 +29,9 @@ class BookmarksController extends Controller
 
     public function store(Request $request)
     {
+        if (!haveAccessTo('read_buku')) {
+            return redirect()->back();
+        }
         try {
             $validated = $request->validate([
                 'id_user' => 'required|uuid|exists:users,id_user',
@@ -69,6 +75,9 @@ class BookmarksController extends Controller
 
     public function destroy($id)
     {
+        if (!haveAccessTo('read_buku')) {
+            return redirect()->back();
+        }
         try{
             $bookmark = Bookmark::findOrFail($id);
             $bookmark->delete();

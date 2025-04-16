@@ -101,7 +101,7 @@
                                 <select name="jenis" id="jenis" required class="form-select">
                                     @foreach ($jenis as $j)
                                         <option value="{{ $j->id_jenis }}"
-                                            {{ $buku->jenis == $j->id_jenis ? 'selected' : '' }}>{{ $j->nama }}
+                                            {{ $buku->jenisBuku->id_jenis == $j->id_jenis ? 'selected' : '' }}>{{ $j->nama }}
                                         </option>
                                     @endforeach
                                 </select>

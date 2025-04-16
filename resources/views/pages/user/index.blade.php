@@ -58,14 +58,15 @@
                                 </a>
                                 <div class="text-xs text-[#333333] mt-1 flex items-center gap-1">
                                     <div class="flex flex-wrap items-center gap-1 text-xs">
-                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis karna yang tampil nya uuid --}}
+                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis
+                                        karna yang tampil nya uuid --}}
                                         <span
-                                            class="text-[#696cff] font-medium">{{ $book->kategori->nama ?? 'Genre' }}</span>
+                                            class="text-[#696cff] font-medium">{{ $book->subKelompok->kelompok->nama ?? 'Genre' }}</span>
                                         <span
-                                            class="text-[#696cff] font-medium">{{ $book->sub_kelompok->nama ?? 'Genre' }}</span>
+                                            class="text-[#696cff] font-medium">{{ $book->subKelompok->nama ?? 'Genre' }}</span>
                                     </div>
                                     <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
-                                        <span class="text-[#696cff] font-medium">{{ $book->jenis->nama ?? 'Genre' }}</span>
+                                        <span class="text-[#696cff] font-medium">{{ $book->jenisBuku->nama ?? 'Genre' }}</span>
                                         <span>{{ \Illuminate\Support\Str::words($book->penerbit ?? $book->uploaded->nama ,1,"...") }}</span>
                                     </div>
                                 </div>
@@ -141,28 +142,29 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach ($newUploads as $book)
                     <div class="flex gap-4">
-                        <a href="{{ route('dashboard.buku.create', $book->id) }}" class="flex-shrink-0">
+                        <a href="{{ route('show', $book->id_buku) }}" class="flex-shrink-0">
                             <img src="{{ asset('storage/' . $book->sampul) }}" alt="{{ $book->judul }}"
                                 class="w-32 h-48 md:w-36 md:h-52 object-cover rounded-lg shadow" />
                         </a>
                         <div class="flex flex-col justify-between">
                             <div>
-                                <a href="{{ route('dashboard.buku.create', $book->id) }}">
+                                <a href="{{ route('show', $book->id_buku) }}">
                                     <h3 class="text-lg text-[#222222] md:text-lg font-semibold leading-snug">
                                         {{ $book->judul }}
                                     </h3>
                                 </a>
                                 <div class="text-xs text-[#333333] mt-1 flex items-center gap-1">
                                     <div class="flex flex-wrap items-center gap-1 text-xs">
-                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis karna yang tampil nya uuid --}}
+                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis
+                                        karna yang tampil nya uuid --}}
                                         <span
-                                            class="text-[#696cff] font-medium">{{ $book->kategori->nama ?? 'Genre' }}</span>
+                                            class="text-[#696cff] font-medium">{{ $book->subKelompok->kelompok->nama ?? 'Genre' }}</span>
                                         <span
-                                            class="text-[#696cff] font-medium">{{ $book->sub_kelompok->nama ?? 'Genre' }}</span>
+                                            class="text-[#696cff] font-medium">{{ $book->subKelompok->nama ?? 'Genre' }}</span>
                                     </div>
                                     <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
-                                        <span class="text-[#696cff] font-medium">{{ $book->jenis->nama ?? 'Genre' }}</span>
-                                        <span>{{ \Illuminate\Support\Str::words($book->penerbit ?? $book->uploaded->nama ,1,"...") }}</span>
+                                        <span class="text-[#696cff] font-medium">{{ $book->jenisBuku->nama ?? 'Genre' }}</span>
+                                        <span>{{ $book->penerbit ?? $book->uploaded->nama }}</span>
                                     </div>
                                 </div>
                                 <p class="text-sm text-[#333333] mt-2 line-clamp-2">

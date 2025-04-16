@@ -139,6 +139,10 @@ class PermissionSeeder extends Seeder
                 'id_permission' => Uuid::uuid4(),
                 'nama' => 'delete_instansi'
             ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'read_buku'
+            ],
         ]);
     }
 }
