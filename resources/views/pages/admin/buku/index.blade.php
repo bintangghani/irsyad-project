@@ -76,8 +76,8 @@
                                                 @endif
                                             </td>
                                             <td class="text-capitalize text-truncate">{{ $item->uploaded->nama }}</td>
-                                            <td class="text-capitalize text-truncate">{{ $item->sub_kelompok }}</td>
-                                            <td class="text-capitalize text-truncate">{{ $item->jenis }}</td>
+                                            <td class="text-capitalize text-truncate">{{ $item->subKelompok->nama }}</td>
+                                            <td class="text-capitalize text-truncate">{{ $item->jenisBuku->nama }}</td>
                                             <td class="text-capitalize text-truncate" style="max-width: 200px;">{{ $item->deskripsi }}</td>
                                             <td class="text-center text-truncate">
                                                 @if ($item->file_buku)
