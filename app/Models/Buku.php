@@ -22,12 +22,12 @@ class Buku extends Model
         return $this->belongsTo(User::class, 'uploaded_by', 'id_user');
     }
 
-    public function sub_kelompok()
+    public function subKelompok()
     {
         return $this->belongsTo(SubKelompok::class, 'sub_kelompok', 'id_sub_kelompok');
     }
 
-    public function jenis()
+    public function jenisBuku()
     {
         return $this->belongsTo(Jenis::class, 'jenis', 'id_jenis');
     }
