@@ -29,7 +29,7 @@
 
                         <div class="mb-3">
                             <label for="nama" class="form-label">Nama</label>
-                            <input type="text" name="nama" id="nama" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}" required>
+                            <input type="text" name="nama" id="nama" placeholder="ex. view_dashboard" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}" required>
                             @error('nama')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

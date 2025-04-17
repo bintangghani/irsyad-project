@@ -50,7 +50,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function getUsersWithRole($keyword, $perPage)
     {
-        $query = $this->model->with(['role:id_role,nama'])->select(['id_user', 'nama', 'email', 'moto', 'profile', 'id_role']);
+        $query = $this->model->with(['role:id_role,nama', 'instansi:id_instansi,nama'])->select(['id_user', 'nama', 'email', 'moto', 'profile', 'id_role', 'id_instansi']);
 
         if (!empty($keyword)) {
             $query->where('nama', 'LIKE', "%$keyword%");

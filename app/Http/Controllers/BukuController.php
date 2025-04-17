@@ -115,26 +115,27 @@ class BukuController extends Controller
         if (!haveAccessTo('update_buku')) {
             return redirect()->back();
         }
+
         try {
             DB::beginTransaction();
+
             $validated = $request->validated();
             $buku = Buku::findOrFail($id);
 
+            // Default path lama
+            $validated['sampul'] = $buku->sampul;
             if ($request->hasFile('sampul')) {
                 Storage::disk('public')->delete($buku->sampul);
                 $validated['sampul'] = $request->file('sampul')->store('sampuls', 'public');
-            } else {
-                $validated['sampul'] = $buku->sampul;
             }
 
+            $validated['file_buku'] = $buku->file_buku;
             if ($request->hasFile('file_buku')) {
                 Storage::disk('public')->delete($buku->file_buku);
                 $validated['file_buku'] = $request->file('file_buku')->store('buku', 'public');
-            } else {
-                $validated['file_buku'] = $buku->file_buku;
             }
 
-            $buku->update($validated);
+            $this->bukuRepository->update($id, $validated);
 
             DB::commit();
             Alert::success('Success', 'Buku berhasil diperbarui');

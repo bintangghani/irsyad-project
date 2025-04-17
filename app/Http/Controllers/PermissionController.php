@@ -89,7 +89,7 @@ class PermissionController extends Controller
 
             Alert::success('Success', 'Permission berhasil diperbarui');
 
-            return redirect()->route('dashboard.permission.index')->with('success', 'Permission berhasil diperbarui');
+            return redirect()->route('dashboard.user.permission.index')->with('success', 'Permission berhasil diperbarui');
         } catch (\Exception $e) {
             Log::error('Update Permission Error: ' . $e->getMessage());
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());

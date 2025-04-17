@@ -22,7 +22,6 @@ class BukuRepository extends BaseRepository implements BukuRepositoryInterface
     {
         $buku = $this->model->findOrFail($id);
         $buku->update($data);
-
         return $buku;
     }
 

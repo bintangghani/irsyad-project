@@ -85,6 +85,7 @@
                             <input type="file" name="background" id="background"
                                 class="form-control @error('background') is-invalid @enderror" accept="image/*">
                             @if ($instansi->background)
+                                <input type="hidden" name="background_lama" value="{{ $instansi->background }}">
                                 <img src="{{ asset('storage/' . $instansi->background) }}" alt="Background"
                                     class="img-thumbnail mt-2" width="100">
                             @endif
@@ -92,6 +93,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
 
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary">Update</button>

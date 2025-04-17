@@ -68,7 +68,7 @@ class InstansiController extends Controller
 
             DB::commit();
             Alert::success('Success', 'Instansi berhasil ditambah');
-            return redirect()->route('dashboard.instansi.index');
+            return redirect()->route('dashboard.user.instansi.index');
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Error storing instansi: ' . $th->getMessage());
@@ -86,27 +86,32 @@ class InstansiController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(InstansiRequest $request, $id)
     {
         if (!haveAccessTo('update_instansi')) {
             return redirect()->back();
         }
+
         try {
             DB::beginTransaction();
+
             $instansi = $this->instansiRepository->findById($id);
 
+            // Simpan profile lama, jika ada file baru, hapus lama & ganti
             $profilePath = $instansi->profile;
             if ($request->hasFile('profile')) {
                 Storage::disk('public')->delete($profilePath);
                 $profilePath = $request->file('profile')->store('profiles', 'public');
             }
 
+            // Simpan background lama, jika ada file baru, hapus lama & ganti
             $backgroundPath = $instansi->background;
             if ($request->hasFile('background')) {
                 Storage::disk('public')->delete($backgroundPath);
                 $backgroundPath = $request->file('background')->store('backgrounds', 'public');
             }
 
+            // Ambil data yang sudah tervalidasi
             $data = $request->validated();
             $data['profile'] = $profilePath;
             $data['background'] = $backgroundPath;
@@ -115,13 +120,14 @@ class InstansiController extends Controller
 
             DB::commit();
             Alert::success('Success', 'Instansi berhasil diperbarui');
-            return redirect()->route('dashboard.instansi.index');
+            return redirect()->route('dashboard.user.instansi.index');
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Error updating instansi: ' . $th->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat memperbarui data.')->withInput();
         }
     }
+
 
     public function destroy($id)
     {

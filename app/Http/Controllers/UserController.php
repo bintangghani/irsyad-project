@@ -38,6 +38,8 @@ class UserController extends Controller
 
         $users = $this->userRepository->getUsersWithRole($search, $perPage);
 
+        // dd($users);
+
         return view('pages.admin.user.index', compact('users'));
     }
 

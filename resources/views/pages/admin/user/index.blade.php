@@ -84,7 +84,7 @@
                                             <td>{{ $item->email }}</td>
                                             <td class="text-capitalize text-truncate">{{ $item->moto ?? '-' }}</td>
                                             <td class="text-capitalize text-truncate">{{ $item->role->nama ?? 'Tidak ada' }}</td>
-                                            <td class="text-capitalize text-truncate">{{ $item->instansi->nama ?? 'Tidak ada' }}</td>
+                                            <td class="text-capitalize text-truncate">{{ $item->instansi->nama ?? 'Belum Terdaftar'}}</td>
                                             <td class="text-center align-middle">
                                                 <div class="d-flex flex-column gap-1 align-items-center">
                                                     <a href="{{ route('dashboard.user.edit', $item->id_user) }}" class="btn btn-warning btn-sm w-100">Edit</a>

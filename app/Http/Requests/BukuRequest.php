@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BukuRequest extends FormRequest
 {
@@ -19,15 +20,23 @@ class BukuRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
     public function rules(): array
     {
         return [
             'penerbit' => 'required|string|max:255',
             'alamat_penerbit' => 'required|string|max:255',
-            'judul' => 'required|string|max:255|unique:buku,judul',
+            'judul' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('buku', 'judul')->ignore($this->route('id'), 'id_buku'),
+            ],
             'tahun_terbit' => 'required|digits:4|integer|min:1900|max:' . date('Y'),
             'jumlah_halaman' => 'required|integer|min:1',
-            'sampul' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+            'sampul' => $this->isMethod('post')
+                ? 'required|image|mimes:jpeg,png,jpg|max:5120'
+                : 'nullable|image|mimes:jpeg,png,jpg|max:5120',
             'deskripsi' => 'required|string',
             'file_buku' => 'nullable|file|mimes:pdf|max:10240',
             'total_download' => 'nullable|integer|min:0',
@@ -37,6 +46,7 @@ class BukuRequest extends FormRequest
             'jenis' => 'required|uuid|exists:jenis,id_jenis',
         ];
     }
+
 
     public function messages(): array
     {
