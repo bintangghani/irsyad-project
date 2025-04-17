@@ -29,6 +29,8 @@ Route::controller(ClientController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/buku/{id}', 'showBuku')->name('show');
     Route::get('/category', 'category')->name('category');
+    Route::get('/instansi', 'instansi')->name('instansi');
+    Route::get('/instansi/{id}', 'showInstansi')->name('instansi.show');
     Route::get('/read/{id}', 'readBook')->name('read');
     Route::get('/profile', 'profile')->name('profile');
     Route::get('/profile/{id}', 'profile')->name('profile');
