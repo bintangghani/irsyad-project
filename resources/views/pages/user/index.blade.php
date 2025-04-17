@@ -56,18 +56,26 @@
                                         {{ $book->judul }}
                                     </h3>
                                 </a>
-                                <div class="text-xs text-[#333333] mt-1 flex items-center gap-1">
+                                <div class="text-xs text-[#333333] mt-1 flex items-center gap-0.5">
                                     <div class="flex flex-wrap items-center gap-1 text-xs">
-                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis
-                                        karna yang tampil nya uuid --}}
-                                        <span
-                                            class="text-[#696cff] font-medium">{{ $book->subKelompok->kelompok->nama ?? 'Genre' }}</span>
-                                        <span
-                                            class="text-[#696cff] font-medium">{{ $book->subKelompok->nama ?? 'Genre' }}</span>
+                                        <a href="{{ route('category') }}?genre={{ urlencode($book->subKelompok->kelompok->nama ?? '') }}"
+                                            class="text-[#696cff] font-medium hover:underline">
+                                            {{ $book->subKelompok->kelompok->nama ?? 'Genre' }}
+                                        </a>
+                                        <a href="{{ route('category') }}?sub_category={{ $book->subKelompok->id_sub_kelompok ?? '' }}"
+                                            class="text-[#696cff] font-medium hover:underline">
+                                            {{ $book->subKelompok->nama ?? 'Sub Genre' }}
+                                        </a>
                                     </div>
                                     <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
-                                        <span class="text-[#696cff] font-medium">{{ $book->jenisBuku->nama ?? 'Genre' }}</span>
-                                        <span>{{ \Illuminate\Support\Str::words($book->penerbit ?? $book->uploaded->nama ,1,"...") }}</span>
+                                        <a href="{{ route('category') }}?jenis={{ $book->jenisBuku->id_jenis ?? '' }}"
+                                            class="text-[#696cff] font-medium hover:underline">
+                                            {{ $book->jenisBuku->nama ?? 'Jenis' }}
+                                        </a>
+                                        <a href="{{ route('category') }}?penerbit={{ urlencode($book->penerbit ?? '') }}"
+                                            class="text-[#696cff] font-medium hover:underline">
+                                            {{ \Illuminate\Support\Str::words($book->penerbit ?? $book->uploaded->nama, 1, '...') }}
+                                        </a>
                                     </div>
                                 </div>
                                 <p class="text-sm text-[#333333] mt-2 line-clamp-2">
@@ -153,22 +161,30 @@
                                         {{ $book->judul }}
                                     </h3>
                                 </a>
-                                <div class="text-xs text-[#333333] mt-1 flex items-center gap-1">
+                                <div class="text-xs text-[#333333] mt-1 flex items-center gap-0.5">
                                     <div class="flex flex-wrap items-center gap-1 text-xs">
-                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis
-                                        karna yang tampil nya uuid --}}
-                                        <span
-                                            class="text-[#696cff] font-medium">{{ $book->subKelompok->kelompok->nama ?? 'Genre' }}</span>
-                                        <span
-                                            class="text-[#696cff] font-medium">{{ $book->subKelompok->nama ?? 'Genre' }}</span>
+                                        <a href="{{ route('category') }}?genre={{ urlencode($book->subKelompok->kelompok->nama ?? '') }}"
+                                            class="text-[#696cff] font-medium hover:underline">
+                                            {{ $book->subKelompok->kelompok->nama ?? 'Genre' }}
+                                        </a>
+                                        <a href="{{ route('category') }}?sub_category={{ $book->subKelompok->id_sub_kelompok ?? '' }}"
+                                            class="text-[#696cff] font-medium hover:underline">
+                                            {{ $book->subKelompok->nama ?? 'Sub Genre' }}
+                                        </a>
                                     </div>
                                     <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
-                                        <span class="text-[#696cff] font-medium">{{ $book->jenisBuku->nama ?? 'Genre' }}</span>
-                                        <span>{{ $book->penerbit ?? $book->uploaded->nama }}</span>
+                                        <a href="{{ route('category') }}?jenis={{ $book->jenisBuku->id_jenis ?? '' }}"
+                                            class="text-[#696cff] font-medium hover:underline">
+                                            {{ $book->jenisBuku->nama ?? 'Jenis' }}
+                                        </a>
+                                        <a href="{{ route('category') }}?penerbit={{ urlencode($book->penerbit ?? '') }}"
+                                            class="text-[#696cff] font-medium hover:underline">
+                                            {{ \Illuminate\Support\Str::words($book->penerbit ?? $book->uploaded->nama, 1, '...') }}
+                                        </a>
                                     </div>
                                 </div>
                                 <p class="text-sm text-[#333333] mt-2 line-clamp-2">
-                                    {{ \Illuminate\Support\Str::words($book->deskripsi,40 , '...') }}
+                                    {{ \Illuminate\Support\Str::words($book->deskripsi, 40, '...') }}
                                 </p>
                             </div>
                             <div class="text-xs text-[#3a4a5a99] mt-3">

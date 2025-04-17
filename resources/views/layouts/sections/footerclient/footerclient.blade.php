@@ -1,5 +1,5 @@
 <footer class="bg-[#111827] text-white pt-12 pb-6">
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto max-w-screen-xl sm:px-6 lg:px-8 px-4">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             <!-- Logo and About -->
             <div class="space-y-4">
