@@ -14,7 +14,7 @@ class CommonDataService
     {
         // Ambil filter dari request
         $selectedGenre = $extraData['genre'] ?? null;
-        $selectedJenis = $extraData['jenis'] ?? null;
+        $selectedJenis = $extraData['jenisBuku'] ?? null;
         $selectedSubCategory = $extraData['sub_category'] ?? null;
         $selectedInstansi = $extraData['instansi'] ?? null;
         $selectedPenerbit = $extraData['penerbit'] ?? null;
@@ -38,12 +38,7 @@ class CommonDataService
                 ->take(30)
                 ->get();
 
-            $categories = collect([
-                (object)[
-                    'nama' => 'Terpopuler',
-                    'filteredBooks' => $books
-                ]
-            ]);
+            $categories = Kelompok::with(['sub_kelompok.buku.uploaded', 'sub_kelompok.buku.jenisBuku'])->get();
         } else {
             $showMostReadBooks = false;
             $kelompoks = Kelompok::with([

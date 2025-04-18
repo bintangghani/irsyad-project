@@ -6,34 +6,32 @@
     <div class="container w-full p-20">
         <div class="flex flex-rows bg-white shadow rounded-lg">
             <div class="flex items-center flex-col p-5">
-                <img src="{{ asset('storage/' . $buku->sampul) }}" class="object-contain object-center rounded w-full h-64"> 
+                <img src="{{ asset('storage/' . $buku->sampul) }}" class="object-contain object-center rounded w-full h-64">
                 <a href="{{ asset('storage/' . $buku->file_buku) }}" target="_blank">
                     <button id="wantToReadBtn"
                         class="mt-5 bg-blue-500 text-white py-2 px-6 rounded hover:bg-blue-600 needvalidation ">
                         Read Now
                     </button>
                 </a>
-                <div class="flex flex-row mt-5 space-x-4">
-                    <div class="flex flex-col items-center ml-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            class="bi bi-share-fill" viewBox="0 0 16 16">
-                            <path
-                                d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5" />
-                        </svg>
-                        <span>Download</span>
+                <div class="flex flex-row mt-6 space-x-3">
+                    <div class="flex flex-col items-center ml-6 hover:text-[#696cff] transition duration-200 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                          </svg>
+                          
+                        <span>Share</span>
                     </div>
                     <form action="{{ route('dashboard.bookmarks.store') }}" method="POST" enctype="multipart/form-data"
                         class="needs-validation" novalidate>
                         @csrf
-                        <div class="flex flex-col items-center ml-3">
+                        <div class="flex flex-col items-center ml-3 hover:text-[#696cff] transition duration-200 cursor-pointer">
                             <button id= 'downloadBtn' class="flex flex-col items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                                    class="bi bi-bookmarks-fill" viewBox="0 0 16 16">
-                                    <path
-                                        d="M2 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L7 13.101l-4.223 2.815A.5.5 0 0 1 2 15.5z" />
-                                    <path
-                                        d="M4.268 1A2 2 0 0 1 6 0h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L13 13.768V2a1 1 0 0 0-1-1z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
                                 </svg>
+
                                 <span>Bookmarks</span>
                             </button>
                             <input type="hidden" name="id_user" value="{{ auth()->id() }}">
@@ -41,15 +39,15 @@
 
                     </form>
                 </div>
-                <div class="flex flex-col items-center">
+                <div class="flex flex-col items-center hover:text-[#696cff] transition duration-200 cursor-pointer">
                     @if ($buku->file_buku)
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            class="bi bi-download" viewBox="0 0 16 16">
-                            <path d="M.5 9.9v4.6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.9h-1V14H1V9.9H.5z" />
-                            <path d="M5.354 5.354 8 8l2.646-2.646-.708-.708L8.5 6.293V0h-1v6.293L6.062 4.646l-.708.708z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m-6 3.75 3 3m0 0 3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75" />
                         </svg>
-                        <a href="{{ asset('storage/' . $buku->file_buku) }}" 
-                            download 
+
+                        <a href="{{ asset('storage/' . $buku->file_buku) }}" download
                             class="btn btn-primary btn-sm needvalidation">
                             Download
                         </a>
@@ -62,7 +60,7 @@
 
         <div class="w-full p-6 ">
             <h1 class="text-2xl font-bold mb-2">{{ $buku->judul }}</h1>
-            <p class="text-gray-500 text-sm mb-4">By {{ $buku->penulis }}</p>
+            <p class="text-gray-500 text-sm mb-4">By {{ $buku->penerbit }}</p>
 
             <p class="text-gray-700 mb-6">
                 {{ $buku->deskripsi ?? 'Deskripsi tidak tersedia untuk buku ini.' }}
@@ -75,7 +73,7 @@
                 </div>
                 <div>
                     <p class="font-semibold text-gray-800">Publisher:</p>
-                    <p>{{ $buku->penerbit }}</p>
+                    <p class="capitalize">{{ $buku->uploaded->nama }}</p>
                 </div>
                 <div>
                     <p class="font-semibold text-gray-800">Language:</p>
@@ -90,107 +88,167 @@
     </div>
 
     <div class="mt-8">
-        <h2 class="text-2xl font-bold text-center">Related Books</h2>
-        <div class="relative flex items-center mt-4">
-            <button class="absolute left-0 z-10 p-2 bg-gray-200 rounded-full shadow-md hover:bg-gray-300"
-                id="prevBtn">&#10094;</button>
-            <div class="overflow-hidden w-full px-8">
-                <div class="flex gap-4 transition-transform duration-300 ease-in-out" id="bookCarousel">
-                    @foreach ($relatedBooks as $book)
-                        <div
-                            class="min-w-[220px] bg-white shadow-md rounded-lg overflow-hidden p-4 transition hover:scale-105">
-                            <a href="" class="block">
-                                <img src="{{ asset('storage/' . $book->sampul) }}"
-                                    class="w-full h-48 object-cover object-center rounded">
-                                <h3 class="text-lg font-semibold mt-2">{{ $book->judul }}</h3>
-                                <p class="text-gray-500 text-sm">by {{ $book->uploaded->nama }}</p>
-                                <p class="text-xs text-gray-400 mt-1">{{ Str::limit($book->deskripsi, 60) }}</p>
-                            </a>
-                            <a href="{{ route('show', $book->id_buku) }}"
-                                class="mt-2 w-full block py-2 text-center rounded text-white bg-blue-600 hover:bg-blue-700">
-                                View Book
-                            </a>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-            <button class="absolute right-0 z-10 p-2 bg-gray-200 rounded-full shadow-md hover:bg-gray-300"
-                id="nextBtn">&#10095;</button>
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Rilisan Terbaru</h2>
+            <a href="/category"
+                class="text-[#696cff] hover:text-[#5a5cff] text-sm font-medium hover:underline flex items-center">
+                Lihat Semua <span class="ml-1">→</span>
+            </a>
         </div>
-    </div>
-
-    <div class="mt-8">
-        <h2 class="text-2xl font-bold text-center capitalize">More By {{ $buku->uploaded->nama }}</h2>
-        <div class="relative flex items-center mt-4">
-            <button class="absolute left-0 z-10 p-2 bg-gray-200 rounded-full shadow-md hover:bg-gray-300"
-                id="prevBtn">&#10094;</button>
-            <div class="overflow-hidden w-full px-8">
-                <div class="flex gap-4 transition-transform duration-300 ease-in-out" id="bookCarousel">
-                    @foreach ($moreBy as $book)
-                        <div
-                            class="min-w-[220px] bg-white shadow-md rounded-lg overflow-hidden p-4 transition hover:scale-105">
-                            <a href="" class="block">
-                                <img src="{{ asset('storage/' . $book->sampul) }}"
-                                    class="w-full h-48 object-cover object-center rounded">
-                                <h3 class="text-lg font-semibold mt-2">{{ $book->judul }}</h3>
-                                <p class="text-gray-500 text-sm">by {{ $book->uploaded->nama }}</p>
-                                <p class="text-xs text-gray-400 mt-1">{{ Str::limit($book->deskripsi, 60) }}</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach ($relatedBooks as $book)
+                <div class="flex gap-4">
+                    <a href="{{ route('show', $book->id_buku) }}" class="flex-shrink-0">
+                        <img src="{{ asset('storage/' . $book->sampul) }}" alt="{{ $book->judul }}"
+                            class="w-32 h-48 md:w-36 md:h-52 object-cover rounded-lg shadow" />
+                    </a>
+                    <div class="flex flex-col justify-between">
+                        <div>
+                            <a href="{{ route('show', $book->id_buku) }}">
+                                <h3 class="text-lg text-[#222222] md:text-lg font-semibold leading-snug">
+                                    {{ $book->judul }}
+                                </h3>
                             </a>
-                            <a href="{{ route('show', $book->id_buku) }}"
-                                class="mt-2 w-full block py-2 text-center rounded text-white bg-blue-600 hover:bg-blue-700">
-                                View Book
-                            </a>
+                            <div class="text-xs text-[#333333] mt-1 flex items-center gap-0.5">
+                                <div class="flex flex-wrap items-center gap-1 text-xs">
+                                    <a href="{{ route('category') }}?genre={{ urlencode($book->subKelompok->kelompok->nama ?? '') }}"
+                                        class="text-[#696cff] font-medium hover:underline">
+                                        {{ $book->subKelompok->kelompok->nama ?? 'Genre' }}
+                                    </a>
+                                    <a href="{{ route('category') }}?sub_category={{ $book->subKelompok->id_sub_kelompok ?? '' }}"
+                                        class="text-[#696cff] font-medium hover:underline">
+                                        {{ $book->subKelompok->nama ?? 'Sub Genre' }}
+                                    </a>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
+                                    <a href="{{ route('category') }}?jenis={{ $book->jenisBuku->id_jenis ?? '' }}"
+                                        class="text-[#696cff] font-medium hover:underline">
+                                        {{ $book->jenisBuku->nama ?? 'Jenis' }}
+                                    </a>
+                                    <a href="{{ route('category') }}?penerbit={{ urlencode($book->penerbit ?? '') }}"
+                                        class="text-[#696cff] font-medium hover:underline">
+                                        {{ \Illuminate\Support\Str::words($book->penerbit ?? $book->uploaded->nama, 1, '...') }}
+                                    </a>
+                                </div>
+                            </div>
+                            <p class="text-sm text-[#333333] mt-2 line-clamp-2">
+                                {{ \Illuminate\Support\Str::words($book->deskripsi, 40, '...') }}
+                            </p>
                         </div>
-                    @endforeach
+                        <div class="text-xs text-[#3a4a5a99] mt-3">
+                            <span>{{ number_format($book->total_read) }} views</span>
+                            <span
+                                class="ml-2 {{ $book->status === 'Completed' ? 'text-green-600' : 'text-yellow-600' }} font-semibold">
+                                {{ ucfirst($book->status) ?? 'Ongoing' }}
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <button class="absolute right-0 z-10 p-2 bg-gray-200 rounded-full shadow-md hover:bg-gray-300"
-                id="nextBtn">&#10095;</button>
+            @endforeach
         </div>
-    </div>
-    <script>
-        document.getElementById('wantToReadBtn').addEventListener('click', function(event) {
-            if (!isUserLoggedIn()) {
-                event.preventDefault();
 
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Login Required',
-                    text: 'You need to log in to read this book.',
-                    showCancelButton: true,
-                    confirmButtonText: 'Login',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = '{{ route('auth.login') }}';
+        <div class="mt-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">More By {{ $buku->penerbit }}</h2>
+                <a href="/category"
+                    class="text-[#696cff] hover:text-[#5a5cff] text-sm font-medium hover:underline flex items-center">
+                    Lihat Semua <span class="ml-1">→</span>
+                </a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach ($moreBy as $book)
+                    <div class="flex gap-4">
+                        <a href="{{ route('show', $book->id_buku) }}" class="flex-shrink-0">
+                            <img src="{{ asset('storage/' . $book->sampul) }}" alt="{{ $book->judul }}"
+                                class="w-32 h-48 md:w-36 md:h-52 object-cover rounded-lg shadow" />
+                        </a>
+                        <div class="flex flex-col justify-between">
+                            <div>
+                                <a href="{{ route('show', $book->id_buku) }}">
+                                    <h3 class="text-lg text-[#222222] md:text-lg font-semibold leading-snug">
+                                        {{ $book->judul }}
+                                    </h3>
+                                </a>
+                                <div class="text-xs text-[#333333] mt-1 flex items-center gap-0.5">
+                                    <div class="flex flex-wrap items-center gap-1 text-xs">
+                                        <a href="{{ route('category') }}?genre={{ urlencode($book->subKelompok->kelompok->nama ?? '') }}"
+                                            class="text-[#696cff] font-medium hover:underline">
+                                            {{ $book->subKelompok->kelompok->nama ?? 'Genre' }}
+                                        </a>
+                                        <a href="{{ route('category') }}?sub_category={{ $book->subKelompok->id_sub_kelompok ?? '' }}"
+                                            class="text-[#696cff] font-medium hover:underline">
+                                            {{ $book->subKelompok->nama ?? 'Sub Genre' }}
+                                        </a>
+                                    </div>
+                                    <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
+                                        <a href="{{ route('category') }}?jenis={{ $book->jenisBuku->id_jenis ?? '' }}"
+                                            class="text-[#696cff] font-medium hover:underline">
+                                            {{ $book->jenisBuku->nama ?? 'Jenis' }}
+                                        </a>
+                                        <a href="{{ route('category') }}?penerbit={{ urlencode($book->penerbit ?? '') }}"
+                                            class="text-[#696cff] font-medium hover:underline">
+                                            {{ \Illuminate\Support\Str::words($book->penerbit ?? $book->uploaded->nama, 1, '...') }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-[#333333] mt-2 line-clamp-2">
+                                    {{ \Illuminate\Support\Str::words($book->deskripsi, 40, '...') }}
+                                </p>
+                            </div>
+                            <div class="text-xs text-[#3a4a5a99] mt-3">
+                                <span>{{ number_format($book->total_read) }} views</span>
+                                <span
+                                    class="ml-2 {{ $book->status === 'Completed' ? 'text-green-600' : 'text-yellow-600' }} font-semibold">
+                                    {{ ucfirst($book->status) ?? 'Ongoing' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <script>
+                document.getElementById('wantToReadBtn').addEventListener('click', function(event) {
+                    if (!isUserLoggedIn()) {
+                        event.preventDefault();
+
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Login Required',
+                            text: 'You need to log in to read this book.',
+                            showCancelButton: true,
+                            confirmButtonText: 'Login',
+                            cancelButtonText: 'Cancel'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '{{ route('auth.login') }}';
+                            }
+                        });
+                    } else {
+                        fetch('{{ route('dashboard.buku.read', $buku->id_buku) }}', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({})
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                alert(data.message);
+
+                                window.open('{{ asset('storage/' . $buku->file_buku) }}', '_blank');
+                            })
                     }
                 });
-            } else {
-                fetch('{{ route('dashboard.buku.read', $buku->id_buku) }}', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({})
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        alert(data.message);
 
-                        window.open('{{ asset('storage/' . $buku->file_buku) }}', '_blank');
-                    })
-            }
-        });
-
-        function isUserLoggedIn() {
-            return {{ auth()->check() ? 'true' : 'false' }};
-        }
-    </script>
-    </div>
-@endsection
+                function isUserLoggedIn() {
+                    return {{ auth()->check() ? 'true' : 'false' }};
+                }
+            </script>
+        </div>
+    @endsection

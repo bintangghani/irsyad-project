@@ -11,9 +11,11 @@ use App\Models\Kelompok;
 use App\Models\SubKelompok;
 use App\Services\CommonDataService;
 use Illuminate\Support\Facades\Auth;
-use Log;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+// use Log;
 use RealRashid\SweetAlert\Facades\Alert;
-use Storage;
+// use Storage;
 
 class ClientController extends Controller
 {
@@ -43,6 +45,31 @@ class ClientController extends Controller
         return view('pages.user.index', compact('trendingBooks', 'newUploads', 'categories', 'user', 'trendingNavbar', 'subcategories'));
     }
 
+    public function search(Request $request)
+    {
+        if (!haveAccessTo('view_buku')) {
+            return redirect()->back();
+        }
+        try {
+            $keyword = $request->query('q');
+    
+            if (!$keyword) {
+                return response()->json([], 200);
+            }
+    
+            $books = Buku::where('judul', 'like', '%' . $keyword . '%')
+                ->select('id_buku', 'judul')
+                ->limit(10)
+                ->get();
+    
+            return response()->json($books);
+    
+        } catch (\Exception $e) {
+            Log::error("Search error: " . $e->getMessage());
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
+    }
+
     public function showBuku($id)
     {
         if (!haveAccessTo('read_buku')) {
@@ -53,19 +80,26 @@ class ClientController extends Controller
         $categories = Kelompok::with('buku')->get();
 
         $categories = $categories->map(function($category) {
-            $category->nuku = $category->buku();
+            $category->buku = $category->buku();
             return $category;
         });
+        $subcategories = SubKelompok::withCount('buku')
+            ->orderByDesc('buku_count')
+            ->take(6)
+            ->get();
+
         $relatedBooks = Buku::where('sub_kelompok', $buku->sub_kelompok)->take(8)->get();
         $moreBy = Buku::where('penerbit', $buku->penerbit)->take(8)->get();
 
-        return view('pages.user.buku.index', compact('buku', 'categories', 'relatedBooks','moreBy'));
+        return view('pages.user.buku.index', compact('buku', 'categories', 'relatedBooks','moreBy','subcategories'));
     }
 
     public function readBook($id) {
         if (!haveAccessTo('read_buku')) {
             return redirect()->back();
         }
+
+       
         $buku = Buku::findOrFail($id);
         
         $buku->increment('total_read');
@@ -84,6 +118,7 @@ class ClientController extends Controller
         ->orderBy('total_read', 'desc')
         ->take(8)
         ->get();
+
         $filters = [
             'genre' => $request->genre,
             'jenisBuku' => $request->jenisBuku,
@@ -139,12 +174,19 @@ class ClientController extends Controller
         }
         $categories = Kelompok::with('buku')->get();
 
+        $subcategories = SubKelompok::withCount('buku')
+            ->orderByDesc('buku_count')
+            ->take(6)
+            ->get();
+
         $categories = $categories->map(function($category) {
-            $category->nuku = $category->buku();
+            $category->buku = $category->buku();
             return $category;
         });
+
+        
         $user = Auth::user();
-        return view('pages.user.profile.index', compact('user', 'categories'));
+        return view('pages.user.profile.index', compact('user', 'categories','subcategories'));
     }
 
     public function editClientProfil($id)
