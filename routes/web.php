@@ -35,6 +35,7 @@ Route::controller(ClientController::class)->group(function () {
     Route::get('/profile', 'profile')->name('profile');
     Route::get('/profile/{id}', 'profile')->name('profile');
     Route::put('/profile/{id}', 'updateClientProfile')->name('updateClientProfile');
+    Route::get('search', 'search')->name('searchBuku');
 });
 
 

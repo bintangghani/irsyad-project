@@ -11,8 +11,7 @@
         <div class="bg-white rounded-xl shadow-md p-6 mb-8">
             <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Jelajahi Koleksi Buku Kami</h1>
 
-            <form method="GET" id="filterForm" action="{{ route('category') }}"
-                class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form method="GET" id="filterForm" action="{{ route('category') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="flex-1">
                     <label for="genre" class="block text-sm font-medium text-gray-700 mb-1">Filter Genre</label>
                     <div class="relative">
@@ -39,13 +38,12 @@
                 <div class="flex-1">
                     <label for="jenisBuku" class="block text-sm font-medium text-gray-700 mb-1">Filter Jenis</label>
                     <div class="relative">
-                        <select id="jenis" name="jenisBuku" onchange="this.form.submit()"
+                        <select id="jenisBuku" name="jenisBuku" onchange="this.form.submit()"
                             class="block w-full pl-4 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#696cff] focus:border-transparent rounded-lg appearance-none bg-white">
                             <option value="">Semua Jenis</option>
                             @foreach ($jenisList as $id => $nama)
-                                <option value="{{ $id }}" {{ request('jenis') == $id ? 'selected' : '' }}>
-                                    {{ $nama }}
-                                </option>
+                                <option value="{{ $id }}" {{ $selectedJenis === $id ? 'selected' : '' }}>
+                                    {{ $nama }}</option>
                             @endforeach
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -109,7 +107,8 @@
                             class="block w-full pl-4 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#696cff] focus:border-transparent rounded-lg appearance-none bg-white">
                             <option value="">Semua Penerbit</option>
                             @foreach ($penerbits as $penerbit)
-                                <option value="{{ $penerbit }}" {{ $selectedPenerbit === $penerbit ? 'selected' : '' }}>
+                                <option value="{{ $penerbit }}"
+                                    {{ $selectedPenerbit === $penerbit ? 'selected' : '' }}>
                                     {{ $penerbit }}
                                 </option>
                             @endforeach
@@ -157,28 +156,29 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 @foreach ($books as $book)
                     <div class="flex gap-4">
-                        <a href="{{ route('show', $book->id_buku) }}" class="flex-shrink-0">
+                        <a href="{{ route('dashboard.buku.create', $book->id) }}" class="flex-shrink-0">
                             <img src="{{ asset('storage/' . $book->sampul) }}" alt="{{ $book->judul }}"
                                 class="w-32 h-48 md:w-36 md:h-52 object-cover rounded-lg shadow" />
                         </a>
                         <div class="flex flex-col justify-between">
                             <div>
-                                <a href="{{ route('show', $book->id_buku) }}">
+                                <a href="{{ route('dashboard.buku.create', $book->id) }}">
                                     <h3 class="text-lg text-[#222222] md:text-lg font-semibold leading-snug">
                                         {{ $book->judul }}
                                     </h3>
                                 </a>
                                 <div class="text-xs text-[#333333] mt-1 flex items-center gap-1">
                                     <div class="flex flex-wrap items-center gap-1 text-xs">
-                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis
-                                        karna yang tampil nya uuid --}}
+                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis karna yang tampil nya uuid --}}
                                         <span
                                             class="text-[#696cff] font-medium">{{ $book->subKelompok->kelompok->nama ?? 'Genre' }}</span>
-                                        <span class="text-[#696cff] font-medium">{{ $book->subKelompok->nama ?? 'Genre' }}</span>
+                                        <span
+                                            class="text-[#696cff] font-medium">{{ $book->subKelompok->nama ?? 'Genre' }}</span>
                                     </div>
                                     <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
-                                        <span class="text-[#696cff] font-medium">{{ $book->jenisBuku->nama ?? 'Genre' }}</span>
-                                        <span>{{ $book->penerbit ?? $book->uploaded->nama }}</span>
+                                        <span
+                                            class="text-[#696cff] font-medium">{{ $book->jenisBuku->nama ?? 'Genre' }}</span>
+                                        <span>{{ \Illuminate\Support\Str::words($book->penerbit ?? $book->uploaded->nama, 1, '...') }}</span>
                                     </div>
                                 </div>
                                 <p class="text-sm text-[#333333] mt-2 line-clamp-2">
@@ -230,7 +230,8 @@
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                 @foreach ($category->filteredBooks as $book)
-                                    <div class="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+                                    <div
+                                        class="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
                                         <a href="{{ route('dashboard.buku.create', $book->id) }}" class="flex gap-4">
                                             <img src="{{ asset('storage/' . $book->sampul) }}" alt="{{ $book->judul }}"
                                                 class="w-24 h-36 md:w-28 md:h-40 object-cover rounded-lg shadow">
@@ -243,14 +244,15 @@
 
                                                 <div class="text-xs text-[#333333] mt-1 flex items-center gap-1">
                                                     <div class="flex flex-wrap items-center gap-1 text-xs">
-                                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis
-                                                        karna yang tampil nya uuid --}}
-                                                        <span class="text-[#696cff] font-medium">{{ $book->kategori->nama ?? 'Genre' }}</span>
+                                                        {{-- bagian ini belum bisa menampilkan nama dari setiap kelompok sub_kelompok sama jenis karna yang tampil nya uuid --}}
+                                                        <span
+                                                            class="text-[#696cff] font-medium">{{ $book->kategori->nama ?? 'Genre' }}</span>
                                                         <span
                                                             class="text-[#696cff] font-medium">{{ $book->sub_kelompok->nama ?? 'Genre' }}</span>
                                                     </div>
                                                     <div class="flex flex-wrap items-center gap-1 text-xs mt-1">
-                                                        <span class="text-[#696cff] font-medium">{{ $book->jenisBuku->nama ?? 'Genre' }}</span>
+                                                        <span
+                                                            class="text-[#696cff] font-medium">{{ $book->jenis->nama ?? 'Genre' }}</span>
                                                         <span>{{ $book->penerbit ?? $book->uploaded->nama }}</span>
                                                     </div>
                                                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Bookmark;
 use App\Models\Kelompok;
+use App\Models\SubKelompok;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -17,6 +18,10 @@ class BookmarksController extends Controller
         if (!haveAccessTo('read_buku')) {
             return redirect()->back();
         }
+        $subcategories = SubKelompok::withCount('buku')
+            ->orderByDesc('buku_count')
+            ->take(6)
+            ->get();
         $bookmark = Bookmark::where('id_user', Auth::user()->id_user)->get();
         $categories = Kelompok::with('buku')->get();
 
@@ -24,7 +29,7 @@ class BookmarksController extends Controller
             $category->nuku = $category->buku();
             return $category;
         });
-        return view('pages.user.buku.bookmarks.index', compact('bookmark', 'categories'));
+        return view('pages.user.buku.bookmarks.index', compact('bookmark', 'categories', 'subcategories'));
     }
 
     public function store(Request $request)
@@ -41,18 +46,15 @@ class BookmarksController extends Controller
                 'id_buku.required' => 'ID Buku wajib',
             ]);
 
-            // Periksa apakah bookmark sudah ada
             $existingBookmark = Bookmark::where('id_user', $validated['id_user'])
                 ->where('id_buku', $validated['id_buku'])
                 ->first();
 
             if ($existingBookmark) {
-                // Jika sudah di-bookmark, tampilkan alert
                 Alert::info('Info', 'Buku ini sudah di-bookmark.');
                 return redirect()->back()->with('info', 'Buku ini sudah di-bookmark.');
             }
 
-            // Jika belum di-bookmark, tambahkan bookmark
             Bookmark::create([
                 'id_user' => $validated['id_user'],
                 'id_buku' => $validated['id_buku'],

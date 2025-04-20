@@ -16,7 +16,7 @@
                 <p class="text-sm text-indigo-200">{{ Auth::user()->email }}</p>
             </div>
         </div>
-
+        
         <!-- Form -->
         <div class="p-6">
             <form action="{{ route('dashboard.user.updateProfile', ['id' => Auth::user()]) }}" method="POST"
@@ -29,7 +29,7 @@
                     <div>
                         <label for="nama" class="block text-sm font-medium text-gray-700">Name</label>
                         <input type="text" id="nama" name="nama"
-                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 sm:text-sm disabled:opacity-50"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 disabled:opacity-50"
                             value="{{ Auth::user()->nama }}" disabled required />
                     </div>
 
@@ -37,7 +37,7 @@
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
                         <input type="email" id="email" name="email"
-                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 sm:text-sm disabled:opacity-50"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 disabled:opacity-50"
                             value="{{ Auth::user()->email }}" disabled required />
                     </div>
 
@@ -45,7 +45,7 @@
                     <div>
                         <label for="moto" class="block text-sm font-medium text-gray-700">Moto</label>
                         <input type="text" id="moto" name="moto"
-                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 sm:text-sm disabled:opacity-50"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 disabled:opacity-50"
                             value="{{ Auth::user()->moto }}" disabled />
                     </div>
 
@@ -53,7 +53,7 @@
                     <div>
                         <label for="profile" class="block text-sm font-medium text-gray-700">Profile Picture</label>
                         <input type="file" id="profile" name="profile"
-                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 sm:text-sm disabled:opacity-50"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 disabled:opacity-50"
                             accept="image/png, image/jpeg, image/jpg" disabled />
                     </div>
                 </div>
@@ -95,7 +95,7 @@
     editButton.addEventListener('click', enableEdit);
     cancelButton.addEventListener('click', () => {
         disableEdit();
-        document.getElementById('profile-form').reset(); // Reset form values
+        document.getElementById('profile-form').reset(); 
     });
 </script>
 @endsection
