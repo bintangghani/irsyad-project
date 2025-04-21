@@ -41,41 +41,40 @@
                                     accept="image/png, image/jpeg, image/jpg" disabled />
                             </div>
                             <div class="col-12 mt-4">
-                                <button type="button" class="btn btn-secondary" id="edit-button">Edit</button>
-                                <button type="submit" class="btn btn-primary" id="save-button" style="display: none;">Save Changes</button>
-                                <button type="button" class="btn btn-secondary" id="cancel-button" style="display: none;">Cancel</button>
+                                <button type="button" class="btn btn-secondary" id="toggle-button">Edit</button>
+                                <button type="submit" class="btn btn-primary" id="save-button" style="display: none;">Save
+                                    Changes</button>
                             </div>
                         </div>
-                    </form> 
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const editButton = document.getElementById('edit-button');
+        const toggleButton = document.getElementById('toggle-button');
         const saveButton = document.getElementById('save-button');
-        const cancelButton = document.getElementById('cancel-button');
-        const formInputs = document.querySelectorAll('#profile-form input');
+        const form = document.getElementById('profile-form');
+        const formInputs = form.querySelectorAll('input');
+        let isEditing = false;
 
-        function enableEdit() {
-            formInputs.forEach(input => input.disabled = false);
-            editButton.style.display = 'none';
-            saveButton.style.display = 'inline-block';
-            cancelButton.style.display = 'inline-block';
-        }
+        toggleButton.addEventListener('click', () => {
+            isEditing = !isEditing;
 
-        function disableEdit() {
-            formInputs.forEach(input => input.disabled = true);
-            editButton.style.display = 'inline-block';
-            saveButton.style.display = 'none';
-            cancelButton.style.display = 'none';
-        }
+            formInputs.forEach(input => {
+                input.disabled = !isEditing;
+            });
 
-        editButton.addEventListener('click', enableEdit);
-        cancelButton.addEventListener('click', () => {
-            disableEdit();
-            document.getElementById('profile-form').reset(); // Reset form values
+            if (isEditing) {
+                toggleButton.textContent = 'Cancel';
+                saveButton.style.display = 'inline-block';
+            } else {
+                toggleButton.textContent = 'Edit';
+                saveButton.style.display = 'none';
+                form.reset();
+            }
         });
     </script>
+
 @endsection

@@ -80,15 +80,14 @@
                 <div class="relative ">
                     @if (Auth::check())
                         <button id="userMenuButton" class="focus:outline-none flex items-center space-x-1 group">
-                            <img src="{{ asset('/storage/'. Auth::user()->profile) }}"
+                            <img src="{{ asset('/storage/' . Auth::user()->profile) }}"
                                 class="w-8 h-8 rounded-full border-2 border-transparent group-hover:border-blue-200 transition-all shadow-sm">
                             <span
                                 class="text-sm font-medium text-gray-700 hidden lg:inline-block">{{ Auth::user()->nama }}</span>
                         </button>
                         <div id="userMenu"
                             class="hidden absolute  mt-2 w-56 bg-white shadow-lg rounded-md py-1 z-50 border border-gray-100">
-                            <a href="{{ route('profile', ['id' => Auth::user()J
-                            &]) }}"
+                            <a href="{{ route('profile', ['id' => Auth::user()]) }}"
                                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
                                 <svg class="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -97,12 +96,13 @@
                                 </svg>
                                 My Profile
                             </a>
-                            <a href="{{route('dashboard.bookmarks.index')}}"
+                            <a href="{{ route('dashboard.bookmarks.index') }}"
                                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                                  </svg>
-                                  
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                                </svg>
                                 Bookmarks
                             </a>
                             <div class="border-t border-gray-100 my-1"></div>

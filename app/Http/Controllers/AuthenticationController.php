@@ -15,14 +15,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use Illuminate\Support\Facades\File;
 class AuthenticationController extends Controller
 {
     public function __construct(
         protected UserRepositoryInterface $userRepository,
         protected RoleRepositoryInterface $roleRepository
-    ) {
-    }
+    ) {}
 
     public function login()
     {
@@ -63,18 +62,40 @@ class AuthenticationController extends Controller
     {
         try {
             DB::beginTransaction();
-            $this->userRepository->create($request->only('nama', 'email', 'profile', 'password', 'id_role'));
-            
+            if ($request->hasFile('profile')) {
+                $profilePath = $request->file('profile')->store('profile', 'public');
+            } else {
+                $defaultPath = 'assets/img/avatars/1.png';
+                $storagePath = storage_path('app/public/' . $defaultPath);
+                $publicPath = public_path($defaultPath);
+
+                // Salin gambar default ke storage jika belum ada
+                if (!\File::exists($storagePath)) {
+                    \File::ensureDirectoryExists(dirname($storagePath));
+                    \File::copy($publicPath, $storagePath);
+                }
+
+                $profilePath = $defaultPath;
+            }
+
+            $this->userRepository->create([
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'password' => $request->password,
+                'profile' => $profilePath,
+                'id_role' => $request->id_role,
+            ]);
+
             DB::commit();
             Alert::success('Success', 'Registrasi Berhasil');
-            return redirect()->to('auth/login');
+            return redirect()->to('/');
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
             Alert::error('Error', 'Nampaknya terjadi kesalahan');
             return response()->json($th->getMessage());
         }
     }
+
 
     public function forgotPassword()
     {

@@ -8,10 +8,10 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @forelse ($bookmark as $bookmarks)
             <div class="bg-white shadow-lg rounded-xl overflow-hidden">
-                <img src="{{ asset($bookmarks->buku->sampul) }}" alt="{{ $bookmarks->buku->judul }}" class="w-full h-48 object-cover">
+                    <img src="{{ asset('storage/' .$bookmarks->buku->sampul) }}" alt="{{ $bookmarks->buku->judul }}" class="w-full h-48 object-cover">
                 <div class="p-4">
                     <h3 class="text-lg font-semibold text-gray-800">{{ $bookmarks->buku->judul }}</h3>
-                    <p class="text-sm text-gray-500">By {{ $bookmarks->buku->penulis }}</p>
+                    <p class="text-sm text-gray-500">By {{ $bookmarks->buku->penerbit }}</p>
                     
                     <div class="mt-4 flex items-center space-x-2">
                         <!-- Tombol Read Now -->

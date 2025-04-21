@@ -38,11 +38,7 @@
             <p class="text-gray-400 text-sm">
                 © 2025 IRSYAD Perpustakaan Digital. All rights reserved.
             </p>
-            <div class="flex space-x-6 mt-4 md:mt-0">
-                <a href="#" class="text-gray-400 hover:text-[#696cff] text-sm transition">Kebijakan Privasi</a>
-                <a href="#" class="text-gray-400 hover:text-[#696cff] text-sm transition">Syarat & Ketentuan</a>
-                <a href="#" class="text-gray-400 hover:text-[#696cff] text-sm transition">FAQ</a>
-            </div>
+            
         </div>
     </div>
 </footer>
