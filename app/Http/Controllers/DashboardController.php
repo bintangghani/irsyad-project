@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Instansi;
 use App\Models\Buku;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -14,6 +15,16 @@ class DashboardController extends Controller
     {
         if (!haveAccessTo('view_dashboard')) {
             abort(403);
+        }
+
+
+        $user = Auth::user();
+        $role = $user->role->nama;
+
+        if ($role === 'admin instansi') {
+            $buku = Buku::with('instansi')->count();
+        } else {
+            $buku = Buku::count();
         }
 
         $now = Carbon::now();
@@ -89,7 +100,7 @@ class DashboardController extends Controller
     public function getChartData(Request $request)
     {
         $year = $request->query('year', date('Y'));
-    
+
         $userRegistrations = User::whereYear('created_at', $year)
             ->selectRaw('MONTH(created_at) as month, COUNT(*) as total')
             ->groupBy('month')
@@ -98,7 +109,7 @@ class DashboardController extends Controller
             ->toArray();
 
         $userAtSelectedYear = User::whereYear('created_at', $year)->count();
-    
+
         return response()->json([
             'registrations' => $userRegistrations,
             'dataUser' => $userAtSelectedYear

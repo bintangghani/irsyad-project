@@ -22,6 +22,10 @@ class RoleSeeder extends Seeder
             [
                 'id_role' => Uuid::uuid4(),
                 'nama' => 'client'
+            ],
+            [
+                'id_role' => Uuid::uuid4(),
+                'nama' => 'admin instansi'
             ]
         ]);
     }
