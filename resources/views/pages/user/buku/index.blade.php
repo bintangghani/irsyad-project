@@ -14,18 +14,22 @@
                     </button>
                 </a>
                 <div class="flex flex-row mt-6 space-x-3">
-                    <div class="flex flex-col items-center ml-6 hover:text-[#696cff] transition duration-200 cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-                          </svg>
-                          
+                    <div
+                        class="flex flex-col items-center ml-6 hover:text-[#696cff] transition duration-200 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                        </svg>
+
                         <span>Share</span>
                     </div>
                     <form action="{{ route('dashboard.bookmarks.store') }}" method="POST" enctype="multipart/form-data"
                         class="needs-validation" novalidate>
                         @csrf
-                        <div class="flex flex-col items-center ml-3 hover:text-[#696cff] transition duration-200 cursor-pointer">
-                            <button id= 'downloadBtn' class="flex flex-col items-center">
+                        <div
+                            class="flex flex-col items-center ml-3 hover:text-[#696cff] transition duration-200 cursor-pointer">
+                            <button  class="flex flex-col items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -41,16 +45,16 @@
                 </div>
                 <div class="flex flex-col items-center hover:text-[#696cff] transition duration-200 cursor-pointer">
                     @if ($buku->file_buku)
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m-6 3.75 3 3m0 0 3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75" />
-                        </svg>
-
-                        <a href="{{ asset('storage/' . $buku->file_buku) }}" download
-                            class="btn btn-primary btn-sm needvalidation">
-                            Download
-                        </a>
+                        <button class="flex flex-col items-center" id="downloadBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m-6 3.75 3 3m0 0 3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75" />
+                            </svg>
+                            <span>Download</span>
+                        </button>
+                        <input type="hidden" name="id_user" value="{{ auth()->id() }}">
+                        <input type="hidden" name="id_buku" value="{{ $buku->id_buku }}">
                     @else
                         <span class="text-muted">Tidak ada file</span>
                     @endif
@@ -250,5 +254,33 @@
                     return {{ auth()->check() ? 'true' : 'false' }};
                 }
             </script>
+
+            <script>
+                document.getElementById('downloadBtn')?.addEventListener('click', function(event) {
+                    if (!isUserLoggedIn()) {
+                        event.preventDefault();
+
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Login Required',
+                            text: 'You need to log in to download this book.',
+                            showCancelButton: true,
+                            confirmButtonText: 'Login',
+                            cancelButtonText: 'Cancel'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '{{ route('auth.login') }}'; // Ubah sesuai route login kamu
+                            }
+                        });
+                    } else {
+                        window.open('{{ asset('storage/' . $buku->file_buku) }}', '_blank');
+                    }
+                });
+
+                 function isUserLoggedIn() {
+                    return {{ auth()->check() ? 'true' : 'false' }};
+                }
+            </script>
+
         </div>
     @endsection

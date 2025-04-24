@@ -78,7 +78,7 @@ class AuthenticationController extends Controller
                 $profilePath = $defaultPath;
             }
 
-            $this->userRepository->create([
+            $user = $this->userRepository->create([
                 'nama' => $request->nama,
                 'email' => $request->email,
                 'password' => $request->password,
@@ -87,6 +87,7 @@ class AuthenticationController extends Controller
             ]);
 
             DB::commit();
+            Auth::login($user);
             Alert::success('Success', 'Registrasi Berhasil');
             return redirect()->to('/');
         } catch (\Throwable $th) {
