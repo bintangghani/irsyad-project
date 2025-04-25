@@ -90,7 +90,7 @@
                                 </div>
                             </div>
                             <p class="mb-1">Buku</p>
-                            <h4 class="card-title mb-3">{{ $data['totalBuku'] }}</h4>
+                            <h4 class="card-title mb-3">{{ $data['totalBukuInstansi'] }}</h4>
                             <small class="{{ $data['bukuTrend'] == 'up' ? 'text-success' : 'text-danger' }} fw-medium">
                                 <i class='bx bx-{{ $data['bukuTrend'] == 'up' ? 'up' : 'down' }}-arrow-alt'></i>
                                 {{ $data['bukuTrend'] == 'up' ? '+' : '-' }}{{ $data['bukuGrowth'] }}%

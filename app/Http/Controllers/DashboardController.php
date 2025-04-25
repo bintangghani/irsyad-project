@@ -74,6 +74,11 @@ class DashboardController extends Controller
         ];
 
         $data = [
+            'totalBukuInstansi' => $role === 'admin instansi'
+                ? Buku::whereIn('uploaded_by', User::where('id_instansi', $user->id_instansi)->pluck('id_user'))
+                ->count()
+                : Buku::count(),
+
             'totalUsers' => $totals['users'],
             'userGrowth' => $calculateGrowth($monthlyData['users']['current'], $monthlyData['users']['last'])['growth'],
             'userTrend' => $calculateGrowth($monthlyData['users']['current'], $monthlyData['users']['last'])['trend'],
