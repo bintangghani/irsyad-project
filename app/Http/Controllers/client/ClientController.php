@@ -105,6 +105,29 @@ class ClientController extends Controller
     
         return view('pages.user.category.index', array_merge($data, ['books' => $books], ['trendingBooks' => $trendingBooks]));
     }
+
+    public function search(Request $request)
+    {
+        
+        try {
+            $keyword = $request->query('q');
+    
+            if (!$keyword) {
+                return response()->json([], 200);
+            }
+    
+            $books = Buku::where('judul', 'like', '%' . $keyword . '%')
+                ->select('id_buku', 'judul')
+                ->limit(10)
+                ->get();
+    
+            return response()->json($books);
+    
+        } catch (\Exception $e) {
+            Log::error("Search error: " . $e->getMessage());
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
+    }
     
 
     public function instansi()

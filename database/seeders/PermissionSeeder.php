@@ -61,6 +61,22 @@ class PermissionSeeder extends Seeder
             ],
             [
                 'id_permission' => Uuid::uuid4(),
+                'nama' => 'view_permission'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'create_permission'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'update_permission'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'delete_permission'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'view_buku'
             ],
             [
