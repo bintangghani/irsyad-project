@@ -24,5 +24,6 @@ class MenuServiceProvider extends ServiceProvider
     
         // Share all menuData to all the views
         $this->app->make('view')->share('menuData', [$verticalMenuData]);
+        // dd($verticalMenuData);
     }
 }

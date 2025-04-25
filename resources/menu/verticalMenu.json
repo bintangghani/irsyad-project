@@ -4,59 +4,70 @@
       "url": "/dashboard",
       "name": "Dashboard",
       "icon": "menu-icon tf-icons bx bx-home-smile",
-      "slug": "dashboard."
+      "slug": "dashboard.index",
+      "permissions": "view_dashboard"
     },
     {
       "name": "User Management",
       "icon": "menu-icon tf-icons bx bx-user",
       "slug": "dashboard.user.",
+      "permissions": "view_user",
       "submenu": [
         {
           "url": "/dashboard/user",
           "name": "User",
-          "slug": "dashboard.user.index"
+          "slug": "dashboard.user.index",
+          "permissions": "view_user"
         },
         {
           "url": "/dashboard/user/role",
           "name": "Role",
-          "slug": "dashboard.user.role.index"
+          "slug": "dashboard.user.role.index",
+          "permissions": "view_role"
         },
         {
           "url": "/dashboard/user/permission",
           "name": "Permission",
-          "slug": "dashboard.user.permission.index"
+          "slug": "dashboard.user.permission.index",
+          "permissions": "view_permission"
         },
         {
           "url": "/dashboard/user/instansi",
           "name": "Instansi",
-          "slug": "dashboard.user.instansi.index"
+          "slug": "dashboard.user.instansi.index",
+          "permissions": "view_instansi"
         }
       ]
     },
     {
       "name": "Books Management",
-      "icon": "menu-icon tf-icons bx bx-user",
+      "icon": "menu-icon tf-icons bx bx-book",
       "slug": "dashboard.buku.",
+      "permissions": "view_buku",
       "submenu": [
         {
           "url": "/dashboard/buku",
           "name": "Buku",
-          "slug": "dashboard.buku.index"
+          "slug": "dashboard.buku.index",
+          "permissions": "view_buku"
         },
         {
           "url": "/dashboard/buku/jenis",
           "name": "Jenis",
-          "slug": "dashboard.buku.jenis.index"
+          "slug": "dashboard.buku.jenis.index",
+          "permissions": "view_jenis"
         },
         {
           "url": "/dashboard/buku/kelompok",
           "name": "Kelompok",
-          "slug": "dashboard.buku.kelompok.index"
+          "slug": "dashboard.buku.kelompok.index",
+          "permissions": "view_kelompok"
         },
         {
           "url": "/dashboard/buku/subkelompok",
           "name": "Sub Kelompok",
-          "slug": "dashboard.buku.subkelompok.index"
+          "slug": "dashboard.buku.subkelompok.index",
+          "permissions": "view_subkelompok"
         }
       ]
     }
