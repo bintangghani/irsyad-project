@@ -16,6 +16,7 @@
 
 @section('content')
     <div class="row">
+        
         <div class="col-xxl-12 mb-6 order-0">
             <div class="card">
                 <div class="d-flex align-items-start row">
@@ -42,6 +43,7 @@
         </div>
         <div class="col-xxl-4 col-12 order-2">
             <div class="row">
+                @if ($role !== 'client' && $role !== 'admin instansi')
                 <div class="col-lg-6 col-md-12 col-6 mb-6">
                     <div class="card h-100">
                         <div class="card-body">
@@ -70,6 +72,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 <div class="col-lg-6 col-md-12 col-6 mb-6">
                     <div class="card h-100">
                         <div class="card-body">
@@ -98,6 +101,7 @@
                         </div>
                     </div>
                 </div>
+                @if ($role !== 'client' && $role !== 'admin instansi')
                 <div class="col-lg-6 col-md-12 col-6 mb-6">
                     <div class="card h-100">
                         <div class="card-body">
@@ -217,6 +221,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
