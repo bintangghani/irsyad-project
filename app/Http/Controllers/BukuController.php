@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BukuRequest;
 use App\Models\Buku;
 use App\Models\Bookmark;
+use App\Models\User;
 use App\Repositories\BukuRepository\BukuRepositoryInterface;
 use App\Repositories\JenisRepository\JenisRepositoryInterface;
 use App\Repositories\SubKelompokRepository\SubKelompokRepositoryInterface;
@@ -25,12 +26,19 @@ class BukuController extends Controller
         protected UserRepositoryInterface $userRepository
     ) {}
 
-    public function index(Request $request)
+        public function index(Request $request)
     {
         if (!haveAccessTo('create_buku')) {
             return redirect()->back();
         }
+
         $buku = Buku::with(['uploaded', 'subKelompok', 'jenisBuku']);
+        $role = Auth::user()->role->nama;
+
+        if ($role === 'admin instansi') {
+            $userInstansiIds = User::where('id_instansi', Auth::user()->id_instansi)->pluck('id_user');
+            $buku->whereIn('uploaded_by', $userInstansiIds);
+        }
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
@@ -41,9 +49,9 @@ class BukuController extends Controller
         $perPage = $request->input('per_page', 10);
         $buku = $buku->orderBy('created_at', 'ASC')->paginate(min($totalData, $perPage));
 
-        // dd($buku);
         return view('pages.admin.buku.index', compact('buku'));
     }
+
 
     public function create()
     {
@@ -93,6 +101,12 @@ class BukuController extends Controller
     {
         $book = Buku::findOrFail($id);
         $book->increment('total_read');
+
+        $bukuInstansi = $role === 'admin instansi'
+                ? Buku::whereIn('uploaded_by', User::where('id_instansi', $user->id_instansi)->pluck('id_user'))
+                ->count()
+                : Buku::count();
+
         return view('pages.user.buku.show', compact('book'));
     }
 
