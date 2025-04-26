@@ -26,7 +26,7 @@ class BukuController extends Controller
         protected UserRepositoryInterface $userRepository
     ) {}
 
-        public function index(Request $request)
+    public function index(Request $request)
     {
         if (!haveAccessTo('create_buku')) {
             return redirect()->back();
@@ -35,9 +35,17 @@ class BukuController extends Controller
         $buku = Buku::with(['uploaded', 'subKelompok', 'jenisBuku']);
         $role = Auth::user()->role->nama;
 
-        if ($role === 'admin instansi') {
-            $userInstansiIds = User::where('id_instansi', Auth::user()->id_instansi)->pluck('id_user');
-            $buku->whereIn('uploaded_by', $userInstansiIds);
+        $user = Auth::user();
+
+        if ($role !== 'superadmin') {
+            if ($user->id_instansi) {
+                // Jika user memiliki instansi, tampilkan buku dari semua user dalam instansi
+                $userInstansiIds = User::where('id_instansi', $user->id_instansi)->pluck('id_user');
+                $buku->whereIn('uploaded_by', $userInstansiIds);
+            } else {
+                // Jika tidak punya instansi, tampilkan hanya buku yang dia upload sendiri
+                $buku->where('uploaded_by', $user->id_user);
+            }
         }
 
         if ($request->has('search') && $request->search != '') {
@@ -103,9 +111,9 @@ class BukuController extends Controller
         $book->increment('total_read');
 
         $bukuInstansi = $role === 'admin instansi'
-                ? Buku::whereIn('uploaded_by', User::where('id_instansi', $user->id_instansi)->pluck('id_user'))
-                ->count()
-                : Buku::count();
+            ? Buku::whereIn('uploaded_by', User::where('id_instansi', $user->id_instansi)->pluck('id_user'))
+            ->count()
+            : Buku::count();
 
         return view('pages.user.buku.show', compact('book'));
     }

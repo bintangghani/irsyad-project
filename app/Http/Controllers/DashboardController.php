@@ -73,6 +73,24 @@ class DashboardController extends Controller
             'trend' => $current >= $last ? 'up' : 'down',
         ];
 
+        if ($role === 'superadmin') {
+            $totalUsers = User::count();
+            $totalInstansi = Instansi::count();
+            $totalBuku = Buku::count();
+            $totalDownload = Buku::sum('total_download');
+        } elseif ($user->id_instansi) {
+            $userInstansiIds = User::where('id_instansi', $user->id_instansi)->pluck('id_user');
+            $totalUsers = User::whereIn('id_user', $userInstansiIds)->count();
+            $totalInstansi = 1;
+            $totalBuku = Buku::whereIn('uploaded_by', $userInstansiIds)->count();
+            $totalDownload = Buku::whereIn('uploaded_by', $userInstansiIds)->sum('total_download');
+        } else {
+            $totalUsers = 1;
+            $totalInstansi = 0;
+            $totalBuku = Buku::where('uploaded_by', $user->id_user)->count();
+            $totalDownload = Buku::where('uploaded_by', $user->id_user)->sum('total_download');
+        }
+
         $data = [
             'totalBukuInstansi' => $role === 'admin instansi'
                 ? Buku::whereIn('uploaded_by', User::where('id_instansi', $user->id_instansi)->pluck('id_user'))
@@ -98,7 +116,7 @@ class DashboardController extends Controller
             'totalViewBuku' => $totals['viewBuku'],
         ];
 
-        return view('pages.admin.dashboard', compact('data', 'years', 'selectedYear'));
+        return view('pages.admin.dashboard', compact('data', 'years', 'selectedYear','role'));
     }
 
 
