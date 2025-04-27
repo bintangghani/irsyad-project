@@ -73,7 +73,7 @@
                             @enderror
                         </div> --}}
                         <div class="mb-3">
-                            <label for="background" class="form-label">Foto Profil</label>
+                            <label for="background" class="form-label">Background</label>
                             <input type="file" name="background" id="background"
                                 class="form-control @error('background') is-invalid @enderror" accept="image/*" required>
                             @error('background')
