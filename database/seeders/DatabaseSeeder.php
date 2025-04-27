@@ -18,10 +18,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             PermissionSeeder::class,
             RolePermissionSeeder::class,
+            RoleClientSeeder::class,
+            RoleAdminInstansiSeeder::class,
             UserSeeder::class,
-            JenisSeeder::class,
-            KelompokSeeder::class,
-            SubKelompokSeeder::class,
         ]);
     }
 }
