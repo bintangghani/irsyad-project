@@ -2,7 +2,7 @@
 @section('content')
 <main class="max-w-screen w-full h-full flex relative">
     <div class="w-full flex flex-col justify-center items-center gap-10 min-h-screen h-full px-10 lg:px-14 lg:w-1/2">
-        <h3 class="w-fit text-3xl font-bold text-[#6636F1] self-start">Irsyad Cloud Drive</h3>
+        <h3 class="w-fit text-3xl font-bold text-[#6636F1] self-start">PUSKITA Cloud Drive</h3>
         <div class="w-full h-full flex flex-col gap-8">
             <div class="flex flex-col gap-2 items-center lg:items-start">
                 <h1 class="w-fit text-5xl font-black">Daftarkan akun anda</h1>
@@ -34,7 +34,7 @@
         </div>
     </div>
     <div class="w-full flex flex-col justify-center items-center gap-10 min-h-screen h-full px-10 lg:px-14 lg:w-1/2">
-        <h3 class="w-fit text-3xl font-bold text-[#6636F1] self-start">Irsyad Cloud Drive</h3>
+        <h3 class="w-fit text-3xl font-bold text-[#6636F1] self-start">PUSKITA Cloud Drive</h3>
         <div class="w-full h-full flex flex-col gap-8">
             <div class="flex flex-col gap-2 items-center lg:items-start">
                 <h1 class="w-fit text-5xl font-black">Masuk ke akun anda</h1>
@@ -58,7 +58,7 @@
         </div>
     </div>
     <div class="w-1/2 absolute top-0 z-50 p-4" id="imgAuth">
-        <img src="{{ asset('storage/images/static/auth.png') }}" alt="Irsyad Cloud Drive" class="object-cover w-full h-[calc(100vh-32px)] object-center rounded-lg">
+        <img src="{{ asset('storage/images/static/auth.png') }}" alt="Puskita Cloud Drive" class="object-cover w-full h-[calc(100vh-32px)] object-center rounded-lg">
     </div>
 </main>
 @endsection
