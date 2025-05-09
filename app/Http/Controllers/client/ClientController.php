@@ -42,9 +42,9 @@ class ClientController extends Controller
 
     public function showBuku($id)
     {
-        if (!haveAccessTo('show_buku_client')) {
-            return redirect()->route('auth.login');
-        }
+        // if (!haveAccessTo('show_buku_client')) {
+        //     return redirect()->route('auth.login');
+        // }
 
         $buku = Buku::findOrFail($id);
 
@@ -63,9 +63,9 @@ class ClientController extends Controller
 
     public function readBook($id)
     {
-        if (!haveAccessTo('read_buku')) {
-            return redirect()->route('auth.login');
-        }
+        // if (!haveAccessTo('read_buku')) {
+        //     return redirect()->route('auth.login');
+        // }
 
         $buku = Buku::findOrFail($id);
 
@@ -78,9 +78,9 @@ class ClientController extends Controller
     public function category(Request $request)
     {
 
-        if (!haveAccessTo('show_category_client')) {
-            return redirect()->route('auth.login');
-        }
+        // if (!haveAccessTo('show_category_client')) {
+        //     return redirect()->route('auth.login');
+        // }
 
         $trendingBooks = Buku::with(['jenisBuku', 'subKelompok.kelompok', 'uploaded'])
             ->where('total_read', '>', 0)
@@ -132,9 +132,9 @@ class ClientController extends Controller
 
     public function instansi()
     {
-        if (!haveAccessTo('show_instansi_client')) {
-            return redirect()->route('auth.login');
-        }
+        // if (!haveAccessTo('show_instansi_client')) {
+        //     return redirect()->route('auth.login');
+        // }
         return view(
             'pages.user.instansi.index',
             CommonDataService::getCommonData([
@@ -145,9 +145,9 @@ class ClientController extends Controller
 
     public function showInstansi($id)
     {
-        if (!haveAccessTo('show_instansi_client')) {
-            return redirect()->route('auth.login');
-        }
+        // if (!haveAccessTo('show_instansi_client')) {
+        //     return redirect()->route('auth.login');
+        // }
         return view('pages.user.instansi.show', CommonDataService::getCommonData([
             'instansi' => Instansi::findOrFail($id),
             'bukuInstansi' => Buku::with('uploaded')

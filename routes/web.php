@@ -21,7 +21,8 @@ Route::fallback(function () {
     return redirect()->route('home');
 });
 
-Route::prefix('client')->name('client.')->group(function () {});
+Route::prefix('client')->name('client.')->group(function () {
+});
 Route::controller(ClientController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/buku/{id}', 'showBuku')->name('show');
