@@ -16,12 +16,17 @@
             <div class="card">
                 <div class="card-header d-flex flex-column flex-md-row align-items-center justify-content-between">
                     <h5 class="card-title mb-0 fs-3">List instansi</h5>
-                    <a href="{{ route('dashboard.user.instansi.create') }}" class="btn btn-primary">
-                        <i class="bx bx-plus me-2"></i>
-                        <span class="d-none d-sm-inline-block">Tambah instansi Baru</span>
-                    </a>
+                    <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
+                        <a href="{{ route('dashboard.user.instansi.import.form') }}" class="btn btn-secondary">
+                            <i class="bx bx-upload me-2"></i>
+                            <span class="d-none d-sm-inline-block">Import Instansi</span>
+                        </a>
+                        <a href="{{ route('dashboard.user.instansi.create') }}" class="btn btn-primary">
+                            <i class="bx bx-plus me-2"></i>
+                            <span class="d-none d-sm-inline-block">Tambah instansi Baru</span>
+                        </a>
+                    </div>
                 </div>
-
                 <div class="card-body">
                     <div class="row mb-3 d-flex justify-content-between">
                         <div class="col-md-2">
@@ -58,11 +63,16 @@
                                 <thead class="table-light">
                                     <tr class="bg-primary">
                                         <th scope="col" class="text-center bg-primary text-white w-10">#</th>
-                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Profile</th>
-                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Nama</th>
-                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Alamat</th>
-                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Deskripsi</th>
-                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Background</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">
+                                            Profile</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Nama
+                                        </th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">
+                                            Alamat</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">
+                                            Deskripsi</th>
+                                        <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">
+                                            Background</th>
                                         <th scope="col" class="text-center bg-primary text-white max-w-[100px] w-30">Aksi
                                         </th>
                                     </tr>

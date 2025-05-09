@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\InstansiRequest;
+use App\Imports\InstansiImport;
 use Illuminate\Http\Request;
 use App\Models\Instansi;
 use App\Repositories\InstansiRepository\InstansiRepositoryInterface;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class InstansiController extends Controller
@@ -147,5 +149,30 @@ class InstansiController extends Controller
         }
         $instansi = $this->instansiRepository->search($request->search);
         return view('pages.admin.instansi.index', compact('instansi'));
+    }
+
+    public function importForm()
+    {
+        return view('pages.admin.instansi.import');
+    }
+
+    public function import(Request $request)
+    {
+        if (!haveAccessTo('import_instansi')) {
+            return redirect()->back();
+        }
+
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        try {
+            Excel::import(new InstansiImport($this->instansiRepository), $request->file('file'));
+            Alert::success('Success', 'Data Instansi berhasil diimpor.');
+            return redirect()->route('pages.admin.instansi.index');
+        } catch (\Throwable $th) {
+            Log::error('Import error: ' . $th->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat mengimpor data.');
+        }
     }
 }

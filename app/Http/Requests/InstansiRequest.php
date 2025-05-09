@@ -27,12 +27,12 @@ class InstansiRequest extends FormRequest
             'nama' => 'required|string|max:255|unique:instansi,nama' . ($id ? ',' . $id . ',id_instansi' : ''),
             'alamat' => 'required|string|max:255',
             'deskripsi' => 'required|string|max:255',
-            'profile' => $id 
-            ? 'nullable|image|mimes:jpg,jpeg,png|max:2048' 
-            : 'required|image|mimes:jpg,jpeg,png|max:2048',
-            'background' => $id 
-            ? 'nullable|string|max:255' 
-            : 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'profile' => $id
+                ? 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+                : 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'background' => $id
+                ? 'nullable|string|max:255'
+                : 'required|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
 

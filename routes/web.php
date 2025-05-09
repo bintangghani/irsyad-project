@@ -19,12 +19,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::fallback(function () {
     return redirect()->route('home');
-    
 });
 
-Route::prefix('client')->name('client.')->group(function () {
-    
-});
+Route::prefix('client')->name('client.')->group(function () {});
 Route::controller(ClientController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/buku/{id}', 'showBuku')->name('show');
@@ -79,7 +76,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::put('/{id}', 'update')->name('update');
             Route::delete('/{id}', 'destroy')->name('destroy');
         });
-    
+
         Route::controller(InstansiController::class)->prefix('instansi')->name('instansi.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/create', 'create')->name('create');
@@ -87,6 +84,9 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
             Route::delete('/{id}', 'destroy')->name('destroy');
+
+            Route::get('/import', 'importForm')->name('import.form');
+            Route::post('/import', 'import')->name('import');
         });
     });
 
