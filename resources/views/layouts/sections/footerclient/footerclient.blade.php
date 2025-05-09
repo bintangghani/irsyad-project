@@ -3,7 +3,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             <!-- Logo and About -->
             <div class="space-y-4">
-                <a href="/" class="text-2xl font-bold text-[#696cff]">IRSYAD</a>
+                <a href="/" class="text-2xl font-bold text-[#696cff]">PUSKITA</a>
                 <p class="text-gray-400 text-sm">
                     Perpustakaan digital modern dengan koleksi buku terlengkap. Memberikan akses mudah untuk membaca
                     dimana saja dan kapan saja.
@@ -13,7 +13,7 @@
 
         <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center">
             <p class="text-gray-400 text-sm">
-                © 2025 IRSYAD Perpustakaan Digital. All rights reserved.
+                © 2025 PUSKITA Perpustakaan Digital. All rights reserved.
             </p>
             
         </div>
