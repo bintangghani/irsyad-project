@@ -27,7 +27,8 @@ class RoleAdminInstansiSeeder extends Seeder
             'show_buku_client',
             'show_category_client',
             'show_instansi_client',
-            'update_user_client'
+            'update_user_client',
+            'view_pprofile_instansi'
         ])->get();
         foreach ($permissions as $item) {
             RolePermission::create([

@@ -157,6 +157,14 @@ class PermissionSeeder extends Seeder
             ],
             [
                 'id_permission' => Uuid::uuid4(),
+                'nama' => 'import_instansi'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'view_profile_instansi'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'read_buku'
             ],
             [
@@ -166,7 +174,7 @@ class PermissionSeeder extends Seeder
             [
                 'id_permission' => Uuid::uuid4(),
                 'nama' => 'show_category_client'
-            ],            
+            ],
             [
                 'id_permission' => Uuid::uuid4(),
                 'nama' => 'show_instansi_client'
