@@ -27,5 +27,5 @@ class UserSeeder extends Seeder
             'moto' => 'Superadmin Irsyad',
             'id_role' => Role::where('nama', 'superadmin')->first()->id_role
         ]);
-    }
+    }   
 }

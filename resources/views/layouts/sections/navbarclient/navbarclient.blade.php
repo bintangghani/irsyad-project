@@ -86,29 +86,43 @@
                                 class="text-sm font-medium text-gray-700 hidden lg:inline-block">{{ Auth::user()->nama }}</span>
                         </button>
                         <div id="userMenu"
-                            class="hidden absolute  mt-2 w-56 bg-white shadow-lg rounded-md py-1 z-50 border border-gray-100">
+                            class="hidden absolute mt-2 w-56 bg-white shadow-lg rounded-md py-1 z-50 border border-gray-100">
                             <a href="{{ route('profile', ['id' => Auth::user()]) }}"
-                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
-                                <svg class="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
+                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                                 My Profile
                             </a>
+                            @if (Auth::user()->id_instansi)
+                            <a href="{{ route('dashboard.user.instansi.profile', ['id' => Auth::user()->id_instansi]) }}"
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500"
+                                    fill="currentColor" viewBox="0 0 16 16">
+                                    <path
+                                        d="M5 2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2h3.5A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5H14a.5.5 0 0 1-1 0H3a.5.5 0 0 1-1 0h-.5A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2zm1 0h4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1M1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5H3V3zM15 12.5v-9a.5.5 0 0 0-.5-.5H13v10h1.5a.5.5 0 0 0 .5-.5m-3 .5V3H4v10z" />
+                                </svg>
+                                Profile Instansi
+                            </a>
+                            @endif
                             <a href="{{ route('dashboard.bookmarks.index') }}"
-                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-500">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
                                 </svg>
                                 Bookmarks
                             </a>
+
                             <div class="border-t border-gray-100 my-1"></div>
+
                             <a href="{{ route('auth.logoutAction') }}"
-                                class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                         d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                 </svg>
@@ -293,7 +307,7 @@
             clearTimeout(timeout);
             timeout = setTimeout(() => {
                 if (keyword.length === 0) {
-                    searchResultList.innerHTML = ''; // biarkan trending tetap muncul
+                    searchResultList.innerHTML = '';
                     return;
                 }
 

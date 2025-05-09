@@ -85,7 +85,8 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
             Route::delete('/{id}', 'destroy')->name('destroy');
-
+            Route::get('/profile/{id}', 'profileInstansi')->name('profile');
+            Route::put('/update-profile/{id}',  'updateProfile')->name('updateProfile');
             Route::get('/import', 'importForm')->name('import.form');
             Route::post('/import', 'import')->name('import');
         });

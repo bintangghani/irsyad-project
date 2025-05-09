@@ -201,18 +201,18 @@ class UserController extends Controller
         return view('pages.admin.profile.index', compact('user'));
     }
 
-    public function updateProfile(Request $request,$id)
+    public function updateProfile(Request $request, $id)
     {
         try {
             $user = User::findOrFail($id);
             // dd($request->all());
             $request->validate([
-               'nama' => 'required|string|max:255',
-               'email' => 'required|string|email|max:255',
-               'moto'=> 'nullable|string|max:255',
-               'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                'nama' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'moto' => 'nullable|string|max:255',
+                'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
-            
+
             if ($request->hasFile('profile')) {
                 if ($user->profile != 'assets/img/avatars/1.png') {
                     Storage::disk('public')->delete($user->profile);

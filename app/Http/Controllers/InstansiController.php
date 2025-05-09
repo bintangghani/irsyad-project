@@ -98,22 +98,16 @@ class InstansiController extends Controller
             DB::beginTransaction();
 
             $instansi = $this->instansiRepository->findById($id);
-
-            // Simpan profile lama, jika ada file baru, hapus lama & ganti
             $profilePath = $instansi->profile;
             if ($request->hasFile('profile')) {
                 Storage::disk('public')->delete($profilePath);
                 $profilePath = $request->file('profile')->store('profiles', 'public');
             }
-
-            // Simpan background lama, jika ada file baru, hapus lama & ganti
             $backgroundPath = $instansi->background;
             if ($request->hasFile('background')) {
                 Storage::disk('public')->delete($backgroundPath);
                 $backgroundPath = $request->file('background')->store('backgrounds', 'public');
             }
-
-            // Ambil data yang sudah tervalidasi
             $data = $request->validated();
             $data['profile'] = $profilePath;
             $data['background'] = $backgroundPath;
@@ -173,6 +167,64 @@ class InstansiController extends Controller
         } catch (\Throwable $th) {
             Log::error('Import error: ' . $th->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat mengimpor data.');
+        }
+    }
+
+    public function profileInstansi($id)
+    {
+        if (!haveAccessTo('view_profile_instansi')) {
+            return redirect()->back();
+        }
+        $instansi = $this->instansiRepository->findById($id);
+        return view('pages.admin.profileinstansi.index', compact('instansi'));
+    }
+
+    public function editProfile($id)
+    {
+        $instansi = Instansi::findOrFail($id);
+        return view('pages.admin.profileinstansi.index', compact('instansi'));
+    }
+
+    public function updateProfile(Request $request, $id)
+    {
+        try {
+            $instansi = Instansi::findOrFail($id);
+            $request->validate([
+                'nama' => 'nullable|string|max:255',
+                'alamat' => 'nullable|string|max:255',
+                'deskripsi' => 'nullable|string|max:255',
+                'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                'background' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            ]);
+            if ($request->hasFile('profile')) {
+                if ($instansi->profile) {
+                    Storage::disk('public')->delete($instansi->profile);
+                }
+                $profilePath = $request->file('profile')->store('profiles', 'public');
+                $instansi->profile = $profilePath;
+            }
+            if ($request->hasFile('background')) {
+                if ($instansi->background) {
+                    Storage::disk('public')->delete($instansi->background);
+                }
+                $backgroundPath = $request->file('background')->store('backgrounds', 'public');
+                $instansi->background = $backgroundPath;
+            }
+            if ($request->filled('nama')) {
+                $instansi->nama = $request->nama;
+            }
+            if ($request->filled('alamat')) {
+                $instansi->alamat = $request->alamat;
+            }
+            if ($request->filled('deskripsi')) {
+                $instansi->deskripsi = $request->deskripsi;
+            }
+            $instansi->save();
+            return redirect()->back()->with('success', 'Profile instansi berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors([
+                'error' => 'Terjadi kesalahan saat memperbarui profile: ' . $e->getMessage()
+            ]);
         }
     }
 }
