@@ -156,13 +156,13 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 @foreach ($books as $book)
                     <div class="flex gap-4">
-                        <a href="{{ route('dashboard.buku.create', $book->id) }}" class="flex-shrink-0">
+                        <a href="{{ route('show', ['id'=> $book->id_buku]) }}" class="flex-shrink-0">
                             <img src="{{ asset('storage/' . $book->sampul) }}" alt="{{ $book->judul }}"
                                 class="w-32 h-48 md:w-36 md:h-52 object-cover rounded-lg shadow" />
                         </a>
                         <div class="flex flex-col justify-between">
                             <div>
-                                <a href="{{ route('dashboard.buku.create', $book->id) }}">
+                                <a href="{{ route('show', ['id'=> $book->id_buku]) }}">
                                     <h3 class="text-lg text-[#222222] md:text-lg font-semibold leading-snug">
                                         {{ $book->judul }}
                                     </h3>
@@ -232,7 +232,7 @@
                                 @foreach ($category->filteredBooks as $book)
                                     <div
                                         class="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
-                                        <a href="{{ route('dashboard.buku.create', $book->id) }}" class="flex gap-4">
+                                        <a href="{{ route('show', ['id'=> $book->id_buku]) }}" class="flex gap-4">
                                             <img src="{{ asset('storage/' . $book->sampul) }}" alt="{{ $book->judul }}"
                                                 class="w-24 h-36 md:w-28 md:h-40 object-cover rounded-lg shadow">
 
