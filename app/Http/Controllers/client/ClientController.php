@@ -42,7 +42,7 @@ class ClientController extends Controller
 
     public function showBuku($id)
     {
-        if(!haveAccessTo('show_buku_client')) {
+        if (!haveAccessTo('show_buku_client')) {
             return redirect()->route('auth.login');
         }
 
@@ -50,7 +50,7 @@ class ClientController extends Controller
 
         $categories = Kelompok::with('buku')->get();
 
-        $categories = $categories->map(function($category) {
+        $categories = $categories->map(function ($category) {
             $category->buku = $category->buku();
             return $category;
         });
@@ -58,16 +58,17 @@ class ClientController extends Controller
         $relatedBooks = Buku::where('sub_kelompok', $buku->sub_kelompok)->take(8)->get();
         $moreBy = Buku::where('penerbit', $buku->penerbit)->take(8)->get();
 
-        return view('pages.user.buku.index', compact('buku', 'categories', 'relatedBooks','moreBy','subcategories'));
+        return view('pages.user.buku.index', compact('buku', 'categories', 'relatedBooks', 'moreBy', 'subcategories'));
     }
 
-    public function readBook($id) {
+    public function readBook($id)
+    {
         if (!haveAccessTo('read_buku')) {
             return redirect()->route('auth.login');
         }
 
         $buku = Buku::findOrFail($id);
-        
+
         $buku->increment('total_read');
         $buku->increment('total_download');
 
@@ -82,10 +83,10 @@ class ClientController extends Controller
         }
 
         $trendingBooks = Buku::with(['jenisBuku', 'subKelompok.kelompok', 'uploaded'])
-        ->where('total_read', '>', 0)
-        ->orderBy('total_read', 'desc')
-        ->take(8)
-        ->get();
+            ->where('total_read', '>', 0)
+            ->orderBy('total_read', 'desc')
+            ->take(8)
+            ->get();
         $filters = [
             'genre' => $request->genre,
             'jenisBuku' => $request->jenisBuku,
@@ -94,41 +95,40 @@ class ClientController extends Controller
             'penerbit' => $request->penerbit,
             'search' => $request->search,
         ];
-        
+
         $data = CommonDataService::getCommonData($filters);
-    
+
         if ($data['showMostReadBooks']) {
             $books = $data['categories'][0]->filteredBooks ?? collect();
         } else {
             $books = $data['categories']->pluck('filteredBooks')->flatten();
         }
-    
+
         return view('pages.user.category.index', array_merge($data, ['books' => $books], ['trendingBooks' => $trendingBooks]));
     }
 
     public function search(Request $request)
     {
-        
+
         try {
             $keyword = $request->query('q');
-    
+
             if (!$keyword) {
                 return response()->json([], 200);
             }
-    
+
             $books = Buku::where('judul', 'like', '%' . $keyword . '%')
                 ->select('id_buku', 'judul')
                 ->limit(10)
                 ->get();
-    
+
             return response()->json($books);
-    
         } catch (\Exception $e) {
             Log::error("Search error: " . $e->getMessage());
             return response()->json(['error' => 'Something went wrong'], 500);
         }
     }
-    
+
 
     public function instansi()
     {
@@ -164,16 +164,16 @@ class ClientController extends Controller
         }
         $categories = Kelompok::with('buku')->get();
         $subcategories = SubKelompok::withCount('buku')
-        ->orderByDesc('buku_count')
-        ->take(6)
-        ->get();
+            ->orderByDesc('buku_count')
+            ->take(6)
+            ->get();
 
-        $categories = $categories->map(function($category) {
+        $categories = $categories->map(function ($category) {
             $category->buku = $category->buku();
             return $category;
         });
 
-        
+
         $user = Auth::user();
         return view('pages.user.profile.index', compact('user', 'categories', 'subcategories'));
     }
@@ -187,7 +187,7 @@ class ClientController extends Controller
         return view('pages.user.profile.index', compact('user'));
     }
 
-    public function updateClientProfile(Request $request,$id)
+    public function updateClientProfile(Request $request, $id)
     {
         if (!haveAccessTo('update_user_client')) {
             return redirect()->route('auth.login');
@@ -196,12 +196,12 @@ class ClientController extends Controller
             $user = User::findOrFail($id);
             // dd($request->all());
             $request->validate([
-               'nama' => 'required|string|max:255',
-               'email' => 'required|string|email|max:255',
-               'moto'=> 'nullable|string|max:255',
-               'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                'nama' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255',
+                'moto' => 'nullable|string|max:255',
+                'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
-            
+
             if ($request->hasFile('profile')) {
                 if ($user->profile != 'assets/img/avatars/1.png') {
                     Storage::disk('public')->delete($user->profile);
