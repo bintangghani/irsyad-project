@@ -70,6 +70,13 @@
           "permissions": "view_subkelompok"
         }
       ]
+    },
+    {
+      "url": "/dashboard/site",
+      "name": "Site Management",
+      "icon": "menu-icon tf-icons bx bx-cog",
+      "slug": "dashboard.site.index",
+      "permissions": "view_site_settings"
     }
   ]
 }

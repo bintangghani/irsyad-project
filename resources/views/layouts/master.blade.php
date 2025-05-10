@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    @extends('includes.head')
+    @include('includes.head')
 </head>
 
 <body class="bg-white min-h-screen flex flex-col">
@@ -20,8 +20,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @include('sweetalert::alert')
-    @extends('includes.script')
+    @include('includes.script')
     @stack('scripts')
 
 </body>
+
 </html>
