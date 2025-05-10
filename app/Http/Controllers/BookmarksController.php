@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Bookmark;
 use App\Models\Kelompok;
 use App\Models\SubKelompok;
+use App\Services\CommonDataService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -18,19 +19,26 @@ class BookmarksController extends Controller
         if (!haveAccessTo('read_buku')) {
             return redirect()->back();
         }
-        $subcategories = SubKelompok::withCount('buku')
+
+        $data = CommonDataService::getCommonData([
+            'user' => Auth::user()
+        ]);
+
+        $data['subcategories'] = SubKelompok::withCount('buku')
             ->orderByDesc('buku_count')
             ->take(6)
             ->get();
-        $bookmark = Bookmark::where('id_user', Auth::user()->id_user)->get();
-        $categories = Kelompok::with('buku')->get();
 
-        $categories = $categories->map(function($category) {
-            $category->nuku = $category->buku();
+        $data['bookmark'] = Bookmark::where('id_user', Auth::user()->id_user)->get();
+
+        $data['categories'] = Kelompok::with('buku')->get()->map(function ($category) {
+            $category->nuku = $category->buku(); // Pastikan ini maksudnya "buku", typo?
             return $category;
         });
-        return view('pages.user.buku.bookmarks.index', compact('bookmark', 'categories', 'subcategories'));
+
+        return view('pages.user.buku.bookmarks.index', $data);
     }
+
 
     public function store(Request $request)
     {
@@ -80,7 +88,7 @@ class BookmarksController extends Controller
         if (!haveAccessTo('read_buku')) {
             return redirect()->back();
         }
-        try{
+        try {
             $bookmark = Bookmark::findOrFail($id);
             $bookmark->delete();
             Alert::success('Success', 'Bookmarks berhasil dihapus');

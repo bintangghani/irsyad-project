@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('nama');
             $table->text('alamat');
             $table->text('deskripsi');
-            $table->text('profile');
-            $table->text('background');
+            $table->text('profile')->nullable();
+            $table->text('background')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

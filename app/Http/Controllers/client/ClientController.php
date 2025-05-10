@@ -8,83 +8,65 @@ use Illuminate\Http\Request;
 use App\Models\Buku;
 use App\Models\Instansi;
 use App\Models\Kelompok;
-use App\Models\SiteSettings;
-use App\Models\SubKelompok;
 use App\Services\CommonDataService;
 use Illuminate\Support\Facades\Auth;
-use Log;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
-use Storage;
 
 class ClientController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-        $categories = Kelompok::with('buku')->get();
-        $subcategories = SubKelompok::withCount('buku')
-            ->orderByDesc('buku_count')
-            ->take(6)
-            ->get();
-        $categories = $categories->map(function ($category) {
-            $category->buku = $category->buku->take(8);
-            return $category;
+        $data = CommonDataService::getCommonData([
+            'user' => Auth::user(),
+        ]);
+
+        $data['trendingBooks'] = Buku::with(['jenisBuku', 'subKelompok', 'uploaded', 'subKelompok.kelompok'])
+            ->where('total_read', '>', 0)->orderByDesc('total_read')->take(8)->get();
+
+        $data['newUploads'] = Buku::with(['jenisBuku', 'subKelompok', 'uploaded', 'subKelompok.kelompok'])
+            ->orderByDesc('created_at')->take(8)->get();
+
+        $data['categories'] = Kelompok::with('buku')->get()->map(function ($cat) {
+            $cat->buku = $cat->buku->take(8);
+            return $cat;
         });
-        $trendingNavbar = Buku::where('total_read', '>', 0)->orderBy('total_read', 'desc')->take(4)->get();
-        $trendingBooks = Buku::with(['jenisBuku', 'subKelompok', 'uploaded', 'subKelompok.kelompok'])
-            ->where('total_read', '>', 0)
-            ->orderBy('total_read', 'desc')
-            ->take(8)
-            ->get();
 
-        $newUploads = Buku::with(['jenisBuku', 'subKelompok', 'uploaded', 'subKelompok.kelompok'])->orderBy('created_at', 'desc')->take(8)->get();
-
-        $setting = SiteSettings::first();
-        return view('pages.user.index', compact('trendingBooks', 'newUploads', 'categories', 'user', 'trendingNavbar', 'subcategories', 'setting'));
+        return view('pages.user.index', $data);
     }
+
 
     public function showBuku($id)
     {
-        // if (!haveAccessTo('show_buku_client')) {
-        //     return redirect()->route('auth.login');
-        // }
+        $buku = Buku::with(['uploaded', 'jenisBuku', 'subKelompok.kelompok'])->findOrFail($id);
+        $data = CommonDataService::getCommonData();
 
-        $buku = Buku::findOrFail($id);
+        $data['buku'] = $buku;
+        $data['relatedBooks'] = $buku->subKelompok
+            ? Buku::where('id_sub_kelompok', $buku->subKelompok->id_sub_kelompok)
+            ->where('id_buku', '!=', $buku->id_buku)
+            ->take(8)
+            ->get()
+            : collect();
+        $data['moreBy'] = Buku::where('penerbit', $buku->penerbit)->take(8)->get();
 
-        $categories = Kelompok::with('buku')->get();
-
-        $categories = $categories->map(function ($category) {
-            $category->buku = $category->buku();
-            return $category;
-        });
-        $subcategories = SubKelompok::withCount('buku')->orderByDesc('buku_count')->take(6)->get();
-        $relatedBooks = Buku::where('sub_kelompok', $buku->sub_kelompok)->take(8)->get();
-        $moreBy = Buku::where('penerbit', $buku->penerbit)->take(8)->get();
-
-        return view('pages.user.buku.index', compact('buku', 'categories', 'relatedBooks', 'moreBy', 'subcategories'));
+        return view('pages.user.buku.index', $data);
     }
+
 
     public function readBook($id)
     {
-        // if (!haveAccessTo('read_buku')) {
-        //     return redirect()->route('auth.login');
-        // }
-
         $buku = Buku::findOrFail($id);
-
         $buku->increment('total_read');
         $buku->increment('total_download');
 
-        return view('pages.user.buku.index', compact('buku', 'total_read', 'total_download'));
+        return redirect()->route('client.showBuku', $id); // Hindari view langsung jika datanya sama dengan showBuku
     }
+
 
     public function category(Request $request)
     {
-
-        // if (!haveAccessTo('show_category_client')) {
-        //     return redirect()->route('auth.login');
-        // }
-
         $trendingBooks = Buku::with(['jenisBuku', 'subKelompok.kelompok', 'uploaded'])
             ->where('total_read', '>', 0)
             ->orderBy('total_read', 'desc')
@@ -135,9 +117,6 @@ class ClientController extends Controller
 
     public function instansi()
     {
-        // if (!haveAccessTo('show_instansi_client')) {
-        //     return redirect()->route('auth.login');
-        // }
         return view(
             'pages.user.instansi.index',
             CommonDataService::getCommonData([
@@ -148,38 +127,29 @@ class ClientController extends Controller
 
     public function showInstansi($id)
     {
-        // if (!haveAccessTo('show_instansi_client')) {
-        //     return redirect()->route('auth.login');
-        // }
+        $instansi = Instansi::findOrFail($id);
+        $users = $instansi->user()->pluck('id_user');
+
         return view('pages.user.instansi.show', CommonDataService::getCommonData([
-            'instansi' => Instansi::findOrFail($id),
-            'bukuInstansi' => Buku::with('uploaded')
-                ->whereIn('uploaded_by', Instansi::findOrFail($id)->user()->pluck('id_user'))
-                ->latest()
-                ->get()
+            'instansi' => $instansi,
+            'bukuInstansi' => Buku::with('uploaded')->whereIn('uploaded_by', $users)->latest()->get(),
         ]));
     }
+
 
     public function profile()
     {
         if (!haveAccessTo('update_user_client')) {
             return redirect()->route('auth.login');
         }
-        $categories = Kelompok::with('buku')->get();
-        $subcategories = SubKelompok::withCount('buku')
-            ->orderByDesc('buku_count')
-            ->take(6)
-            ->get();
-
-        $categories = $categories->map(function ($category) {
-            $category->buku = $category->buku();
-            return $category;
-        });
-
 
         $user = Auth::user();
-        return view('pages.user.profile.index', compact('user', 'categories', 'subcategories'));
+
+        return view('pages.user.profile.index', CommonDataService::getCommonData([
+            'user' => $user
+        ]));
     }
+
 
     public function editClientProfil($id)
     {
@@ -192,40 +162,27 @@ class ClientController extends Controller
 
     public function updateClientProfile(Request $request, $id)
     {
-        if (!haveAccessTo('update_user_client')) {
-            return redirect()->route('auth.login');
-        }
-        try {
-            $user = User::findOrFail($id);
-            // dd($request->all());
-            $request->validate([
-                'nama' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255',
-                'moto' => 'nullable|string|max:255',
-                'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            ]);
+        if (!haveAccessTo('update_user_client')) return redirect()->route('auth.login');
 
-            if ($request->hasFile('profile')) {
-                if ($user->profile != 'assets/img/avatars/1.png') {
-                    Storage::disk('public')->delete($user->profile);
-                }
-                $profilePath = $request->file('profile')->store('profiles', 'public');
-            } else {
-                $profilePath = $user->profile;
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'moto' => 'nullable|string|max:255',
+            'profile' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        if ($request->hasFile('profile')) {
+            if ($user->profile != 'assets/img/avatars/1.png') {
+                Storage::disk('public')->delete($user->profile);
             }
-
-            $user->update([
-                'nama' => $request->input('nama'),
-                'email' => $request->input('email'),
-                'moto' => $request->input('moto'),
-                'profile' => $profilePath,
-            ]);
-            Alert::success('Success', 'Profile berhasil diperbarui');
-            return redirect()->back();
-        } catch (\Throwable $th) {
-            Alert::error('Error', 'Nampaknya terjadi kesalahan');
-            Log::error($th);
-            return redirect()->back();
+            $user->profile = $request->file('profile')->store('profiles', 'public');
         }
+
+        $user->update($request->only(['nama', 'email', 'moto']) + ['profile' => $user->profile]);
+
+        Alert::success('Success', 'Profile berhasil diperbarui');
+        return redirect()->back();
     }
 }

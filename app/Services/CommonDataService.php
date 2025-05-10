@@ -11,89 +11,55 @@ use App\Models\SubKelompok;
 
 class CommonDataService
 {
-    public static function getCommonData($extraData = [],)
+    public static function getCommonData(array $extraData = [])
     {
-        // Ambil filter dari request
-        $selectedGenre = $extraData['genre'] ?? null;
-        $selectedJenis = $extraData['jenisBuku'] ?? null;
+        $selectedGenre       = $extraData['genre'] ?? null;
+        $selectedJenis       = $extraData['jenisBuku'] ?? null;
         $selectedSubCategory = $extraData['sub_category'] ?? null;
-        $selectedInstansi = $extraData['instansi'] ?? null;
-        $selectedPenerbit = $extraData['penerbit'] ?? null;
-        $search = $extraData['search'] ?? null;
-        $trendingNavbar = Buku::where('total_read', '>', 0)->orderBy('total_read', 'desc')->take(4)->get();
-        $subGenres = SubKelompok::pluck('nama', 'id_sub_kelompok');
-        $instansis = Instansi::pluck('nama', 'id_instansi');
-        $penerbits = Buku::pluck('penerbit')->unique()->filter()->values(); // Hindari duplikat dan null
-        $genres = Kelompok::pluck('nama');
-        $jenisList = Jenis::pluck('nama', 'id_jenis');
+        $selectedInstansi    = $extraData['instansi'] ?? null;
+        $selectedPenerbit    = $extraData['penerbit'] ?? null;
+        $search              = $extraData['search'] ?? null;
 
-        $showMostReadBooks = true;
+        $showMostReadBooks = !$selectedGenre && !$selectedJenis && !$selectedSubCategory && !$selectedInstansi && !$selectedPenerbit && !$search;
 
-        if (!$selectedGenre && !$selectedJenis && !$selectedSubCategory && !$selectedInstansi && !$selectedPenerbit && !$search) {
-            $books = Buku::with('uploaded')
-                ->orderByDesc('total_read')
-                ->take(30)
-                ->get();
-
-            $categories = Kelompok::with(['sub_kelompok.buku.uploaded', 'sub_kelompok.buku.jenisBuku'])->get();
-        } else {
-            $showMostReadBooks = false;
-            $kelompoks = Kelompok::with([
-                'sub_kelompok.buku.uploaded',
-                'sub_kelompok.buku.jenisBuku',
-            ])->get();
-
-            $categories = $kelompoks->map(function ($kelompok) use (
+        $categories = Kelompok::with([
+            'sub_kelompok.buku' => function ($query) use (
                 $selectedGenre,
                 $selectedJenis,
                 $selectedSubCategory,
                 $selectedInstansi,
                 $selectedPenerbit,
-                $search,
+                $search
             ) {
-                $books = $kelompok->sub_kelompok->flatMap(function ($sub) use (
-                    $selectedGenre,
-                    $selectedJenis,
-                    $selectedSubCategory,
-                    $selectedInstansi,
-                    $selectedPenerbit,
-                    $search,
-                ) {
-                    return $sub->buku->filter(function ($book) use (
-                        $selectedGenre,
-                        $selectedJenis,
-                        $selectedSubCategory,
-                        $selectedInstansi,
-                        $selectedPenerbit,
-                        $search,
-                        $sub,
-                    ) {
-
-                        if ($selectedGenre && optional($sub->kelompok)->nama !== $selectedGenre) return false;
-                        $jenisRelasi = $book->getRelationValue('jenis');
-                        if ($selectedJenis && (!$jenisRelasi || $jenisRelasi->id_jenis !== $selectedJenis)) {
-                            return false;
-                        }
-                        if ($selectedSubCategory && $book->sub_kelompok !== $selectedSubCategory) return false;
-                        if ($selectedInstansi && $book->instansi_id !== $selectedInstansi) return false;
-                        if  ($selectedPenerbit && $book->penerbit !== $selectedPenerbit) return false;
-                        if ($search && stripos($book->judul, $search) === false) return false;
-
-                        return true;
-                    });
-                });
-
-                $kelompok->filteredBooks = $books;
-                return $kelompok;
+                $query->with(['uploaded', 'jenisBuku'])
+                    ->when($selectedJenis, fn($q) => $q->where('id_jenis', $selectedJenis))
+                    ->when($selectedSubCategory, fn($q) => $q->where('sub_kelompok', $selectedSubCategory))
+                    ->when($selectedInstansi, fn($q) => $q->where('instansi_id', $selectedInstansi))
+                    ->when($selectedPenerbit, fn($q) => $q->where('penerbit', $selectedPenerbit))
+                    ->when($search, fn($q) => $q->where('judul', 'like', '%' . $search . '%'));
+            },
+            'sub_kelompok.kelompok'
+        ])->get()->map(function ($kelompok) {
+            $kelompok->filteredBooks = $kelompok->sub_kelompok->flatMap(function ($sub) {
+                return $sub->buku;
             });
+            return $kelompok;
+        });
+
+
+        if ($selectedGenre) {
+            $categories = $categories->filter(fn($kelompok) => $kelompok->nama === $selectedGenre);
         }
 
-        $subcategories = SubKelompok::withCount('buku')
-            ->orderByDesc('buku_count')
-            ->take(6)
-            ->get();
-
-        $setting = SiteSettings::first();
+        // Data tambahan
+        $subcategories   = SubKelompok::withCount('buku')->orderByDesc('buku_count')->take(6)->get();
+        $trendingNavbar  = Buku::orderByDesc('total_read')->take(4)->get();
+        $subGenres       = SubKelompok::pluck('nama', 'id_sub_kelompok');
+        $instansis       = Instansi::pluck('nama', 'id_instansi');
+        $penerbits       = Buku::whereNotNull('penerbit')->distinct()->pluck('penerbit');
+        $genres          = Kelompok::pluck('nama');
+        $jenisList       = Jenis::pluck('nama', 'id_jenis');
+        $setting         = SiteSettings::first();
 
         $commonData = compact(
             'categories',
