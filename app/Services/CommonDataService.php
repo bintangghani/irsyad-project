@@ -6,6 +6,7 @@ use App\Models\Buku;
 use App\Models\Instansi;
 use App\Models\Kelompok;
 use App\Models\Jenis;
+use App\Models\SiteSettings;
 use App\Models\SubKelompok;
 
 class CommonDataService
@@ -20,15 +21,11 @@ class CommonDataService
         $selectedPenerbit = $extraData['penerbit'] ?? null;
         $search = $extraData['search'] ?? null;
         $trendingNavbar = Buku::where('total_read', '>', 0)->orderBy('total_read', 'desc')->take(4)->get();
-        // Ambil data dasar untuk dropdown/filter
         $subGenres = SubKelompok::pluck('nama', 'id_sub_kelompok');
         $instansis = Instansi::pluck('nama', 'id_instansi');
         $penerbits = Buku::pluck('penerbit')->unique()->filter()->values(); // Hindari duplikat dan null
         $genres = Kelompok::pluck('nama');
         $jenisList = Jenis::pluck('nama', 'id_jenis');
-
-
-
 
         $showMostReadBooks = true;
 
@@ -96,6 +93,8 @@ class CommonDataService
             ->take(6)
             ->get();
 
+        $setting = SiteSettings::first();
+
         $commonData = compact(
             'categories',
             'genres',
@@ -111,7 +110,8 @@ class CommonDataService
             'penerbits',
             'showMostReadBooks',
             'search',
-            'trendingNavbar'
+            'trendingNavbar',
+            'setting'
         );
 
         return array_merge($commonData, $extraData);

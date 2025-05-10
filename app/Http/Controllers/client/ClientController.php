@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Buku;
 use App\Models\Instansi;
 use App\Models\Kelompok;
+use App\Models\SiteSettings;
 use App\Models\SubKelompok;
 use App\Services\CommonDataService;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +38,9 @@ class ClientController extends Controller
             ->get();
 
         $newUploads = Buku::with(['jenisBuku', 'subKelompok', 'uploaded', 'subKelompok.kelompok'])->orderBy('created_at', 'desc')->take(8)->get();
-        return view('pages.user.index', compact('trendingBooks', 'newUploads', 'categories', 'user', 'trendingNavbar', 'subcategories'));
+
+        $setting = SiteSettings::first();
+        return view('pages.user.index', compact('trendingBooks', 'newUploads', 'categories', 'user', 'trendingNavbar', 'subcategories', 'setting'));
     }
 
     public function showBuku($id)

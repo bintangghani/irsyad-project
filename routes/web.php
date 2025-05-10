@@ -11,6 +11,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\KelompokController;
+use App\Http\Controllers\SiteSettingsController;
 use App\Http\Controllers\SubKelompokController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Authentication;
@@ -149,5 +150,11 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::get('/', 'index')->name('index');
         Route::post('/', 'store')->name('store');
         Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+    Route::controller(SiteSettingsController::class)->prefix('site')->name('site.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
     });
 });

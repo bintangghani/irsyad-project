@@ -7,7 +7,7 @@
     <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             <a href="{{ url('/') }}" class="text-xl font-bold text-[#696cff] hover:text-[#5a5cff] transition-colors">
-                PUSKITA
+                {{ $setting->brand ?? 'PUSKITA' }}
             </a>
             <div class="hidden md:flex items-center space-x-8">
                 <div class="flex items-center space-x-6">
