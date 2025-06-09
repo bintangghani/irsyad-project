@@ -93,6 +93,10 @@ class PermissionSeeder extends Seeder
             ],
             [
                 'id_permission' => Uuid::uuid4(),
+                'nama' => 'import_buku'
+            ],
+            [
+                'id_permission' => Uuid::uuid4(),
                 'nama' => 'view_jenis'
             ],
             [

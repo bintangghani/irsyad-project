@@ -5,7 +5,7 @@
             <div class="space-y-4">
                 <a href="/" class="text-2xl font-bold text-[#696cff]">{{ $setting->brand ?? 'PUSKITA' }}</a>
                 <p class="text-gray-400 text-sm">
-                    {{ $setting->deskripsi }}
+                    {{ $setting->deskripsi ?? ''}}
                 </p>
             </div>
         </div>

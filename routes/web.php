@@ -22,8 +22,7 @@ Route::fallback(function () {
     return redirect()->route('home');
 });
 
-Route::prefix('client')->name('client.')->group(function () {
-});
+Route::prefix('client')->name('client.')->group(function () {});
 Route::controller(ClientController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/buku/{id}', 'showBuku')->name('show');
@@ -144,6 +143,8 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::delete('/{id}', 'destroy')->name('destroy');
         Route::get('/show/{id}', 'show')->name('show');
         Route::post('/read/{id}', 'read')->name('read');
+        Route::get('/import', 'importForm')->name('import.form');
+        Route::post('/import', 'import')->name('import');
     });
 
     Route::controller(BookmarksController::class)->prefix('bookmarks')->name('bookmarks.')->group(function () {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BukuRequest;
+use App\Imports\BukuImport;
 use App\Models\Buku;
 use App\Models\Bookmark;
 use App\Models\User;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BukuController extends Controller
 {
@@ -39,11 +41,9 @@ class BukuController extends Controller
 
         if ($role !== 'superadmin') {
             if ($user->id_instansi) {
-                // Jika user memiliki instansi, tampilkan buku dari semua user dalam instansi
                 $userInstansiIds = User::where('id_instansi', $user->id_instansi)->pluck('id_user');
                 $buku->whereIn('uploaded_by', $userInstansiIds);
             } else {
-                // Jika tidak punya instansi, tampilkan hanya buku yang dia upload sendiri
                 $buku->where('uploaded_by', $user->id_user);
             }
         }
@@ -107,6 +107,9 @@ class BukuController extends Controller
 
     public function show($id)
     {
+        $role = Auth::user()->role->nama;
+        $user = Auth::user();
+
         $book = Buku::findOrFail($id);
         $book->increment('total_read');
 
@@ -123,11 +126,10 @@ class BukuController extends Controller
         if (!haveAccessTo('update_buku')) {
             return redirect()->back();
         }
-        // $buku = Buku::findOrFail($id);
-        $buku = $this->bukuRepository->find($id);
-        $subkelompok = $this->subKelompokRepository->all();
-        $jenis = $this->jenisRepository->all();
-        // $user = $this->userRepository->all();
+
+        $buku           = $this->bukuRepository->find($id);
+        $subkelompok    = $this->subKelompokRepository->all();
+        $jenis          = $this->jenisRepository->all();
 
         return view('pages.admin.buku.edit', compact('subkelompok', 'jenis', 'buku'));
     }
@@ -213,6 +215,33 @@ class BukuController extends Controller
         } catch (\Throwable $th) {
             Log::error('Read Buku Error: ' . $th->getMessage());
             return back()->withErrors(['error' => 'Terjadi kesalahan saat membaca buku.']);
+        }
+    }
+
+    public function importForm()
+    {
+        return view('pages.admin.buku.import');
+    }
+
+    public function import(Request $request)
+    {
+        if (!haveAccessTo('import_buku')) {
+            return redirect()->back();
+        }
+
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        try {
+            $import = new BukuImport($this->bukuRepository);
+            Excel::import($import, $request->file('file'));
+            Alert::success('Berhasil', 'Data buku berhasil diimpor.');
+            return redirect()->route('dashboard.buku.index');
+        } catch (\Throwable $th) {
+            Alert::error('Gagal', 'Import buku gagal. Periksa format atau data duplikat.');
+            Log::error('Import error: ' . $th->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat mengimpor data.');
         }
     }
 }

@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('judul');
             $table->year('tahun_terbit');
             $table->integer('jumlah_halaman');
-            $table->text('sampul');
+            $table->text('sampul')->nullable();
             $table->text('deskripsi');
-            $table->text('file_buku');
+            $table->text('file_buku')->nullable();
             $table->integer('total_download')->default(0);
             $table->integer('total_read')->default(0);
             $table->uuid('uploaded_by');
