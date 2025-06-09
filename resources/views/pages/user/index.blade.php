@@ -94,51 +94,6 @@
                 @endforeach
             </div>
         </div>
-        <div class="bg-gradient-to-r from-[#696cff] to-[#5a5cff] rounded-xl p-8 md:p-12 mb-16 text-white shadow-lg">
-            <div class="max-w-4xl mx-auto text-center">
-                <h2 class="text-2xl md:text-3xl font-bold mb-4">Mengapa Memilih Perpustakaan Kami?</h2>
-                <p class="text-white/90 mb-8 text-lg">Kami menyediakan pengalaman membaca yang tak tertandingi dengan
-                    koleksi buku terbaik dan fitur-fitur eksklusif.</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
-                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                            </svg>
-                        </div>
-                        <h3 class="font-semibold text-lg mb-2">Koleksi Lengkap</h3>
-                        <p class="text-white/80 text-sm">Ribuan buku dari berbagai genre tersedia untuk Anda.</p>
-                    </div>
-
-                    <div class="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
-                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-                            </svg>
-                        </div>
-                        <h3 class="font-semibold text-lg mb-2">Akses Cloud</h3>
-                        <p class="text-white/80 text-sm">Baca di mana saja dengan penyimpanan cloud kami.</p>
-                    </div>
-
-                    <div class="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
-                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                        </div>
-                        <h3 class="font-semibold text-lg mb-2">100% Aman</h3>
-                        <p class="text-white/80 text-sm">Data dan privasi Anda terlindungi dengan enkripsi terbaik.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="mb-16">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Rilisan Terbaru</h2>

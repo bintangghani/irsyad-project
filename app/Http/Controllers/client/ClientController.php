@@ -44,7 +44,7 @@ class ClientController extends Controller
 
         $data['buku'] = $buku;
         $data['relatedBooks'] = $buku->subKelompok
-            ? Buku::where('id_sub_kelompok', $buku->subKelompok->id_sub_kelompok)
+            ? Buku::where('sub_kelompok', $buku->subKelompok->id_sub_kelompok)
             ->where('id_buku', '!=', $buku->id_buku)
             ->take(8)
             ->get()
@@ -61,7 +61,7 @@ class ClientController extends Controller
         $buku->increment('total_read');
         $buku->increment('total_download');
 
-        return redirect()->route('client.showBuku', $id); // Hindari view langsung jika datanya sama dengan showBuku
+        return view('pages.user.buku.index', compact('buku', 'total_read', 'total_download'));
     }
 
 

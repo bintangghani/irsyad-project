@@ -72,6 +72,20 @@
       ]
     },
     {
+      "name": "Report Summary",
+      "icon": "menu-icon tf-icons bx bx-spreadsheet",
+      "slug": "dashboard.laporan.",
+      "permissions": "view_laporan",
+      "submenu": [
+        {
+          "url": "/dashboard/laporan",
+          "name": "Book & Daily Report",
+          "slug": "dashboard.laporan.index",
+          "permissions": "view_laporan"
+        }
+      ]
+    },
+    {
       "url": "/dashboard/site",
       "name": "Site Management",
       "icon": "menu-icon tf-icons bx bx-cog",

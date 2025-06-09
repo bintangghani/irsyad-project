@@ -34,31 +34,31 @@
                     </div>
                     <div class="relative group">
                         <a href="/category"
-                            class="text-gray-700 hover:text-[#696cff] transition-colors font-medium text-sm flex">
+                            class="inline-flex items-center gap-1 text-gray-700 hover:text-[#696cff] transition-colors font-medium text-sm">
                             Sub Genre
-                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                fill="currentColor">
+                            <svg class="h-4 w-4 text-gray-400 group-hover:text-[#696cff] transition"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
                                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                                     clip-rule="evenodd" />
                             </svg>
                         </a>
                         <div
-                            class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-gray-100">
-                            @foreach ($subcategories as $sub)
-                                <a href="{{ url('category?sub_category=' . $sub->id_sub_kelompok) }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-[#696cff] transition-colors">
-                                    {{ $sub->nama }}
-                                </a>
-                            @endforeach
+                            class="absolute left-0 mt-2 w-80 bg-white shadow-lg rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-gray-100">
+                            @if ($subcategories->count())
+                                <div class="grid grid-cols-2 gap-1">
+                                    @foreach ($subcategories as $sub)
+                                        <a href="{{ url('category?sub_category=' . $sub->id_sub_kelompok) }}"
+                                            class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#696cff] rounded transition">
+                                            {{ $sub->nama }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @else
+                                <span class="block px-4 py-2 text-sm text-gray-400">Tidak ada sub genre</span>
+                            @endif
                         </div>
                     </div>
-
-
-                    <a href="/category"
-                        class="text-gray-700 hover:text-[#696cff] transition-colors font-medium text-sm">
-                        Jenis
-                    </a>
 
                     <a href="/instansi"
                         class="text-gray-700 hover:text-[#696cff] transition-colors font-medium text-sm">
@@ -97,15 +97,15 @@
                                 My Profile
                             </a>
                             @if (Auth::user()->id_instansi)
-                            <a href="{{ route('dashboard.user.instansi.profile', ['id' => Auth::user()->id_instansi]) }}"
-                                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500"
-                                    fill="currentColor" viewBox="0 0 16 16">
-                                    <path
-                                        d="M5 2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2h3.5A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5H14a.5.5 0 0 1-1 0H3a.5.5 0 0 1-1 0h-.5A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2zm1 0h4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1M1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5H3V3zM15 12.5v-9a.5.5 0 0 0-.5-.5H13v10h1.5a.5.5 0 0 0 .5-.5m-3 .5V3H4v10z" />
-                                </svg>
-                                Profile Instansi
-                            </a>
+                                <a href="{{ route('dashboard.user.instansi.profile', ['id' => Auth::user()->id_instansi]) }}"
+                                    class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500"
+                                        fill="currentColor" viewBox="0 0 16 16">
+                                        <path
+                                            d="M5 2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2h3.5A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5H14a.5.5 0 0 1-1 0H3a.5.5 0 0 1-1 0h-.5A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2zm1 0h4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1M1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5H3V3zM15 12.5v-9a.5.5 0 0 0-.5-.5H13v10h1.5a.5.5 0 0 0 .5-.5m-3 .5V3H4v10z" />
+                                    </svg>
+                                    Profile Instansi
+                                </a>
                             @endif
                             <a href="{{ route('dashboard.bookmarks.index') }}"
                                 class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">

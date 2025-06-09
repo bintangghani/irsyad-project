@@ -16,7 +16,7 @@ class CommonDataService
         $selectedGenre       = $extraData['genre'] ?? null;
         $selectedJenis       = $extraData['jenisBuku'] ?? null;
         $selectedSubCategory = $extraData['sub_category'] ?? null;
-        $selectedInstansi    = $extraData['instansi'] ?? null;
+        $selectedInstansi    = $extraData['id_instansi'] ?? null;
         $selectedPenerbit    = $extraData['penerbit'] ?? null;
         $search              = $extraData['search'] ?? null;
 
@@ -32,9 +32,9 @@ class CommonDataService
                 $search
             ) {
                 $query->with(['uploaded', 'jenisBuku'])
-                    ->when($selectedJenis, fn($q) => $q->where('id_jenis', $selectedJenis))
+                    ->when($selectedJenis, fn($q) => $q->where('jenis', $selectedJenis))
                     ->when($selectedSubCategory, fn($q) => $q->where('sub_kelompok', $selectedSubCategory))
-                    ->when($selectedInstansi, fn($q) => $q->where('instansi_id', $selectedInstansi))
+                    ->when($selectedInstansi, fn($q) => $q->where('id_instansi', $selectedInstansi))
                     ->when($selectedPenerbit, fn($q) => $q->where('penerbit', $selectedPenerbit))
                     ->when($search, fn($q) => $q->where('judul', 'like', '%' . $search . '%'));
             },
@@ -52,7 +52,7 @@ class CommonDataService
         }
 
         // Data tambahan
-        $subcategories   = SubKelompok::withCount('buku')->orderByDesc('buku_count')->take(6)->get();
+        $subcategories   = SubKelompok::withCount('buku')->orderByDesc('buku_count')->get();
         $trendingNavbar  = Buku::orderByDesc('total_read')->take(4)->get();
         $subGenres       = SubKelompok::pluck('nama', 'id_sub_kelompok');
         $instansis       = Instansi::pluck('nama', 'id_instansi');

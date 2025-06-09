@@ -11,6 +11,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\KelompokController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\SiteSettingsController;
 use App\Http\Controllers\SubKelompokController;
 use App\Http\Controllers\UserController;
@@ -157,5 +158,10 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::get('/', 'index')->name('index');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::put('/{id}', 'update')->name('update');
+    });
+
+    Route::controller(LaporanController::class)->prefix('laporan')->name('laporan.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/export', 'export')->name('export');
     });
 });

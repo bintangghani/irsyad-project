@@ -163,7 +163,7 @@ class InstansiController extends Controller
         try {
             Excel::import(new InstansiImport($this->instansiRepository), $request->file('file'));
             Alert::success('Success', 'Data Instansi berhasil diimpor.');
-            return redirect()->route('pages.admin.instansi.index');
+            return redirect()->route('dashboard.user.instansi.index');
         } catch (\Throwable $th) {
             Log::error('Import error: ' . $th->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat mengimpor data.');

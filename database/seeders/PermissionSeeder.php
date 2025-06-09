@@ -195,6 +195,10 @@ class PermissionSeeder extends Seeder
                 'id_permission' => Uuid::uuid4(),
                 'nama' => 'update_site_settings'
             ],
+            [
+                'id_permission' => Uuid::uuid4(),
+                'nama' => 'view_laporan'
+            ],
         ]);
     }
 }
