@@ -1,7 +1,10 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
-        <a href="{{ url('/') }}" class="app-brand-link">
-            <span class="app-brand-text demo menu-text fw-bold ms-2">{{ config('variables.templateName') }}</span>
+        <a href="{{ url('/') }}" class="app-brand-link d-flex align-items-center">
+            <img src="{{ asset('storage/assets/img/logo/logo_puskita.png') }}" alt="Logo Puskita" style="height: 40px;">
+            <span class="app-brand-text demo menu-text fw-bold ms-2 align-middle">
+                {{ config('variables.templateName') }}
+            </span>
         </a>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm d-flex align-items-center justify-content-center"></i>

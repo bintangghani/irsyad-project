@@ -1,6 +1,6 @@
 @extends('layouts/dashboard')
 
-@section('title', 'permission')
+@section('title', 'User - Permission')
 
 @section('content')
     <nav aria-label="breadcrumb">

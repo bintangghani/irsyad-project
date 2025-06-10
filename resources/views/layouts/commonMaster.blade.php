@@ -18,15 +18,16 @@
     <!-- Canonical SEO -->
     <link rel="canonical" href="{{ config('variables.productPage') ? config('variables.productPage') : '' }}">
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
-
+    {{-- <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" /> --}}
+    <link rel="icon" href="{{ asset('storage/' . ($setting->icon ?? 'default-icon.png')) }}"
+        type="image/x-icon" />
 
     <!-- Include Styles -->
     @include('layouts/sections/styles')
 
-  <!-- Include Scripts for customizer, helper, analytics, config -->
-  @include('layouts/sections/scriptsIncludes')
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Include Scripts for customizer, helper, analytics, config -->
+    @include('layouts/sections/scriptsIncludes')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>

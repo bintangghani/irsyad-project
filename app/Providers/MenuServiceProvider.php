@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\SiteSettings;
 
 class MenuServiceProvider extends ServiceProvider
 {
@@ -19,11 +20,15 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Ambil menu
         $verticalMenuJson = file_get_contents(base_path('resources/menu/verticalMenu.json'));
         $verticalMenuData = json_decode($verticalMenuJson);
-    
-        // Share all menuData to all the views
-        $this->app->make('view')->share('menuData', [$verticalMenuData]);
-        // dd($verticalMenuData);
+
+        // Ambil setting
+        $setting = SiteSettings::first();
+
+        // Bagikan ke semua view
+        view()->share('menuData', [$verticalMenuData]);
+        view()->share('setting', $setting);
     }
 }

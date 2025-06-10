@@ -1,6 +1,6 @@
 @extends('layouts/dashboard')
 
-@section('title', 'jenis')
+@section('title', 'Jenis')
 
 @section('content')
     <nav aria-label="breadcrumb">

@@ -1,6 +1,6 @@
 @extends('layouts/dashboard')
 
-@section('title', 'setting')
+@section('title', 'Settings')
 
 @section('content')
     <nav aria-label="breadcrumb">

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Kelompok;
+use App\Models\SiteSettings;
 use App\Repositories\BukuRepository\BukuRepository;
 use App\Repositories\BukuRepository\BukuRepositoryInterface;
 use App\Repositories\InstansiRepository\InstansiRepository;
@@ -20,6 +21,7 @@ use App\Repositories\SubKelompokRepository\SubKelompokRepositoryInterface;
 use App\Repositories\UserRepository\UserRepository;
 use App\Repositories\UserRepository\UserRepositoryInterface;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
