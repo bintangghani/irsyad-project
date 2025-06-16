@@ -15,7 +15,7 @@ class SiteSeeder extends Seeder
     {
         SiteSettings::create([
             'id_site_settings' => Uuid::uuid4(),
-            'icon' => 'assets/img/icon/brand/logo.png',
+            'icon' => '\assets\img\logo\logo_puskita.png',
             'title' => 'PUSKITA',
             'brand' => 'PUSKITA',
             'deskripsi' => 'Perpustakaan digital modern dengan koleksi buku terlengkap. Memberikan akses mudah untuk membaca dimana saja dan kapan saja.',

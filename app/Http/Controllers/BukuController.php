@@ -34,7 +34,7 @@ class BukuController extends Controller
             return redirect()->back();
         }
 
-        $buku = Buku::with(['uploaded', 'subKelompok', 'jenisBuku']);
+        $buku = Buku::with(['uploaded', 'subKelompok.kelompok', 'jenisBuku']);
         $role = Auth::user()->role->nama;
 
         $user = Auth::user();

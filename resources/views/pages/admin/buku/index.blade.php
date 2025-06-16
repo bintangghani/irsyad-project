@@ -65,7 +65,7 @@
                             @if ($buku->count() > 0)
                                 <thead class="table-light">
                                     <tr class="bg-primary align-middle">
-                                        @foreach (['#', 'Penerbit', 'Alamat Penerbit', 'Judul', 'Tahun Terbit', 'Jumlah Halaman', 'Sampul', 'Upload', 'Sub Kelompok', 'Jenis', 'Deskripsi', 'Link Buku', 'Aksi'] as $col)
+                                        @foreach (['#', 'Judul', 'Penulis', 'Penerbit', 'Alamat Penerbit', 'Tahun Terbit', 'Jumlah Halaman', 'ISBN', 'Sampul', 'Upload', 'Sub Kelompok', 'Kelompok', 'Jenis', 'Deskripsi', 'Link Buku', 'Aksi'] as $col)
                                             <th class="text-center bg-primary text-white">{{ $col }}</th>
                                         @endforeach
                                     </tr>
@@ -73,15 +73,21 @@
                                 <tbody>
                                     @foreach ($buku as $key => $item)
                                         <tr>
-                                            <th scope="row" class="text-center">{{ $key + 1 }}</th>
+                                            <th scope="row" class="text-center">{{ $loop->iteration }}</th>
+                                            <td class="text-capitalize text-truncate">{{ $item->judul ?? '-' }}</td>
                                             <td class="text-capitalize text-truncate" style="max-width: 250px;">
-                                                {{ $item->penerbit }}</td>
-                                            <td class="text-capitalize text-truncate">{{ $item->alamat_penerbit }}</td>
-                                            <td class="text-capitalize text-truncate">{{ $item->judul }}</td>
-                                            <td class="text-center text-capitalize text-truncate">{{ $item->tahun_terbit }}
+                                                {{ $item->penulis ?? '-' }}</td>
+                                            <td class="text-capitalize text-truncate" style="max-width: 250px;">
+                                                {{ $item->penerbit ?? '-' }}</td>
+                                            <td class="text-capitalize text-truncate">{{ $item->alamat_penerbit ?? '-' }}
                                             </td>
                                             <td class="text-center text-capitalize text-truncate">
-                                                {{ $item->jumlah_halaman }}</td>
+                                                {{ $item->tahun_terbit ?? '-' }}
+                                            </td>
+                                            <td class="text-center text-capitalize text-truncate">
+                                                {{ $item->jumlah_halaman ?? '-' }}</td>
+                                            <td class="text-capitalize text-truncate" style="max-width: 250px;">
+                                                {{ $item->no_isbn ?? '-' }}</td>
                                             <td class="text-center">
                                                 @if ($item->sampul)
                                                     <img src="{{ asset('storage/' . $item->sampul) }}" alt="Sampul"
@@ -90,11 +96,16 @@
                                                     <span class="text-muted">No Image</span>
                                                 @endif
                                             </td>
-                                            <td class="text-capitalize text-truncate">{{ $item->uploaded->nama }}</td>
-                                            <td class="text-capitalize text-truncate">{{ $item->subKelompok->nama }}</td>
-                                            <td class="text-capitalize text-truncate">{{ $item->jenisBuku->nama }}</td>
+                                            <td class="text-capitalize text-truncate">{{ $item->uploaded->nama ?? '-' }}
+                                            </td>
+                                            <td class="text-capitalize text-truncate">{{ $item->subKelompok->nama ?? '-' }}
+                                            </td>
+                                            <td class="text-capitalize text-truncate">{{ $item->subKelompok->kelompok->nama ?? '-' }}
+                                            </td>
+                                            <td class="text-capitalize text-truncate">{{ $item->jenisBuku->nama ?? '-' }}
+                                            </td>
                                             <td class="text-capitalize text-truncate" style="max-width: 200px;">
-                                                {{ $item->deskripsi }}</td>
+                                                {{ $item->deskripsi ?? '-' }}</td>
                                             <td class="text-center text-truncate">
                                                 @if ($item->file_buku)
                                                     <a href="{{ asset('storage/' . $item->file_buku) }}" target="_blank"

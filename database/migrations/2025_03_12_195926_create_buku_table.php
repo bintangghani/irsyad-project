@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('buku', function (Blueprint $table) {
             $table->uuid('id_buku')->primary()->unique();
+            $table->string('no_isbn')->nullable();
+            $table->string('penulis');
             $table->string('penerbit');
-            $table->text('alamat_penerbit');
+            $table->text('alamat_penerbit')->nullable();
             $table->string('judul');
             $table->year('tahun_terbit');
             $table->integer('jumlah_halaman');
             $table->text('sampul')->nullable();
-            $table->text('deskripsi');
+            $table->text('deskripsi')->nullable();
             $table->text('file_buku')->nullable();
             $table->integer('total_download')->default(0);
             $table->integer('total_read')->default(0);

@@ -32,6 +32,9 @@ class BukuRequest extends FormRequest
                 'max:255',
                 Rule::unique('buku', 'judul')->ignore($this->route('id'), 'id_buku'),
             ],
+            'penulis' => 'required|string|max:255',
+            'no_isbn' => 'nullable|string|max:20|regex:/^[0-9\-]+$/',
+            Rule::unique('buku', 'no_isbn')->ignore($this->route('id'), 'id_buku'),
             'tahun_terbit' => 'required|digits:4|integer|min:1900|max:' . date('Y'),
             'jumlah_halaman' => 'required|integer|min:1',
             'sampul' => $this->isMethod('post')
@@ -48,6 +51,7 @@ class BukuRequest extends FormRequest
     }
 
 
+
     public function messages(): array
     {
         return [
@@ -57,6 +61,8 @@ class BukuRequest extends FormRequest
             'sampul.required' => 'Sampul wajib diunggah!',
             'sampul.image' => 'File sampul harus berupa gambar!',
             'file_buku.mimes' => 'File buku harus dalam format PDF!',
+            'penulis.required' => 'Nama penulis wajib diisi!',
+            'no_isbn.regex' => 'Nomor ISBN hanya boleh terdiri dari angka dan tanda hubung!',
         ];
     }
 }
