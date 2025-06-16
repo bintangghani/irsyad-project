@@ -13,11 +13,11 @@
 
             <form method="GET" id="filterForm" action="{{ route('category') }}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="flex-1">
-                    <label for="genre" class="block text-sm font-medium text-gray-700 mb-1">Filter Genre</label>
+                    <label for="genre" class="block text-sm font-medium text-gray-700 mb-1">Filter Kelompok</label>
                     <div class="relative">
                         <select id="genre" name="genre" onchange="this.form.submit()"
                             class="block w-full pl-4 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#696cff] focus:border-transparent rounded-lg appearance-none bg-white">
-                            <option value="">Semua Genre</option>
+                            <option value="">Semua Kelompok</option>
                             @foreach ($genres as $genre)
                                 <option value="{{ $genre }}" {{ $selectedGenre === $genre ? 'selected' : '' }}>
                                     {{ $genre }}
@@ -57,11 +57,11 @@
                     </div>
                 </div>
                 <div class="flex-1">
-                    <label for="sub_category" class="block text-sm font-medium text-gray-700 mb-1">Filter Sub Genre</label>
+                    <label for="sub_category" class="block text-sm font-medium text-gray-700 mb-1">Filter Sub Kelompok</label>
                     <div class="relative">
                         <select id="sub_category" name="sub_category" onchange="this.form.submit()"
                             class="block w-full pl-4 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#696cff] focus:border-transparent rounded-lg appearance-none bg-white">
-                            <option value="">Semua Sub Genre</option>
+                            <option value="">Semua Sub Kelompok</option>
                             @foreach ($subGenres as $id => $nama)
                                 <option value="{{ $id }}" {{ $selectedSubCategory === $id ? 'selected' : '' }}>
                                     {{ ucfirst($nama) }}
@@ -156,13 +156,13 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 @foreach ($books as $book)
                     <div class="flex gap-4">
-                        <a href="{{ route('show', ['id'=> $book->id_buku]) }}" class="flex-shrink-0">
+                        <a href="{{ route('show', ['id' => $book->id_buku]) }}" class="flex-shrink-0">
                             <img src="{{ asset('storage/' . $book->sampul) }}" alt="{{ $book->judul }}"
                                 class="w-32 h-48 md:w-36 md:h-52 object-cover rounded-lg shadow" />
                         </a>
                         <div class="flex flex-col justify-between">
                             <div>
-                                <a href="{{ route('show', ['id'=> $book->id_buku]) }}">
+                                <a href="{{ route('show', ['id' => $book->id_buku]) }}">
                                     <h3 class="text-lg text-[#222222] md:text-lg font-semibold leading-snug">
                                         {{ $book->judul }}
                                     </h3>
@@ -198,32 +198,47 @@
             </div>
         @else
             <div class="text-center py-8 text-gray-500">
-                @if ($selectedGenre || $selectedJenis || $selectedSubCategory || $selectedInstansi || $selectedPenerbit || $search)
-                    <h2 class="text-2xl font-semibold mb-4 text-gray-800">
-                        Menampilkan buku
-                        @if ($selectedGenre)
-                            dengan genre <span class="font-bold">{{ $selectedGenre }}</span>
-                        @endif
-                        @if ($selectedJenis)
-                            {{ $selectedGenre ? ',' : '' }} jenis <span class="font-bold">{{ $selectedJenis }}</span>
-                        @endif
-                        @if ($selectedSubCategory)
-                            {{ $selectedGenre || $selectedJenis ? ',' : '' }} sub genre <span
-                                class="font-bold">{{ $selectedSubCategory }}</span>
-                        @endif
-                        @if ($selectedInstansi)
-                            {{ $selectedGenre || $selectedJenis || $selectedSubCategory ? ',' : '' }} dari instansi <span
-                                class="font-bold">{{ $selectedInstansi }}</span>
-                        @endif
-                        @if ($selectedPenerbit)
-                            {{ $selectedGenre || $selectedJenis || $selectedSubCategory || $selectedInstansi ? ',' : '' }}
-                            penerbit <span class="font-bold">{{ $selectedPenerbit }}</span>
-                        @endif
-                        @if ($search)
-                            {{ $selectedGenre || $selectedJenis || $selectedSubCategory || $selectedInstansi || $selectedPenerbit ? ',' : '' }}
-                            dengan pencarian judul "<span class="font-bold">{{ $search }}</span>"
-                        @endif
-                    </h2>
+                @php
+    $hasFilteredBooks = false;
+    foreach ($categories as $category) {
+        if ($category->filteredBooks->isNotEmpty()) {
+            $hasFilteredBooks = true;
+            break;
+        }
+    }
+@endphp
+
+@if ($hasFilteredBooks)
+    <h2 class="text-2xl font-semibold mb-4 text-gray-800">
+        Menampilkan buku
+        @if ($selectedGenre)
+            dengan genre <span class="font-bold">{{ $selectedGenre }}</span>
+        @endif
+        @if ($selectedJenis)
+            {{ $selectedGenre ? ',' : '' }} jenis <span
+                class="font-bold">{{ $jenisList[$selectedJenis] ?? $selectedJenis }}</span>
+        @endif
+        @if ($selectedSubCategory)
+            {{ $selectedGenre || $selectedJenis ? ',' : '' }} sub genre <span
+                class="font-bold">{{ $subGenres[$selectedSubCategory] ?? $selectedSubCategory }}</span>
+        @endif
+        @if ($selectedInstansi)
+            {{ $selectedGenre || $selectedJenis || $selectedSubCategory ? ',' : '' }} dari instansi <span
+                class="font-bold">{{ $selectedInstansi }}</span>
+        @endif
+        @if ($selectedPenerbit)
+            {{ $selectedGenre || $selectedJenis || $selectedSubCategory || $selectedInstansi ? ',' : '' }}
+            penerbit <span class="font-bold">{{ $selectedPenerbit }}</span>
+        @endif
+        @if ($search)
+            {{ $selectedGenre || $selectedJenis || $selectedSubCategory || $selectedInstansi || $selectedPenerbit ? ',' : '' }}
+            dengan pencarian judul "<span class="font-bold">{{ $search }}</span>"
+        @endif
+    </h2>
+    @else
+     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Buku Tidak Tersedia</h2>
+
+
                     @foreach ($categories as $category)
                         @if ($category->filteredBooks->isNotEmpty())
                             <h3 class="text-lg font-bold text-[#696cff] mt-6 mb-2">{{ $category->nama }}</h3>
@@ -232,7 +247,7 @@
                                 @foreach ($category->filteredBooks as $book)
                                     <div
                                         class="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
-                                        <a href="{{ route('show', ['id'=> $book->id_buku]) }}" class="flex gap-4">
+                                        <a href="{{ route('show', ['id' => $book->id_buku]) }}" class="flex gap-4">
                                             <img src="{{ asset('storage/' . $book->sampul) }}" alt="{{ $book->judul }}"
                                                 class="w-24 h-36 md:w-28 md:h-40 object-cover rounded-lg shadow">
 
