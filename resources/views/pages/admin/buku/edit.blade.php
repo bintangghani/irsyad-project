@@ -34,9 +34,22 @@
                                     required class="form-control">
                             </div>
                             <div class="col-md-6">
+                                <label for="penulis" class="form-label">Penulis</label>
+                                <input type="text" name="penulis" id="penulis"
+                                    value="{{ old('penulis', $buku->penulis) }}" required class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
                                 <label for="penerbit" class="form-label">Penerbit</label>
                                 <input type="text" name="penerbit" id="penerbit"
                                     value="{{ old('penerbit', $buku->penerbit) }}" required class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="no_isbn" class="form-label">No. ISBN</label>
+                                <input type="text" name="no_isbn" id="no_isbn"
+                                    value="{{ old('no_isbn', $buku->no_isbn) }}" class="form-control">
                             </div>
                         </div>
 
@@ -101,7 +114,8 @@
                                 <select name="jenis" id="jenis" required class="form-select">
                                     @foreach ($jenis as $j)
                                         <option value="{{ $j->id_jenis }}"
-                                            {{ $buku->jenisBuku->id_jenis == $j->id_jenis ? 'selected' : '' }}>{{ $j->nama }}
+                                            {{ $buku->jenisBuku->id_jenis == $j->id_jenis ? 'selected' : '' }}>
+                                            {{ $j->nama }}
                                         </option>
                                     @endforeach
                                 </select>

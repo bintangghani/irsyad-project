@@ -37,10 +37,30 @@
                             </div>
 
                             <div class="col-md-6">
+                                <label for="penulis" class="form-label">Penulis</label>
+                                <input type="text" name="penulis" id="penulis" value="{{ old('penulis') }}" required
+                                    class="form-control @error('penulis') is-invalid @enderror">
+                                @error('penulis')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
                                 <label for="penerbit" class="form-label">Penerbit</label>
                                 <input type="text" name="penerbit" id="penerbit" value="{{ old('penerbit') }}" required
                                     class="form-control @error('penerbit') is-invalid @enderror">
                                 @error('penerbit')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="no_isbn" class="form-label">No. ISBN</label>
+                                <input type="text" name="no_isbn" id="no_isbn" value="{{ old('no_isbn') }}"
+                                    class="form-control @error('no_isbn') is-invalid @enderror">
+                                @error('no_isbn')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -94,7 +114,8 @@
                             <div class="col-md-6">
                                 <label for="file_buku" class="form-label">File Buku (PDF)</label>
                                 <input type="file" name="file_buku" id="file_buku"
-                                    class="form-control @error('file_buku') is-invalid @enderror" accept="application/pdf">
+                                    class="form-control @error('file_buku') is-invalid @enderror"
+                                    accept="application/pdf">
                                 @error('file_buku')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
