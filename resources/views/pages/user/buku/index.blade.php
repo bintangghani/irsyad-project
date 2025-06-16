@@ -40,7 +40,7 @@
                 </div>
                 <div class="flex flex-col items-center hover:text-[#696cff] transition duration-200 cursor-pointer">
                     @if ($buku->file_buku)
-                        <a href="{{ asset('storage/' . $buku->file_buku) }}" download
+                        <a href="{{ asset('storage/' . $buku->file_buku) }}" target="_blank"
                             class="flex flex-col items-center hover:text-[#696cff] transition duration-200 cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-6">

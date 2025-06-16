@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\FileNameHelper;
 use App\Http\Requests\BukuRequest;
 use App\Imports\BukuImport;
 use App\Models\Buku;
@@ -82,9 +83,10 @@ class BukuController extends Controller
             DB::beginTransaction();
             $validated = $request->validated();
 
-            $sampulPath = $request->file('sampul')->store('sampuls', 'public');
+            $sampulPath = FileNameHelper::fileName($request->file('sampul'), 'sampuls', $validated['judul']);
+
             $bukuPath = $request->hasFile('file_buku')
-                ? $request->file('file_buku')->store('buku', 'public')
+                ? FileNameHelper::fileName($request->file('file_buku'), 'buku', $validated['judul'])
                 : null;
 
             Buku::create([
