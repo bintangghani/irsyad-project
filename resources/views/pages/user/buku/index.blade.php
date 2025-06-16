@@ -50,7 +50,7 @@
                             <span>Download</span>
                         </a>
                     @else
-                        <span class="text-muted">Tidak ada file</span>
+                        <span class="text-muted hidden">Tidak ada file</span>
                     @endif
                 </div>
             </div>

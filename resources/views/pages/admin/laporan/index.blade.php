@@ -47,7 +47,7 @@
                                                     <input class="form-check-input" type="checkbox" name="sub_kelompok[]"
                                                         id="sub_kelompok_{{ $sk->id_sub_kelompok }}"
                                                         value="{{ $sk->id_sub_kelompok }}"
-                                                        {{ is_array(request('sub_kelompok')) && in_array($sk->id_sub_kelompok, request('sub_kelompok')) ? 'checked' : '' }}>
+                                                        {{ is_array(request('sub_kelompok')) && in_array($sk->id_sub_kelompok, request('sub_kelompok')) ? 'checked' : '-' }}>
                                                     <label class="form-check-label"
                                                         for="sub_kelompok_{{ $sk->id_sub_kelompok }}">{{ $sk->nama }}</label>
                                                 </div>
@@ -64,7 +64,7 @@
                                                     <input class="form-check-input" type="checkbox" name="id_kelompok[]"
                                                         id="id_kelompok_{{ $kelompok->id_kelompok }}"
                                                         value="{{ $kelompok->id_kelompok }}"
-                                                        {{ is_array(request('id_kelompok')) && in_array($kelompok->id_kelompok, request('id_kelompok')) ? 'checked' : '' }}>
+                                                        {{ is_array(request('id_kelompok')) && in_array($kelompok->id_kelompok, request('id_kelompok')) ? 'checked' : '-' }}>
                                                     <label class="form-check-label"
                                                         for="id_kelompok_{{ $kelompok->id_kelompok }}">{{ $kelompok->nama }}</label>
                                                 </div>
@@ -161,7 +161,7 @@
                                             </td>
                                             <td class="text-capitalize text-truncate" style="max-width: 150px;"
                                                 title="{{ $item->alamat_penerbit }}">
-                                                {{ $item->alamat_penerbit }}
+                                                {{ $item->alamat_penerbit ?? '-' }}
                                             </td>
                                             <td class="text-capitalize text-truncate" style="max-width: 180px;"
                                                 title="{{ $item->judul }}">
@@ -192,8 +192,8 @@
                                                 {{ Str::limit($item->jenisBuku->nama ?? '-', 20) }}
                                             </td>
                                             <td class="text-truncate" style="max-width: 200px;"
-                                                title="{{ $item->deskripsi }}">
-                                                {{ Str::limit($item->deskripsi, 60) }}
+                                                title="{{ $item->deskripsi  }}">
+                                                {{ Str::limit($item->deskripsi ?? '-', 60) }}
                                             </td>
                                             <td class="text-center">{{ $item->total_read }}</td>
                                             <td class="text-center">

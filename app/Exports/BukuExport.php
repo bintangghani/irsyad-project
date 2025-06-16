@@ -37,9 +37,9 @@ class BukuExport implements FromCollection, WithHeadings, WithMapping
 
         if (!empty($filters['sub_kelompok'])) {
             if (is_array($filters['sub_kelompok'])) {
-                $query->whereIn('id_sub_kelompok', $filters['sub_kelompok']);
+                $query->whereIn('sub_kelompok', $filters['sub_kelompok']);
             } else {
-                $query->where('id_sub_kelompok', $filters['sub_kelompok']);
+                $query->where('sub_kelompok', $filters['sub_kelompok']);
             }
         }
 
