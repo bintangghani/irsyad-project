@@ -67,7 +67,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="alamat_penerbit" class="form-label">Alamat Penerbit</label>
+                            <label for="alamat_penerbit" class="form-label"> Alamat Penerbit</label>
                             <textarea name="alamat_penerbit" id="alamat_penerbit" rows="3" required
                                 class="form-control @error('alamat_penerbit') is-invalid @enderror">{{ old('alamat_penerbit') }}</textarea>
                             @error('alamat_penerbit')
