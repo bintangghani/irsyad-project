@@ -130,9 +130,10 @@ class ClientController extends Controller
         $instansi = Instansi::findOrFail($id);
         $users = $instansi->user()->pluck('id_user');
 
+
         return view('pages.user.instansi.show', CommonDataService::getCommonData([
             'instansi' => $instansi,
-            'bukuInstansi' => Buku::with('uploaded')->whereIn('uploaded_by', $users)->latest()->get(),
+            'bukuInstansi' => Buku::with('uploaded','jenisBuku')->whereIn('uploaded_by', $users)->latest()->get(),
         ]));
     }
 

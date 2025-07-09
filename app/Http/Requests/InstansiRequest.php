@@ -31,7 +31,7 @@ class InstansiRequest extends FormRequest
                 ? 'nullable|image|mimes:jpg,jpeg,png|max:2048'
                 : 'required|image|mimes:jpg,jpeg,png|max:2048',
             'background' => $id
-                ? 'nullable|string|max:255'
+                ? 'nullable|image|max:255'
                 : 'required|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
