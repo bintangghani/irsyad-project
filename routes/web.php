@@ -31,8 +31,8 @@ Route::controller(ClientController::class)->group(function () {
     Route::get('/instansi', 'instansi')->name('instansi');
     Route::get('/instansi/{id}', 'showInstansi')->name('instansi.show');
     Route::get('/read/{id}', 'readBook')->name('read');
-    Route::get('/profile', 'profile')->name('profile');
-    Route::get('/profile/{id}', 'profile')->name('profile');
+    Route::get('/profile', 'profile')->name('client.profile');
+    Route::get('/profile/{id}', 'profile')->name('client.profile.show');
     Route::put('/profile/{id}', 'updateClientProfile')->name('updateClientProfile');
     Route::get('search', 'search')->name('searchBuku');
 });
@@ -86,7 +86,7 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
             Route::delete('/{id}', 'destroy')->name('destroy');
-            Route::get('/profile/{id}', 'profileInstansi')->name('profile');
+            Route::get('/profile/{id}', 'profileInstansi')->name('instansi.profile.show');
             Route::put('/update-profile/{id}',  'updateProfile')->name('updateProfile');
             Route::get('/import', 'importForm')->name('import.form');
             Route::post('/import', 'import')->name('import');
@@ -100,9 +100,9 @@ Route::middleware(Authentication::class)->prefix('dashboard')->name('dashboard.'
         Route::post('/', 'store')->name('store');
         Route::put('/{id}', 'update')->name('update');
         Route::delete('/', 'destroy')->name('destroy');
-        Route::get('/profile/{id}', 'profile')->name('profile');
+        Route::get('/profile/{id}', 'profile')->name('user.profile.show');
         Route::delete('/{id}', 'destroy')->name('destroy');
-        Route::get('edit/profile/{id}', 'profile')->name('profile');
+        Route::get('edit/profile/{id}', 'profile')->name('user.profile.edit');
         Route::put('/profile/{id}', 'updateProfile')->name('updateProfile');
     });
 

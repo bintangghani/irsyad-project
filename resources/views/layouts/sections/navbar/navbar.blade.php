@@ -76,7 +76,7 @@ $navbarDetached = ($navbarDetached ?? '');
                 <div class="dropdown-divider my-1"></div>
               </li>
               <li>
-                <a class="dropdown-item" href="{{route('dashboard.user.profile', ['id' => Auth::user()->id_user])}}">
+                <a class="dropdown-item" href="{{route('dashboard.user.user.profile.show', ['id' => Auth::user()->id_user])}}">
                   <i class="bx bx-user bx-md me-3"></i><span>My Profile</span>
                 </a>
               </li>

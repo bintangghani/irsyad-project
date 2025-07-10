@@ -90,7 +90,7 @@
                         </button>
                         <div id="userMenu"
                             class="hidden absolute mt-2 w-56 bg-white shadow-lg rounded-md py-1 z-50 border border-gray-100">
-                            <a href="{{ route('profile', ['id' => Auth::user()]) }}"
+                            <a href="{{ route('client.profile', ['id' => Auth::user()]) }}"
                                 class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
                                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -100,7 +100,7 @@
                                 My Profile
                             </a>
                             @if (Auth::user()->id_instansi)
-                                <a href="{{ route('dashboard.user.instansi.profile', ['id' => Auth::user()->id_instansi]) }}"
+                                <a href="{{ route('dashboard.user.instansi.instansi.profile.show', ['id' => Auth::user()->id_instansi]) }}"
                                     class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500"
                                         fill="currentColor" viewBox="0 0 16 16">
