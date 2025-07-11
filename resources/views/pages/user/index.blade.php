@@ -17,10 +17,6 @@
                     <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mt-2 leading-tight">
                         Temukan Dunia Literasi di <span class="text-[#696cff]">Perpustakaan Digital</span> Kami
                     </h1>
-                    <p class="mt-6 text-gray-300 text-base md:text-lg">
-                        Jelajahi ribuan koleksi buku digital dan audiobook premium. Nikmati akses tanpa batas ke berbagai
-                        bacaan menarik, mulai dari novel best-seller hingga konten edukasi eksklusif.
-                    </p>
                     <div class="mt-8 flex flex-col sm:flex-row gap-4">
                         <a href="/category"
                             class="bg-[#696cff] hover:bg-[#5a5cff] text-white px-8 py-3 rounded-lg shadow-lg text-lg font-semibold transition-all transform hover:scale-105">

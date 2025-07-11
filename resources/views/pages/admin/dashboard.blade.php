@@ -16,19 +16,25 @@
 
 @section('content')
     <div class="row">
-        
+
         <div class="col-xxl-12 mb-6 order-0">
             <div class="card">
                 <div class="d-flex align-items-start row">
                     <div class="col-sm-7">
                         <div class="card-body">
                             <h5 class="card-title text-primary mb-3 text-capitalize">Selamat Datang,
-                                {{ Auth::user()->role->nama . ' ' . Auth::user()->nama  }}
+                                {{ Auth::user()->role->nama . ' ' . Auth::user()->nama }}
                             </h5>
                             <p class="mb-6">
                                 Kelola sistem dengan mudah dan pantau aktivitas pengguna secara real-time.
                             </p>
-                            <a href="/" class="btn btn-sm btn-outline-primary">Lihat Website</a>
+                            {{-- <a href="/" class="btn btn-sm btn-outline-primary">Lihat Website</a> --}}
+                            <div class="d-flex gap-2">
+                                <a href="/" class="btn btn-sm btn-outline-primary">Lihat Website</a>
+                                <a href="{{ route('dashboard.buku.create') }}" class="btn btn-sm btn-primary">
+                                    <i class="bx bx-plus me-1"></i> Tambah Buku
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -44,34 +50,34 @@
         <div class="col-xxl-4 col-12 order-2">
             <div class="row">
                 @if ($role !== 'client' && $role !== 'admin instansi')
-                <div class="col-lg-6 col-md-12 col-6 mb-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                                <div class="avatar flex-shrink-0">
-                                    <img src="{{ asset('assets/img/icons/unicons/chart-success.png') }}" alt="chart success"
-                                        class="rounded">
-                                </div>
-                                <div class="dropdown">
-                                    <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bx-dots-vertical-rounded text-muted"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                                        <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                        <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                    <div class="col-lg-6 col-md-12 col-6 mb-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="card-title d-flex align-items-start justify-content-between mb-4">
+                                    <div class="avatar flex-shrink-0">
+                                        <img src="{{ asset('assets/img/icons/unicons/chart-success.png') }}"
+                                            alt="chart success" class="rounded">
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="bx bx-dots-vertical-rounded text-muted"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
+                                            <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                        </div>
                                     </div>
                                 </div>
+                                <p class="mb-1">User</p>
+                                <h4 class="card-title mb-3">{{ $data['totalUsers'] }}</h4>
+                                <small class="{{ $data['userTrend'] == 'up' ? 'text-success' : 'text-danger' }} fw-medium">
+                                    <i class='bx bx-{{ $data['userTrend'] == 'up' ? 'up' : 'down' }}-arrow-alt'></i>
+                                    {{ $data['userTrend'] == 'up' ? '+' : '-' }}{{ $data['userGrowth'] }}%
+                                </small>
                             </div>
-                            <p class="mb-1">User</p>
-                            <h4 class="card-title mb-3">{{ $data['totalUsers'] }}</h4>
-                            <small class="{{ $data['userTrend'] == 'up' ? 'text-success' : 'text-danger' }} fw-medium">
-                                <i class='bx bx-{{ $data['userTrend'] == 'up' ? 'up' : 'down' }}-arrow-alt'></i>
-                                {{ $data['userTrend'] == 'up' ? '+' : '-' }}{{ $data['userGrowth'] }}%
-                            </small>
                         </div>
                     </div>
-                </div>
                 @endif
                 <div class="col-lg-6 col-md-12 col-6 mb-6">
                     <div class="card h-100">
@@ -102,62 +108,64 @@
                     </div>
                 </div>
                 @if ($role !== 'client' && $role !== 'admin instansi')
-                <div class="col-lg-6 col-md-12 col-6 mb-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                                <div class="avatar flex-shrink-0">
-                                    <img src="{{ asset('assets/img/icons/unicons/paypal.png') }}" alt="paypal"
-                                        class="rounded">
-                                </div>
-                                <div class="dropdown">
-                                    <button class="btn p-0" type="button" id="cardOpt4" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bx-dots-vertical-rounded text-muted"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt4">
-                                        <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                        <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                    <div class="col-lg-6 col-md-12 col-6 mb-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="card-title d-flex align-items-start justify-content-between mb-4">
+                                    <div class="avatar flex-shrink-0">
+                                        <img src="{{ asset('assets/img/icons/unicons/paypal.png') }}" alt="paypal"
+                                            class="rounded">
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn p-0" type="button" id="cardOpt4" data-bs-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="bx bx-dots-vertical-rounded text-muted"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt4">
+                                            <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                        </div>
                                     </div>
                                 </div>
+                                <p class="mb-1">Instansi</p>
+                                <h4 class="card-title mb-3">{{ $data['totalInstansi'] }}</h4>
+                                <small
+                                    class="{{ $data['instansiTrend'] == 'up' ? 'text-success' : 'text-danger' }} fw-medium">
+                                    <i class='bx bx-{{ $data['instansiTrend'] == 'up' ? 'up' : 'down' }}-arrow-alt'></i>
+                                    {{ $data['instansiTrend'] == 'up' ? '+' : '-' }}{{ $data['instansiGrowth'] }}%
+                                </small>
                             </div>
-                            <p class="mb-1">Instansi</p>
-                            <h4 class="card-title mb-3">{{ $data['totalInstansi'] }}</h4>
-                            <small class="{{ $data['instansiTrend'] == 'up' ? 'text-success' : 'text-danger' }} fw-medium">
-                                <i class='bx bx-{{ $data['instansiTrend'] == 'up' ? 'up' : 'down' }}-arrow-alt'></i>
-                                {{ $data['instansiTrend'] == 'up' ? '+' : '-' }}{{ $data['instansiGrowth'] }}%
-                            </small>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-md-12 col-6 mb-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                                <div class="avatar flex-shrink-0">
-                                    <img src="{{ asset('assets/img/icons/unicons/cc-primary.png') }}" alt="Credit Card"
-                                        class="rounded">
-                                </div>
-                                <div class="dropdown">
-                                    <button class="btn p-0" type="button" id="cardOpt1" data-bs-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bx-dots-vertical-rounded text-muted"></i>
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="cardOpt1">
-                                        <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                        <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                    <div class="col-lg-6 col-md-12 col-6 mb-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="card-title d-flex align-items-start justify-content-between mb-4">
+                                    <div class="avatar flex-shrink-0">
+                                        <img src="{{ asset('assets/img/icons/unicons/cc-primary.png') }}"
+                                            alt="Credit Card" class="rounded">
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn p-0" type="button" id="cardOpt1" data-bs-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="bx bx-dots-vertical-rounded text-muted"></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="cardOpt1">
+                                            <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                        </div>
                                     </div>
                                 </div>
+                                <p class="mb-1">Total Download</p>
+                                <h4 class="card-title mb-3">{{ $data['totalDownload'] }}</h4>
+                                <small
+                                    class="{{ $data['downloadTrend'] == 'up' ? 'text-success' : 'text-danger' }} fw-medium">
+                                    <i class='bx bx-{{ $data['downloadTrend'] == 'up' ? 'up' : 'down' }}-arrow-alt'></i>
+                                    {{ $data['downloadTrend'] == 'up' ? '+' : '-' }}{{ $data['downloadGrowth'] }}%
+                                </small>
                             </div>
-                            <p class="mb-1">Total Download</p>
-                            <h4 class="card-title mb-3">{{ $data['totalDownload'] }}</h4>
-                            <small class="{{ $data['downloadTrend'] == 'up' ? 'text-success' : 'text-danger' }} fw-medium">
-                                <i class='bx bx-{{ $data['downloadTrend'] == 'up' ? 'up' : 'down' }}-arrow-alt'></i>
-                                {{ $data['downloadTrend'] == 'up' ? '+' : '-' }}{{ $data['downloadGrowth'] }}%
-                            </small>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
         <!-- Total Baca -->
@@ -224,7 +232,7 @@
         @endif
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const selectedYearBtn = document.getElementById("selectedYear");
             const yearOptions = document.querySelectorAll(".year-option");
             const selectedYearInfo = document.getElementById("displaySelectedYear");
@@ -265,14 +273,16 @@
                     colors: '#696cff'
                 },
                 xaxis: {
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
+                        'Nov', 'Dec'
+                    ]
                 }
             });
 
             userRegistrationsChart.render();
 
             yearOptions.forEach(option => {
-                option.addEventListener("click", function () {
+                option.addEventListener("click", function() {
                     const selectedYear = this.getAttribute("data-year");
                     selectedYearBtn.textContent = selectedYear; // Update tombol
                     selectedYearInfo.textContent = selectedYear;
@@ -302,8 +312,7 @@
                         userRegistrationsChart.updateSeries([{
                             name: `${year}`,
                             data: userData
-                        }
-                        ]);
+                        }]);
                     })
                     .catch(error => console.error("Error loading chart data:", error));
             }
