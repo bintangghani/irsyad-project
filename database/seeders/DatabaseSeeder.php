@@ -22,6 +22,9 @@ class DatabaseSeeder extends Seeder
             RoleAdminInstansiSeeder::class,
             UserSeeder::class,
             SiteSeeder::class,
+            // JenisSeeder::class,
+            // KelompokSeeder::class,
+            // SubKelompokSeeder::class,
         ]);
     }
 }
